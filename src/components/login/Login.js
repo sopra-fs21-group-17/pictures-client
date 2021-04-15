@@ -20,13 +20,13 @@ const Form = styled.div`
   flex-direction: column;
   justify-content: center;
   width: 60%;
-  height: 375px;
+  height: 550px;
   font-size: 16px;
   font-weight: 300;
   padding-left: 37px;
   padding-right: 37px;
   border-radius: 5px;
-  background: linear-gradient(rgb(27, 124, 186), rgb(2, 46, 101));
+  background: #9D9D9D;
   transition: opacity 0.5s ease, transform 0.5s ease;
 `;
 
@@ -38,7 +38,7 @@ const InputField = styled.input`
   padding-left: 15px;
   margin-left: -4px;
   border: none;
-  border-radius: 20px;
+  border-radius: 5px;
   margin-bottom: 20px;
   background: rgba(255, 255, 255, 0.2);
   color: white;
@@ -104,6 +104,10 @@ class Login extends React.Component {
       alert(`Something went wrong during the login: \n${handleError(error)}`);
     }
   }
+  //navigate to route /registration in GameRouter
+  register(){
+    this.props.history.push('/registration');
+  }
 
   /**
    *  Every time the user enters something in the input field, the state gets updated.
@@ -130,16 +134,15 @@ class Login extends React.Component {
       <BaseContainer>
         <FormContainer>
           <Form>
-            <Label>Username</Label>
+            <h1 style={{color: "white", textAlign: "center"}}>Login</h1>
             <InputField
-              placeholder="Enter here.."
+              placeholder="Username"
               onChange={e => {
                 this.handleInputChange('username', e.target.value);
               }}
             />
-            <Label>Name</Label>
             <InputField
-              placeholder="Enter here.."
+              placeholder="Password"
               onChange={e => {
                 this.handleInputChange('name', e.target.value);
               }}
@@ -153,6 +156,16 @@ class Login extends React.Component {
                 }}
               >
                 Login
+              </Button>
+            </ButtonContainer>
+            <ButtonContainer>
+              <Button
+                width="50%"
+                onClick={() => {
+                  this.register();
+                }}
+              >
+                Register Now
               </Button>
             </ButtonContainer>
           </Form>
