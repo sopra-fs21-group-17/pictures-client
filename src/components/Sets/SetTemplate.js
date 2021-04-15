@@ -38,6 +38,14 @@ const Form = styled.div`
   transition: opacity 0.5s ease, transform 0.5s ease;
 `;
 
+const Board = styled.div`
+  width: 1000px;
+  height: 1000px;
+  background: #C4C4C4;
+  border: 50px solid #1f1f1f;
+
+`;
+
 const Inventory = styled.div`
   display: flex;
   flex-direction: row;
@@ -52,47 +60,19 @@ const Inventory = styled.div`
   filter: brightness(75%);
 `;
 
-
-const InputField = styled.input`
-  &::placeholder {
-    color: rgba(255, 255, 255, 1.0);
-  }
-  height: 35px;
-  padding-left: 20px;
-  padding-right: 20px;
-  border: none;
-  background: transparent;
-  color: white;
-`;
-
-const Title = styled.title`
+const Square = styled.div`
+  background: #fff;
+  border: 1px solid #999;
+  float: left;
+  font-size: 24px;
   font-weight: bold;
-  display: flex;
-  justify-content: center;
-  color: white;
-  margin-bottom: 20px;
-  text-transform: uppercase;
-  font-size: 28px;
-`;
-
-const Label = styled.label`
-  color: white;
-  margin-bottom: 10px;
-  /*text-transform: uppercase;*/
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: center;
-`;
-
-const Link = styled.button`
-  margin-top: 5px; 
-  font-size: 14px;
-  cursor: pointer;
-  background: transparent;
-  border: none;
-  color: darkgray;
+  line-height: 34px;
+  height: 300px;
+  margin-right: -1px;
+  margin-top: -1px;
+  padding: 0;
+  text-align: center;
+  width: 300px;
 `;
 
 
@@ -115,10 +95,10 @@ class SetTemplate extends React.Component {
     constructor() {
         super();
         this.state = {
-
+            dim:3,
+            grid:Array(3).fill(0).map(x=>Array(3).fill("+"))
         };
     }
-
 
 
     /**
@@ -141,11 +121,65 @@ class SetTemplate extends React.Component {
      */
     componentDidMount() {}
 
+    onDragOver = (ev) =>{
+        ev.preventDefault();
+    }
+
+    onDrop = (ev, cat)=> {
+        let id = ev.dataTransfer.getData("id");
+
+        let tasks = this.state.tasks.filter((task) => {
+            if (task.name == id) {
+                task.category = cat;
+            }
+            return task;
+        });
+        this.state.setState({
+
+        })
+    }
+
     render() {
+
+        const style = {
+            margin: 'auto',
+            width: 'auto',
+            height: 'auto',
+            backgroundColor: 'darkorange',
+            color: 'white',
+            fontSize: '3em',
+            tableLayout: 'fixed',
+        }
+
+        const rows = this.state.grid.map((r, i) => {return(
+            <tr key={"row"+i}>
+                {r.map((d, j) => {console.log('building'); return(
+                    <Square
+                        key={i+"_"+j}
+                        dims={this.dims}
+                        onClick={()=>{}}
+                        contents={d=="+"?" ":d} />
+                )
+                }
+                )
+                }
+            </tr>)
+        }
+
+
+    );
+
         return (
             <BaseContainer>
                 <FormContainer>
-
+                    <Board className="droppable" onDragOver={(e)=>this.onDragOver(e)}>
+                        onDrop={(e)=>this.onDrop(e, "complete")}
+                        <table cellSpacing="0" id="table" style={style}>
+                            <tbody>
+                                {rows}
+                            </tbody>
+                        </table>
+                    </Board>
                 </FormContainer>
                 <Inventory>
                     <Set1 />

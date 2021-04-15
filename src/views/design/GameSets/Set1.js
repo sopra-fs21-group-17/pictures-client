@@ -25,14 +25,14 @@ const InventoryContainter = styled.div`
 
 
 export const Set1 = () => {
-    const [{ isDragging }, drag, preview] = useDrag(() => ({
-        collect: (monitor) => ({
-            isDragging: !!monitor.isDragging(),
-        })
-    }), []);
+    // const [{ isDragging }, drag, preview] = useDrag(() => ({
+    //     collect: (monitor) => ({
+    //         isDragging: !!monitor.isDragging(),
+    //     })
+    // }), []);
     return (
         <InventoryContainter>
-            <Square style={{background:"red"}}>
+            <Square style={{background:"red"}} draggable className="draggable">
                 3X
             </Square>
             <Square style={{background:"blue"}}>
