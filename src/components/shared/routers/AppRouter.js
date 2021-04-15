@@ -6,8 +6,9 @@ import { LoginGuard } from "../routeProtectors/LoginGuard";
 import Login from "../../login/Login";
 import {RegistrationGuard} from "../routeProtectors/RegistrationGuard";
 import Registration from "../../registration/Registration";
-import {HomescreenGuard} from "../routeProtectors/HomescreenGuard";
-import Homescreen from "../../homescreen/Homescreen";
+import {HomeGuard} from "../routeProtectors/HomeGuard";
+import Homescreen from "../../home/Home";
+import Home from "../../home/Home";
 
 /**
  * Main router of your application.
@@ -51,12 +52,12 @@ class AppRouter extends React.Component {
                 )}
             />
               <Route
-                  path="/homescreen"
+                  path="/home"
                   exact
                   render={() => (
-                      <HomescreenGuard>
-                          <Homescreen />
-                      </HomescreenGuard>
+                      <HomeGuard>
+                          <Home />
+                      </HomeGuard>
                   )}
               />
             <Route path="/" exact render={() => <Redirect to={"/game"} />} />

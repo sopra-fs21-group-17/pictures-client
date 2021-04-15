@@ -19,20 +19,20 @@ const Form = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 60%;
-  height: 550px;
+  width: 50%;
+  height: 400px;
   font-size: 16px;
   font-weight: 300;
   padding-left: 37px;
   padding-right: 37px;
   border-radius: 5px;
-  background: #9D9D9D;
+  background: rgba(137, 137, 137, 1);
   transition: opacity 0.5s ease, transform 0.5s ease;
 `;
 
 const InputField = styled.input`
   &::placeholder {
-    color: rgba(255, 255, 255, 1.0);
+    color: rgba(230, 230, 230, 1.0);
   }
   height: 35px;
   padding-left: 15px;
@@ -40,15 +40,15 @@ const InputField = styled.input`
   border: none;
   border-radius: 5px;
   margin-bottom: 20px;
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(230, 230, 230, 0.2);
   color: white;
 `;
 
-const Label = styled.label`
-  color: white;
-  margin-bottom: 10px;
-  text-transform: uppercase;
-`;
+// const Label = styled.label`
+//   color: white;
+//   margin-bottom: 10px;
+//   text-transform: uppercase;
+// `;
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -76,7 +76,8 @@ class Login extends React.Component {
     super();
     this.state = {
       name: null,
-      username: null
+      username: null,
+      responseUser: null
     };
   }
   /**
@@ -88,9 +89,12 @@ class Login extends React.Component {
     try {
       const requestBody = JSON.stringify({
         username: this.state.username,
-        name: this.state.name
+        password: this.state.password
       });
-      const response = await api.post('/users', requestBody);
+      const response = await api.post('/users/names', requestBody);
+
+      //sets the value with the response data to the key, if user exists, it returns the user
+      this.setState({responseUser: response.data})
 
       // Get the returned user and update a new object.
       const user = new User(response.data);
@@ -98,8 +102,19 @@ class Login extends React.Component {
       // Store the token into the local storage.
       localStorage.setItem('token', user.token);
 
+      //requestBody for Put request
+      const requestBodyPut = JSON.stringify({
+        username: null,
+        birthDate: null,
+
+      });
+
+      //the user status gets changed to ONLINE
+      await api.put('/users/' + user.id, requestBodyPut)
+
+
       // Login successfully worked --> navigate to the route /game in the GameRouter
-      this.props.history.push(`/game`);
+      this.props.history.push(`/home`);
     } catch (error) {
       alert(`Something went wrong during the login: \n${handleError(error)}`);
     }

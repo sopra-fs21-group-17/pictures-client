@@ -23,8 +23,13 @@ const PlayerContainer = styled.li`
   align-items: center;
   justify-content: center;
 `;
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+`;
 
-class Homescreen extends React.Component {
+class Home extends React.Component {
     constructor() {
         super();
         this.state = {
@@ -65,8 +70,8 @@ class Homescreen extends React.Component {
     render() {
         return (
             <Container>
-                <h2>Happy Coding! </h2>
-                <p>Get all users from secure end point:</p>
+                <h2>HOME</h2>
+                <p>Logged in as:</p>
                 {!this.state.users ? (
                     <Spinner />
                 ) : (
@@ -80,14 +85,28 @@ class Homescreen extends React.Component {
                                 );
                             })}
                         </Users>
-                        <Button
-                            width="100%"
-                            onClick={() => {
-                                this.logout();
-                            }}
-                        >
-                            Logout
-                        </Button>
+                        <ButtonContainer>
+                            <Button
+                                width="30%"
+                                onClick={() => {
+                                    this.props.history.push('/lobby')
+                                }}
+                            >
+                                Join Game
+                            </Button>
+                        </ButtonContainer>
+                        <ButtonContainer>
+                            <Button
+                                width="30%"
+                                onClick={() => {
+                                    this.logout();
+                                }}
+                            >
+                                Logout
+                            </Button>
+                        </ButtonContainer>
+
+
                     </div>
                 )}
             </Container>
@@ -95,4 +114,4 @@ class Homescreen extends React.Component {
     }
 }
 
-export default withRouter(Homescreen);
+export default withRouter(Home);

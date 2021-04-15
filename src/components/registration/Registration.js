@@ -19,20 +19,20 @@ const Form = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 60%;
-  height: 550px;
+  width: 50%;
+  height: 400px;
   font-size: 16px;
   font-weight: 300;
   padding-left: 37px;
   padding-right: 37px;
   border-radius: 5px;
-  background: #9D9D9D;
+  background: rgba(137, 137, 137, 1);
   transition: opacity 0.5s ease, transform 0.5s ease;
 `;
 
 const InputField = styled.input`
   &::placeholder {
-    color: rgba(255, 255, 255, 1.0);
+    color: rgba(230, 230, 230, 1.0);
   }
   height: 35px;
   padding-left: 15px;
@@ -40,10 +40,9 @@ const InputField = styled.input`
   border: none;
   border-radius: 5px;
   margin-bottom: 20px;
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(230, 230, 230, 0.2);
   color: white;
 `;
-
 const Label = styled.label`
   color: white;
   margin-bottom: 10px;
@@ -75,8 +74,8 @@ class Registration extends React.Component {
     constructor() {
         super();
         this.state = {
-            name: null,
-            username: null
+            username: null,
+            password: null
         };
     }
     /**
@@ -84,11 +83,11 @@ class Registration extends React.Component {
      * If the request is successful, a new user is returned to the front-end
      * and its token is stored in the localStorage.
      */
-    async login() {
+    async register() {
         try {
             const requestBody = JSON.stringify({
                 username: this.state.username,
-                name: this.state.name
+                password: this.state.name
             });
             const response = await api.post('/users', requestBody);
 
@@ -99,14 +98,14 @@ class Registration extends React.Component {
             localStorage.setItem('token', user.token);
 
             // Login successfully worked --> navigate to the route /game in the GameRouter
-            this.props.history.push(`/game`);
+            this.props.history.push(`/homescreen`);
         } catch (error) {
             alert(`Something went wrong during the login: \n${handleError(error)}`);
         }
     }
     //navigate to route /registration in GameRouter
-    register(){
-        this.props.history.push('/registration');
+    login(){
+        this.props.history.push('/login');
     }
 
     /**
@@ -143,16 +142,17 @@ class Registration extends React.Component {
                         />
                         <InputField
                             placeholder="Password"
+                            type="password"
                             onChange={e => {
-                                this.handleInputChange('name', e.target.value);
+                                this.handleInputChange('password', e.target.value);
                             }}
                         />
                         <ButtonContainer>
                             <Button
-                                disabled={!this.state.username || !this.state.name}
+                                disabled={!this.state.username || !this.state.password}
                                 width="50%"
                                 onClick={() => {
-                                    this.login();
+                                    this.register();
                                 }}
                             >
                                 Register
@@ -162,7 +162,7 @@ class Registration extends React.Component {
                             <Button
                                 width="50%"
                                 onClick={() => {
-                                    this.register();
+                                    this.login();
                                 }}
                             >
                                  Back to login
