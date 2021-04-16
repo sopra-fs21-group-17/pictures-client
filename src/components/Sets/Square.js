@@ -3,7 +3,8 @@ import {useDrag} from "react-dnd";
 import {ItemTypes} from '../utils/Items';
 
 const SquareContainer = styled.div`
-  width: 100%;
+  width: 100px;
+  height: 100px;
   margin-left: 20px;
   margin-right: 20px;
   margin-top: 20px;
