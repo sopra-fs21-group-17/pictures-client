@@ -6,6 +6,7 @@ import {BaseContainer} from "../../../helpers/layout";
 import {Square} from "../../../components/Sets/Square";
 import {Board} from "../../../components/Sets/Board";
 import {ItemTypes} from "../../../components/utils/Items";
+import {Inventory} from "../../../components/Sets/Inventory";
 
 const FormContainer = styled.div`
   margin-top: 2em;
@@ -17,7 +18,7 @@ const FormContainer = styled.div`
 `;
 
 
-const Inventory = styled.div`
+/**const Inventory = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -25,11 +26,11 @@ const Inventory = styled.div`
   right: 2%;
   left: 2%;
   bottom: 2%;
-  width: width;
-  height: 200px;
+  width: max;
+  height: auto;
   background: #303036;
   filter: brightness(75%);
-`;
+`;*/
 
 
 const InventoryContainter = styled.div`
@@ -41,8 +42,10 @@ const InventoryContainter = styled.div`
 `;
 
 export const ItemContext = createContext({
-        markAsBoard: null
+        markAsBoard: null,
+        markAsInventory: null
 })
+
 
 
 export const Set1 = () => {
@@ -104,6 +107,13 @@ export const Set1 = () => {
                 setItemList(itemList.filter((item, i) => item._id !== _id).concat(item[0]));
         };
 
+        const markAsInventory = _id => {
+                const item = itemList.filter((item, i) => item._id === _id);
+                item[0].location = 'board';
+                setItemList(itemList.filter((item, i) => item._id !== _id).concat(item[0]));
+        };
+
+
 
 
         return (
@@ -125,7 +135,6 @@ export const Set1 = () => {
                                 </Board>
                         </FormContainer>
                         <Inventory>
-                                <InventoryContainter>
                                         {itemList
                                         .filter((task, i) => task.location === 'inventory')
                                         .map((task, i) => (
@@ -137,7 +146,7 @@ export const Set1 = () => {
                                                 amount={task.amount}
                                             />
                                         ))}
-                                </InventoryContainter>
+
                         </Inventory>
                 </BaseContainer>
                 </ItemContext.Provider>

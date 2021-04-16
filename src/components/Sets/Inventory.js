@@ -4,20 +4,21 @@ import {ItemTypes} from "../utils/Items";
 import React, {useContext} from "react";
 import {ItemContext} from "../../views/design/GameSets/Set1";
 
+const Inventorycontainer = styled.div`
 
-const BoardContainer = styled.div`
-  
-  width: 350px;
-  height: 350px;
-  //background: #C4C4C4;
-  border: 25px solid #1f1f1f;
-  // display: grid;
-  // grid-template-columns: repeat(3, 1fr);
-  // grid-template-rows: repeat(3, 1fr);
-
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  position: fixed;
+  right: 2%;
+  left: 2%;
+  bottom: 2%;
+  width: max;
+  height: auto;
+  background: #303036;
+  filter: brightness(75%);
 `;
-
-export const Board = props => {
+export const Inventory = props => {
 
     const { markAsBoard } = useContext(ItemContext)
 
@@ -30,10 +31,10 @@ export const Board = props => {
     });
 
     return (
-        <BoardContainer
+        <Inventorycontainer
             style={isOver ? {background: 'white'} : {background: '#C4C4C4'}}
             ref={drop}>
             {props.children}
-        </BoardContainer>
+        </Inventorycontainer>
     )
 }
