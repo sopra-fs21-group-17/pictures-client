@@ -7,8 +7,9 @@ import Login from "../../login/Login";
 import {RegistrationGuard} from "../routeProtectors/RegistrationGuard";
 import Registration from "../../registration/Registration";
 import {HomeGuard} from "../routeProtectors/HomeGuard";
-import Homescreen from "../../home/Home";
 import Home from "../../home/Home";
+import Game from "../../game/Game";
+
 
 /**
  * Main router of your application.
@@ -26,11 +27,11 @@ class AppRouter extends React.Component {
         <Switch>
           <div>
             <Route
-              path="/game"
+              path="/home"
               render={() => (
-                <GameGuard>
-                  <GameRouter base={"/game"} />
-                </GameGuard>
+                <HomeGuard>
+                  <GameRouter base={"/home"} />
+                </HomeGuard>
               )}
             />
             <Route
@@ -51,16 +52,7 @@ class AppRouter extends React.Component {
                     </RegistrationGuard>
                 )}
             />
-              <Route
-                  path="/home"
-                  exact
-                  render={() => (
-                      <HomeGuard>
-                          <Home />
-                      </HomeGuard>
-                  )}
-              />
-            <Route path="/" exact render={() => <Redirect to={"/game"} />} />
+            <Route path="/" exact render={() => <Redirect to={"/home"} />} />
           </div>
         </Switch>
       </BrowserRouter>

@@ -75,7 +75,7 @@ class Registration extends React.Component {
         super();
         this.state = {
             username: null,
-            password: null
+            password: null,
         };
     }
     /**
@@ -87,7 +87,7 @@ class Registration extends React.Component {
         try {
             const requestBody = JSON.stringify({
                 username: this.state.username,
-                password: this.state.name
+                password: this.state.password
             });
             const response = await api.post('/users', requestBody);
 
@@ -96,14 +96,16 @@ class Registration extends React.Component {
 
             // Store the token into the local storage.
             localStorage.setItem('token', user.token);
+            localStorage.setItem('currentUsername', user.username);
+            localStorage.setItem('currentPassword', user.password);
 
-            // Login successfully worked --> navigate to the route /game in the GameRouter
-            this.props.history.push(`/homescreen`);
+            // Login successfully worked --> navigate to the route /home in the GameRouter
+            this.props.history.push(`/home`);
         } catch (error) {
             alert(`Something went wrong during the login: \n${handleError(error)}`);
         }
     }
-    //navigate to route /registration in GameRouter
+    //navigate to route /login in GameRouter
     login(){
         this.props.history.push('/login');
     }

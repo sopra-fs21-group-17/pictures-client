@@ -75,8 +75,8 @@ class Login extends React.Component {
   constructor() {
     super();
     this.state = {
-      name: null,
       username: null,
+      password: null,
       responseUser: null
     };
   }
@@ -97,24 +97,16 @@ class Login extends React.Component {
       this.setState({responseUser: response.data})
 
       // Get the returned user and update a new object.
-      const user = new User(response.data);
+      const user = new User(this.state.responseUser);
 
       // Store the token into the local storage.
       localStorage.setItem('token', user.token);
-
-      //requestBody for Put request
-      const requestBodyPut = JSON.stringify({
-        username: null,
-        birthDate: null,
-
-      });
-
-      //the user status gets changed to ONLINE
-      await api.put('/users/' + user.id, requestBodyPut)
+      localStorage.setItem('username', user.username)
 
 
-      // Login successfully worked --> navigate to the route /game in the GameRouter
+      // Login successfully worked --> navigate to the route /home in the GameRouter
       this.props.history.push(`/home`);
+
     } catch (error) {
       alert(`Something went wrong during the login: \n${handleError(error)}`);
     }
@@ -158,6 +150,7 @@ class Login extends React.Component {
             />
             <InputField
               placeholder="Password"
+              type="password"
               onChange={e => {
                 this.handleInputChange('name', e.target.value);
               }}
