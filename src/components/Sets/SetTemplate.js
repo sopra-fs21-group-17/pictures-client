@@ -10,6 +10,8 @@ import {Set2} from "../../views/design/GameSets/Set2";
 import {Set3} from "../../views/design/GameSets/Set3";
 import {Set4} from "../../views/design/GameSets/Set4";
 import {Set5} from "../../views/design/GameSets/Set5";
+import {DndProvider} from "react-dnd";
+import {HTML5Backend} from "react-dnd-html5-backend";
 
 
 const FormContainer = styled.div`
@@ -39,10 +41,13 @@ const Form = styled.div`
 `;
 
 const Board = styled.div`
-  width: 1000px;
-  height: 1000px;
+  width: 350px;
+  height: 350px;
   background: #C4C4C4;
-  border: 50px solid #1f1f1f;
+  border: 25px solid #1f1f1f;
+  // display: grid;
+  // grid-template-columns: repeat(3, 1fr);
+  // grid-template-rows: repeat(3, 1fr);
 
 `;
 
@@ -67,12 +72,12 @@ const Square = styled.div`
   font-size: 24px;
   font-weight: bold;
   line-height: 34px;
-  height: 300px;
+  height: 100px;
   margin-right: -1px;
   margin-top: -1px;
   padding: 0;
   text-align: center;
-  width: 300px;
+  width: 100px;
 `;
 
 
@@ -95,97 +100,17 @@ class SetTemplate extends React.Component {
     constructor() {
         super();
         this.state = {
-            dim:3,
-            grid:Array(3).fill(0).map(x=>Array(3).fill("+"))
         };
     }
 
 
-    /**
-     *  Every time the user enters something in the input field, the state gets updated.
-     * @param key (the key of the state for identifying the field that needs to be updated)
-     * @param value (the value that gets assigned to the identified state key)
-     */
-    handleInputChange(key, value) {
-        // Example: if the key is username, this statement is the equivalent to the following one:
-        // this.setState({'username': value});
-        this.setState({ [key]: value });
-    }
-
-    /**
-     * componentDidMount() is invoked immediately after a component is mounted (inserted into the tree).
-     * Initialization that requires DOM nodes should go here.
-     * If you need to load data from a remote endpoint, this is a good place to instantiate the network request.
-     * You may call setState() immediately in componentDidMount().
-     * It will trigger an extra rendering, but it will happen before the browser updates the screen.
-     */
-    componentDidMount() {}
-
-    onDragOver = (ev) =>{
-        ev.preventDefault();
-    }
-
-    onDrop = (ev, cat)=> {
-        let id = ev.dataTransfer.getData("id");
-
-        let tasks = this.state.tasks.filter((task) => {
-            if (task.name == id) {
-                task.category = cat;
-            }
-            return task;
-        });
-        this.state.setState({
-
-        })
-    }
 
     render() {
 
-        const style = {
-            margin: 'auto',
-            width: 'auto',
-            height: 'auto',
-            backgroundColor: 'darkorange',
-            color: 'white',
-            fontSize: '3em',
-            tableLayout: 'fixed',
-        }
-
-        const rows = this.state.grid.map((r, i) => {return(
-            <tr key={"row"+i}>
-                {r.map((d, j) => {console.log('building'); return(
-                    <Square
-                        key={i+"_"+j}
-                        dims={this.dims}
-                        onClick={()=>{}}
-                        contents={d=="+"?" ":d} />
-                )
-                }
-                )
-                }
-            </tr>)
-        }
-
-
-    );
-
         return (
-            <BaseContainer>
-                <FormContainer>
-                    <Board className="droppable" onDragOver={(e)=>this.onDragOver(e)}>
-                        onDrop={(e)=>this.onDrop(e, "complete")}
-                        <table cellSpacing="0" id="table" style={style}>
-                            <tbody>
-                                {rows}
-                            </tbody>
-                        </table>
-                    </Board>
-                </FormContainer>
-                <Inventory>
-                    <Set1 />
-                </Inventory>
-
-            </BaseContainer>
+            <DndProvider backend={HTML5Backend}>
+                <Set1 />
+            </DndProvider>
 
         );
     }
