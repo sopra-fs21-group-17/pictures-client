@@ -4,8 +4,7 @@ import {ItemTypes} from "../utils/Items";
 import React, {useContext} from "react";
 import {ItemContext} from "../../views/design/GameSets/Set1";
 
-const Inventorycontainer = styled.div`
-
+const InventoryContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -15,26 +14,31 @@ const Inventorycontainer = styled.div`
   bottom: 2%;
   width: max;
   height: auto;
+  min-height: 175px;
+  padding-top: 20px;
+  padding-bottom: 20px;
   background: #303036;
   filter: brightness(75%);
 `;
+
+
 export const Inventory = props => {
 
-    const { markAsBoard } = useContext(ItemContext)
+    const { markAsInventory } = useContext(ItemContext)
 
     const[{isOver}, drop] = useDrop({
         accept: ItemTypes.SQUARE,
-        drop: (item, monitor) => markAsBoard(item.id),
+        drop: (item, monitor) => markAsInventory(item.id),
         collect: monitor => ({
             isOver: !!monitor.isOver(),
         }),
     });
 
     return (
-        <Inventorycontainer
-            style={isOver ? {background: 'white'} : {background: '#C4C4C4'}}
+        <InventoryContainer
+            style={isOver ? {background: '#65656b'} : {background: '#303036'}}
             ref={drop}>
             {props.children}
-        </Inventorycontainer>
+        </InventoryContainer>
     )
 }

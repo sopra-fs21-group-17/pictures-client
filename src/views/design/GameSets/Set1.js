@@ -109,7 +109,7 @@ export const Set1 = () => {
 
         const markAsInventory = _id => {
                 const item = itemList.filter((item, i) => item._id === _id);
-                item[0].location = 'board';
+                item[0].location = 'inventory';
                 setItemList(itemList.filter((item, i) => item._id !== _id).concat(item[0]));
         };
 
@@ -117,7 +117,7 @@ export const Set1 = () => {
 
 
         return (
-                <ItemContext.Provider value={{ markAsBoard }}>
+                <ItemContext.Provider value={{ markAsBoard, markAsInventory }}>
                 <BaseContainer>
                         <FormContainer>
                                 <Board>

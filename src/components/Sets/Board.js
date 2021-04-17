@@ -6,15 +6,13 @@ import {ItemContext} from "../../views/design/GameSets/Set1";
 
 
 const BoardContainer = styled.div`
-  
-  width: 350px;
-  height: 350px;
+  width: 17vw;
+  height: 17vw;
   //background: #C4C4C4;
   border: 25px solid #1f1f1f;
-  // display: grid;
-  // grid-template-columns: repeat(3, 1fr);
-  // grid-template-rows: repeat(3, 1fr);
-
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
 `;
 
 export const Board = props => {
@@ -31,7 +29,7 @@ export const Board = props => {
 
     return (
         <BoardContainer
-            style={isOver ? {background: 'white'} : {background: '#C4C4C4'}}
+            style={isOver ? {background: '#919191'} : {background: '#C4C4C4'}}
             ref={drop}>
             {props.children}
         </BoardContainer>

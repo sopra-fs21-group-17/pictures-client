@@ -5,10 +5,10 @@ import {ItemTypes} from '../utils/Items';
 const SquareContainer = styled.div`
   width: 5vw;
   height: 5vw;
-  margin-left: 20px;
-  margin-right: 20px;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  // margin-left: 20px;
+  // margin-right: 20px;
+  // margin-top: 20px;
+  // margin-bottom: 20px;
   font-size: 26px;
   font-weight: 800;
   display: flex;
