@@ -87,7 +87,7 @@ class Home extends React.Component {
                         </Users>
                         <ButtonContainer>
                             <Button
-                                width="30%"
+                                width="70%"
                                 onClick={() => {
                                     this.props.history.push('/lobby')
                                 }}
@@ -97,7 +97,7 @@ class Home extends React.Component {
                         </ButtonContainer>
                         <ButtonContainer>
                             <Button
-                                width="30%"
+                                width="70%"
                                 onClick={() => {
                                     this.logout();
                                 }}

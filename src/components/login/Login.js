@@ -152,12 +152,12 @@ class Login extends React.Component {
               placeholder="Password"
               type="password"
               onChange={e => {
-                this.handleInputChange('name', e.target.value);
+                this.handleInputChange('password', e.target.value);
               }}
             />
             <ButtonContainer>
               <Button
-                disabled={!this.state.username || !this.state.name}
+                disabled={!this.state.username || !this.state.password}
                 width="50%"
                 onClick={() => {
                   this.login();
