@@ -5,8 +5,8 @@ import React, {useContext} from "react";
 import {ItemContext} from "../../views/design/GameSets/Set1";
 
 const SquareFieldContainer = styled.div`
-  width: 5vw;
-  height: 5vw;
+  width: 100%;
+  height: 100%;
   // margin-left: 20px;
   // margin-right: 20px;
   // margin-top: 20px;

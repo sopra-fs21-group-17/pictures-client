@@ -21,15 +21,30 @@ const SquareFieldContainer = styled.div`
   display:grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
+  min-height: 100%;
+  min-width: 100%;
+  max-width: 100%;
+  max-height: 100%;
   `;
 const BoardContainer = styled.div`
-  width: 17vw;
-  height: 17vw;
-  background: #C4C4C4;
-  border: 25px solid #1f1f1f;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  background: #c4c4c4;
+  justify-content: center;
+  align-items: center;
+  
+`;
+const BorderContainer = styled.div`
+  width: 40vw;
+  height: 40vw;
+  max-height: 800px;
+  max-width: 800px;
+  background: #1f1f1f;
+  padding-top: 2.5%;
+  padding-bottom: 2.5%;
+  padding-left: 2.5%;
+  padding-right: 2.5%;
 `;
 
 
@@ -153,7 +168,8 @@ export const Set1 = () => {
                 <ItemContext.Provider value={{ markAsInventory,markAsSquareField }}>
                 <BaseContainer>
                         <FormContainer>
-                        <BoardContainer>
+                                <BorderContainer>
+                                <BoardContainer>
                                 <SquareFieldContainer>
                                 <SquareField>
                                 {itemList
@@ -219,7 +235,8 @@ export const Set1 = () => {
                                                             amount={task.amount}
                                                         />
                                                     ))}
-                                        </SquareField><SquareField>
+                                        </SquareField>
+                                        <SquareField>
                                         {itemList
                                             .filter((task, i) => task.location === 'squarefield')
                                             .map((task, i) => (
@@ -274,6 +291,7 @@ export const Set1 = () => {
 
                                 </SquareFieldContainer>
                         </BoardContainer>
+                                </BorderContainer>
 
 
                         </FormContainer>
