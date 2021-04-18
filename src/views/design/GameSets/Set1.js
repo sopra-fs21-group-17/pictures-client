@@ -150,10 +150,13 @@ export const Set1 = () => {
 
         const markAsInventory = _id => {
                 const item = itemList.filter((item, i) => item._id === _id);
-                item[0].location = 'inventory';
-                item[0].amount = item[0].amount+1;
-                setItemList(itemList.filter((item, i) => item._id !== _id).concat(item[0]));
+                if(item[0].amount != 3){
+                        item[0].location = 'inventory';
+                        item[0].amount = item[0].amount+1;
+                        setItemList(itemList.filter((item, i) => item._id !== _id).concat(item[0]));
+                }
         };
+
         const markAsSquareField = _id => {
                 const item = itemList.filter((item, i) => item._id === _id);
                 item[0].location = 'squarefield';
@@ -173,9 +176,10 @@ export const Set1 = () => {
                                 <SquareFieldContainer>
                                 <SquareField>
                                 {itemList
-                                .filter((task, i) => task.location === 'squarefield')
+                                .filter((task, i) => task.amount !== 3)
                                 .map((task, i) => (
                                     <Square
+                                        style={{height: '100%'}}
                                         key={task._id.toString()}
                                         _id={task._id}
                                         locatioin={task.location}
@@ -297,7 +301,7 @@ export const Set1 = () => {
                         </FormContainer>
                                 <Inventory>
                                         {itemList
-                                        .filter((task, i) => task.location === 'inventory')
+                                        .filter((task, i) => task.amount !== 0)
                                         .map((task, i) => (
                                             <ItemContainer>
                                                     <Square
