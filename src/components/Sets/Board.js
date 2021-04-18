@@ -1,4 +1,4 @@
-import { useDrop} from "react-dnd";
+/**import { useDrop} from "react-dnd";
 import styled from "styled-components";
 import {ItemTypes} from "../utils/Items";
 import React, {useContext} from "react";
@@ -35,3 +35,4 @@ export const Board = props => {
         </BoardContainer>
     )
 }
+*/
