@@ -5,10 +5,8 @@ import {ItemTypes} from '../utils/Items';
 const SquareContainer = styled.div`
   width: 5vw;
   height: 5vw;
-  // margin-left: 20px;
-  // margin-right: 20px;
-  // margin-top: 20px;
-  // margin-bottom: 20px;
+  min-height: 80px;
+  min-width: 80px;
   font-size: 26px;
   font-weight: 800;
   display: flex;
@@ -16,6 +14,8 @@ const SquareContainer = styled.div`
   justify-content: center;
   border: 2px solid black;
   cursor:move;
+  text-align: center;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 `;
 
 export const Square = props => {
