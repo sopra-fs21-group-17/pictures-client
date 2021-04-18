@@ -8,6 +8,9 @@ import {Board} from "../../../components/Sets/Board";
 import {ItemTypes} from "../../../components/utils/Items";
 import {Inventory} from "../../../components/Sets/Inventory";
 import {SquareField} from "../../../components/Sets/SquareField";
+import {Grid} from "../../../components/Sets/Grid";
+import {Grid2} from "../../../components/Sets/Grid2";
+
 
 const FormContainer = styled.div`
   margin-top: 2em;
@@ -173,127 +176,12 @@ export const Set1 = () => {
                         <FormContainer>
                                 <BorderContainer>
                                 <BoardContainer>
-                                <SquareFieldContainer>
-                                <SquareField>
-                                {itemList
-                                .filter((task, i) => task.amount !== 3)
-                                .map((task, i) => (
-                                    <Square
-                                        style={{height: '100%'}}
-                                        key={task._id.toString()}
-                                        _id={task._id}
-                                        locatioin={task.location}
-                                        color={task.color}
-                                        amount={task.amount}
-                                    />
-                                ))}
-                                </SquareField>
-                                <SquareField>
-                                        {itemList
-                                            .filter((task, i) => task.location === 'squarefield')
-                                            .map((task, i) => (
-                                                <Square
-                                                    key={task._id.toString()}
-                                                    _id={task._id}
-                                                    locatioin={task.location}
-                                                    color={task.color}
-                                                    amount={task.amount}
-                                                />
-                                            ))}
-                                </SquareField>
-                                <SquareField>
-                                        {itemList
-                                            .filter((task, i) => task.location === 'squarefield')
-                                            .map((task, i) => (
-                                                <Square
-                                                    key={task._id.toString()}
-                                                    _id={task._id}
-                                                    locatioin={task.location}
-                                                    color={task.color}
-                                                    amount={task.amount}
-                                                />
-                                            ))}
-                                </SquareField>
-                                        <SquareField>
-                                                {itemList
-                                                    .filter((task, i) => task.location === 'squarefield')
-                                                    .map((task, i) => (
-                                                        <Square
-                                                            key={task._id.toString()}
-                                                            _id={task._id}
-                                                            locatioin={task.location}
-                                                            color={task.color}
-                                                            amount={task.amount}
-                                                        />
-                                                    ))}
-                                        </SquareField>
-                                        <SquareField>
-                                                {itemList
-                                                    .filter((task, i) => task.location === 'squarefield')
-                                                    .map((task, i) => (
-                                                        <Square
-                                                            key={task._id.toString()}
-                                                            _id={task._id}
-                                                            locatioin={task.location}
-                                                            color={task.color}
-                                                            amount={task.amount}
-                                                        />
-                                                    ))}
-                                        </SquareField>
-                                        <SquareField>
-                                        {itemList
-                                            .filter((task, i) => task.location === 'squarefield')
-                                            .map((task, i) => (
-                                                <Square
-                                                    key={task._id.toString()}
-                                                    _id={task._id}
-                                                    locatioin={task.location}
-                                                    color={task.color}
-                                                    amount={task.amount}
-                                                />
-                                            ))}
-                                </SquareField>
-                                        <SquareField>
-                                                {itemList
-                                                    .filter((task, i) => task.location === 'squarefield')
-                                                    .map((task, i) => (
-                                                        <Square
-                                                            key={task._id.toString()}
-                                                            _id={task._id}
-                                                            locatioin={task.location}
-                                                            color={task.color}
-                                                            amount={task.amount}
-                                                        />
-                                                    ))}
-                                        </SquareField>
-                                        <SquareField>
-                                                {itemList
-                                                    .filter((task, i) => task.location === 'squarefield')
-                                                    .map((task, i) => (
-                                                        <Square
-                                                            key={task._id.toString()}
-                                                            _id={task._id}
-                                                            locatioin={task.location}
-                                                            color={task.color}
-                                                            amount={task.amount}
-                                                        />
-                                                    ))}
-                                        </SquareField>
-                                        <SquareField>
-                                                {itemList
-                                                    .filter((task, i) => task.location === 'squarefield')
-                                                    .map((task, i) => (
-                                                        <Square
-                                                            key={task._id.toString()}
-                                                            _id={task._id}
-                                                            locatioin={task.location}
-                                                            color={task.color}
-                                                            amount={task.amount}
-                                                        />
-                                                    ))}
-                                        </SquareField>
 
-                                </SquareFieldContainer>
+                                        <Grid2 game={null}/>
+
+
+
+
                         </BoardContainer>
                                 </BorderContainer>
 

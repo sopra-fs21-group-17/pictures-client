@@ -21,7 +21,7 @@ const SquareFieldContainer = styled.div`
 `;
 
 
-export const SquareField = props => {
+export const SquareField = (props,x,y) => {
 
     const { markAsSquareField } = useContext(ItemContext)
 
