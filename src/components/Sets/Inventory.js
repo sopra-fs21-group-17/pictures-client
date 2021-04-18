@@ -8,6 +8,7 @@ const InventoryContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
+  align-items: center;
   position: fixed;
   right: 2%;
   left: 2%;
@@ -38,7 +39,7 @@ export const Inventory = props => {
         <InventoryContainer
             style={isOver ? {background: '#65656b'} : {background: '#303036'}}
             ref={drop}>
-            {props.children}
+                {props.children}
         </InventoryContainer>
     )
 }

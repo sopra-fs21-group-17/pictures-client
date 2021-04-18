@@ -56,6 +56,16 @@ const InventoryContainter = styled.div`
   height: 100%;
 `;
 
+const ItemContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  height: 100%;
+  width: max;
+  margin-left: 1vw;
+  margin-right: 1vw;
+`;
+
 export const ItemContext = createContext({
         markAsBoard: null,
         markAsInventory: null,
@@ -267,21 +277,22 @@ export const Set1 = () => {
 
 
                         </FormContainer>
-                        <Inventory>
+                                <Inventory>
                                         {itemList
                                         .filter((task, i) => task.location === 'inventory')
                                         .map((task, i) => (
-                                            <Square
-                                                key={task._id.toString()}
-                                                _id={task._id}
-                                                locatioin={task.location}
-                                                color={task.color}
-                                                amount={task.amount}
-                                            />
+                                            <ItemContainer>
+                                                    <Square
+                                                        key={task._id.toString()}
+                                                        _id={task._id}
+                                                        locatioin={task.location}
+                                                        color={task.color}
+                                                        amount={task.amount}
+                                                    />
+                                            </ItemContainer>
                                         ))}
-
-                        </Inventory>
-                </BaseContainer>
+                                </Inventory>
+                        </BaseContainer>
                 </ItemContext.Provider>
                 );
         };
