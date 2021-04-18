@@ -6,26 +6,33 @@ import PictureElement from "./PictureElement";
 //TODO define game states
 
 const Container = styled(BaseContainer)`
+  display: flex;
   color: white;
   text-align: center;
+  flex-direction: row;
+  min-width: 900px;
+  
   `;
 
 const GridContainer = styled.div`
-  margin-top: 2em;
+  
   display: flex;
   flex-direction: column;
   align-items: center;
   min-height: 300px;
+  min-width: 600px;
   justify-content: center;
  
 `;
+
+
 
 const Grid = styled.div`
   display: grid;
   flex-direction: column;
   grid-gap: 10px;
   
-  width: 80%;
+  width: auto;
   height: 600px;
   
   padding-left: 15px;
@@ -42,12 +49,6 @@ const Grid = styled.div`
   
 `;
 
-const GridElement = styled.div`
-background: grey;
- height: auto;
-  width: auto;
-  
-`;
 
 const GridCoordinate = styled.div`
  height: 100px;
@@ -64,15 +65,25 @@ background: transparent;
   width: auto;
 `;
 
+const UserBar = styled.div`
+display: flex;
+flex-direction: row;
+width: 20%;
+height: 600px;
+background: pink;
+margin: 15px;
+border-radius: 5px;
+`;
+
 
 //TODO Board will need PUT request for guesses
 //TODO Board needs get Request for pictures (depending on api)
-
+//TODO add getRequest for after guessing for ending guesses
 //TODO will need to be styled
 
-// made Picture element a separate classe so it can store its coordinates,
+// made Picture element a separate class so it can store its coordinates,
 // so when the time comes to select a specific coordinate it will be able to ti pass it on directly
-// could also be usefull for the pictures
+// could also be useful for the pictures
 class Board extends React.Component{
     constructor(props) {
         super(props);
@@ -87,6 +98,7 @@ class Board extends React.Component{
 
     render(){
         return(<Container>
+            <UserBar></UserBar>
             <GridContainer>
 
                 <Grid>
