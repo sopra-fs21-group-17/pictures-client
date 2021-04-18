@@ -2,7 +2,7 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import styled from "styled-components";
 import {BaseContainer} from "../../helpers/layout";
-
+import PictureElement from "./PictureElement";
 //TODO define game states
 
 const Container = styled(BaseContainer)`
@@ -68,14 +68,21 @@ background: transparent;
 //TODO Board will need PUT request for guesses
 //TODO Board needs get Request for pictures (depending on api)
 
+//TODO will need to be styled
+
+// made Picture element a separate classe so it can store its coordinates,
+// so when the time comes to select a specific coordinate it will be able to ti pass it on directly
+// could also be usefull for the pictures
 class Board extends React.Component{
     constructor(props) {
         super(props);
-
+        this.state = {
+            coordinate: [['A1','A2','A3','A4'],
+                ['B1','B2','B3','B4'],
+                ['C1','C2','C3','C4'],
+                ['D1','D2','D3','D4']]
+        };
     }
-
-    componentDidMount() {}
-
 
 
     render(){
@@ -91,28 +98,28 @@ class Board extends React.Component{
                     <GridCoordinate>4</GridCoordinate>
 
                     <GridCoordinate>A</GridCoordinate>
-                    <GridElement>A1</GridElement>
-                    <GridElement>A2</GridElement>
-                    <GridElement>A3</GridElement>
-                    <GridElement>A4</GridElement>
+                    <PictureElement coordinates={this.state.coordinate[0][0]}></PictureElement>
+                    <PictureElement coordinates={this.state.coordinate[0][1]}></PictureElement>
+                    <PictureElement coordinates={this.state.coordinate[0][2]}></PictureElement>
+                    <PictureElement coordinates={this.state.coordinate[0][3]}></PictureElement>
 
                     <GridCoordinate>B</GridCoordinate>
-                    <GridElement>B1</GridElement>
-                    <GridElement>B2</GridElement>
-                    <GridElement>B3</GridElement>
-                    <GridElement>B4</GridElement>
+                    <PictureElement coordinates={this.state.coordinate[1][0]}></PictureElement>
+                    <PictureElement coordinates={this.state.coordinate[1][1]}></PictureElement>
+                    <PictureElement coordinates={this.state.coordinate[1][2]}></PictureElement>
+                    <PictureElement coordinates={this.state.coordinate[1][3]}></PictureElement>
 
                     <GridCoordinate>C</GridCoordinate>
-                    <GridElement>C1</GridElement>
-                    <GridElement>C2</GridElement>
-                    <GridElement>C3</GridElement>
-                    <GridElement>C4</GridElement>
+                    <PictureElement coordinates={this.state.coordinate[2][0]}></PictureElement>
+                    <PictureElement coordinates={this.state.coordinate[2][1]}></PictureElement>
+                    <PictureElement coordinates={this.state.coordinate[2][2]}></PictureElement>
+                    <PictureElement coordinates={this.state.coordinate[2][3]}></PictureElement>
 
                     <GridCoordinate>D</GridCoordinate>
-                    <GridElement>D1</GridElement>
-                    <GridElement>D2</GridElement>
-                    <GridElement>D3</GridElement>
-                    <GridElement>D4</GridElement>
+                    <PictureElement coordinates={this.state.coordinate[3][0]}></PictureElement>
+                    <PictureElement coordinates={this.state.coordinate[3][1]}></PictureElement>
+                    <PictureElement coordinates={this.state.coordinate[3][2]}></PictureElement>
+                    <PictureElement coordinates={this.state.coordinate[3][3]}></PictureElement>
                 </Grid>
             </GridContainer>
         </Container>);

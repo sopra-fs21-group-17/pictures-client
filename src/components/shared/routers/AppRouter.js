@@ -4,6 +4,7 @@ import { GameGuard } from "../routeProtectors/GameGuard";
 import GameRouter from "./GameRouter";
 import { LoginGuard } from "../routeProtectors/LoginGuard";
 import Login from "../../login/Login";
+import Board from "../../game/Board";
 
 /**
  * Main router of your application.
@@ -37,7 +38,22 @@ class AppRouter extends React.Component {
                 </LoginGuard>
               )}
             />
-            <Route path="/" exact render={() => <Redirect to={"/game"} />} />
+            <Route
+              path="/"
+              exact
+              render={() => (
+                  <Redirect to={"/game"} />
+              )}
+            />
+
+            <Route
+            path="/board"
+            exact
+            render={() => (
+                <Board />
+            )}
+            />
+
           </div>
         </Switch>
       </BrowserRouter>
