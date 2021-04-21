@@ -6,7 +6,7 @@ import {SquareField} from "./SquareField";
 import styled from "styled-components";
 import {Square} from "../Items/Square";
 import {Inventory} from "../Inventory";
-import {Set1} from "../../../views/design/GameSets/Set1";
+
 /** Styling properties applied to the board element */
 const boardStyle = {
     width: '100%',
