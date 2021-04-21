@@ -3,13 +3,11 @@ import styled from "styled-components";
 import {DndProvider, useDrag, useDrop} from 'react-dnd';
 import {HTML5Backend} from "react-dnd-html5-backend";
 import {BaseContainer} from "../../../helpers/layout";
-import {Square} from "../../../components/Sets/Square";
-import {Board} from "../../../components/Sets/Board";
+import {Square} from "../../../components/Sets/Items/Square";
 import {ItemTypes} from "../../../components/utils/Items";
 import {Inventory} from "../../../components/Sets/Inventory";
-import {SquareField} from "../../../components/Sets/SquareField";
-import {Grid} from "../../../components/Sets/Grid";
-import {Grid2} from "../../../components/Sets/Grid2";
+import {GridBoard} from "../../../components/Sets/Boards/GridBoard";
+import {SquareField} from "../../../components/Sets/Boards/SquareField";
 
 
 const FormContainer = styled.div`
@@ -36,7 +34,7 @@ const BoardContainer = styled.div`
   background: #c4c4c4;
   justify-content: center;
   align-items: center;
-  
+
 `;
 const BorderContainer = styled.div`
   width: 40vw;
@@ -166,19 +164,19 @@ export const Set1 = () => {
                 setItemList(itemList.filter((item, i) => item._id !== _id).concat(item[0]));
                 console.log(item[0].location);
         };
+
+
         return (
-                <ItemContext.Provider value={{ markAsInventory,markAsSquareField }}>
-                <BaseContainer>
-                        <FormContainer>
-                                <BorderContainer>
-                                <BoardContainer>
-                                        <Grid2 itemlist={itemList}/>
+                <ItemContext.Provider value={{ markAsInventory,markAsSquareField,markAsBoard }}>
+                        <BaseContainer>
+                                <FormContainer>
+                                        <BorderContainer>
+                                                <BoardContainer>
+                                                    <GridBoard itemlist={itemList}/>
+                                                </BoardContainer>
+                                        </BorderContainer>
+                                </FormContainer>
 
-                        </BoardContainer>
-                                </BorderContainer>
-
-
-                        </FormContainer>
                                 <Inventory>
                                         {itemList
                                         .filter((task, i) => task.amount !== 0)

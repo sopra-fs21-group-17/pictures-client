@@ -2,7 +2,7 @@ import { useDrop} from "react-dnd";
 import styled from "styled-components";
 import {ItemTypes} from "../utils/Items";
 import React, {useContext} from "react";
-import {ItemContext} from "../../views/design/GameSets/Set1";
+import {ItemContext} from "./SetTemplate";
 
 const InventoryContainer = styled.div`
   display: flex;

@@ -4,9 +4,9 @@ import React, { useEffect, useState } from 'react';
 
 import {SquareField} from "./SquareField";
 import styled from "styled-components";
-import {Square} from "./Square";
-import {Inventory} from "./Inventory";
-import {Set1} from "../../views/design/GameSets/Set1";
+import {Square} from "../Items/Square";
+import {Inventory} from "../Inventory";
+import {Set1} from "../../../views/design/GameSets/Set1";
 /** Styling properties applied to the board element */
 const boardStyle = {
     width: '100%',
@@ -24,7 +24,7 @@ const squareStyle = { width: '33.333333%', height: '33.33333%' };
  * @param props The react props
  */
 
-export const Grid2 = ({ itemlist }) => {
+export const GridBoard = ({ itemlist }) => {
 
 
 
