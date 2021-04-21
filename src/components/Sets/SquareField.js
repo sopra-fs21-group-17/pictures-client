@@ -11,8 +11,8 @@ const SquareFieldContainer = styled.div`
   // margin-right: 20px;
   // margin-top: 20px;
   // margin-bottom: 20px;
-  font-size: 26px;
-  font-weight: 800;
+  font-size: 0px;
+  font-weight: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -21,13 +21,13 @@ const SquareFieldContainer = styled.div`
 `;
 
 
-export const SquareField = (props,x,y) => {
+export const SquareField = (props) => {
 
     const { markAsSquareField } = useContext(ItemContext)
 
     const[{isOver}, drop] = useDrop({
         accept: ItemTypes.SQUARE,
-        drop: (item, monitor) => markAsSquareField(item.id),
+        drop: (item, monitor) => markAsSquareField(item.id,props.x),
         collect: monitor => ({
             isOver: !!monitor.isOver(),
         }),

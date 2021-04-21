@@ -14,10 +14,8 @@ const BoardContainer = styled.div`
 `;
 
 const BorderContainer = styled.div`
-  width: 40vw;
-  height: 40vw;
-  max-height: 800px;
-  max-width: 800px;
+  width: 60vh;
+  height: 60vh;
   background: #1f1f1f;
   padding-top: 2.5%;
   padding-bottom: 2.5%;

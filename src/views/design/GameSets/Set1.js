@@ -1,4 +1,4 @@
-import React, {createContext, useState} from "react";
+import React, {createContext, useEffect, useState} from "react";
 import styled from "styled-components";
 import {DndProvider, useDrag, useDrop} from 'react-dnd';
 import {HTML5Backend} from "react-dnd-html5-backend";
@@ -91,7 +91,6 @@ export const ItemContext = createContext({
 })
 
 
-
 export const Set1 = () => {
         const [itemList, setItemList] = useState([
                 {
@@ -160,27 +159,20 @@ export const Set1 = () => {
                 }
         };
 
-        const markAsSquareField = _id => {
+        const markAsSquareField = (_id,x) => {
                 const item = itemList.filter((item, i) => item._id === _id);
-                item[0].location = 'squarefield';
+                item[0].location = 'squarefield'+x;
                 item[0].amount = item[0].amount-1;
                 setItemList(itemList.filter((item, i) => item._id !== _id).concat(item[0]));
+                console.log(item[0].location);
         };
-
-
-
-
         return (
                 <ItemContext.Provider value={{ markAsInventory,markAsSquareField }}>
                 <BaseContainer>
                         <FormContainer>
                                 <BorderContainer>
                                 <BoardContainer>
-
-                                        <Grid2 game={null}/>
-
-
-
+                                        <Grid2 itemlist={itemList}/>
 
                         </BoardContainer>
                                 </BorderContainer>
