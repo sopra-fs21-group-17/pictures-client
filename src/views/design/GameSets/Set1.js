@@ -3,11 +3,11 @@ import styled from "styled-components";
 import {DndProvider, useDrag, useDrop} from 'react-dnd';
 import {HTML5Backend} from "react-dnd-html5-backend";
 import {BaseContainer} from "../../../helpers/layout";
-import {Square} from "../../../components/Sets/Square";
-import {Board} from "../../../components/Sets/Board";
+import {Square} from "../../../components/Sets/Items/Square";
+import {GridBoard} from "../../../components/Sets/Boards/GridBoard";
 import {ItemTypes} from "../../../components/utils/Items";
 import {Inventory} from "../../../components/Sets/Inventory";
-import {SquareField} from "../../../components/Sets/SquareField";
+import {SquareField} from "../../../components/Sets/Boards/SquareField";
 
 const FormContainer = styled.div`
   margin-top: 2em;
@@ -142,7 +142,7 @@ export const Set1 = () => {
 
 
         return (
-                <ItemContext.Provider value={{ markAsInventory,markAsSquareField }}>
+                <ItemContext.Provider value={{ markAsInventory,markAsSquareField,markAsBoard }}>
                         <BaseContainer>
                                 <FormContainer>
                                         <BorderContainer>

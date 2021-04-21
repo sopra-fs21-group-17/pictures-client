@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import {useDrag} from "react-dnd";
-import {ItemTypes} from '../utils/Items';
+import {ItemTypes} from '../../utils/Items';
 
 const SquareContainer = styled.div`
   width: 5vw;
@@ -26,7 +26,8 @@ export const Square = props => {
         type: ItemTypes.SQUARE,
         item: {
         type: ItemTypes.SQUARE,
-        id: props._id},
+        id: props._id,
+        amount: props.amount},
         collect: monitor => ({
             isDragging: !!monitor.isDragging(),
         }),

@@ -1,8 +1,9 @@
 import { useDrop} from "react-dnd";
 import styled from "styled-components";
-import {ItemTypes} from "../utils/Items";
+import {ItemTypes} from "../../utils/Items";
 import React, {useContext} from "react";
-import {ItemContext} from "../../views/design/GameSets/Set1";
+import {ItemContext} from "../SetTemplate";
+
 
 
 const BoardContainer = styled.div`
@@ -23,7 +24,7 @@ const BorderContainer = styled.div`
   padding-right: 2.5%;
 `;
 
-export const Board = props => {
+export const GridBoard = props => {
 
     const { markAsBoard } = useContext(ItemContext)
 
