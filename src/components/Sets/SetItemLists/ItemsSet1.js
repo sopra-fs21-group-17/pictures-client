@@ -44,7 +44,7 @@ export const ItemsSet1 = [
     {
         _id: 8,
         location: 'inventory',
-        color: 'brown',
+        color: '#8B4513',
         amount: 3,
     }
 ]

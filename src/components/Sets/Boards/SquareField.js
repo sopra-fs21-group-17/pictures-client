@@ -27,7 +27,7 @@ export const SquareField = (props) => {
 
     const[{isOver}, drop] = useDrop({
         accept: ItemTypes.SQUARE,
-        drop: (item, monitor) => markAsSquareField(item.id,props.x),
+        drop: (item, monitor) => markAsSquareField(item,props.x),
         collect: monitor => ({
             isOver: !!monitor.isOver(),
         }),

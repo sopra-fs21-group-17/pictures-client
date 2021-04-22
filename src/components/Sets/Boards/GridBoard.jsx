@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
-
-
-
 import {SquareField} from "./SquareField";
 import styled from "styled-components";
 import {Square} from "../Items/Square";
 import {Inventory} from "../Inventory";
+
 
 /** Styling properties applied to the board element */
 const boardStyle = {

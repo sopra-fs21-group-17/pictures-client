@@ -32,18 +32,25 @@ export const Square = props => {
         item: {
         type: ItemTypes.SQUARE,
         id: props._id,
+        location: props.location,
         amount: props.amount},
         collect: monitor => ({
             isDragging: !!monitor.isDragging(),
         }),
     });
 
+    function showAmount(){
+        if(props.location === 'inventory'){
+            return props.amount.toString()+'X';
+        }
+    }
+
     return (
         <SquareContainer
             style={{background: props.color}}
             ref={drag}
             opacity={isDragging ? '0.5' : '1'}>
-            {props.amount}X
+            {showAmount()}
         </SquareContainer>
     )
 }
