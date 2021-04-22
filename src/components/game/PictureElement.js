@@ -7,7 +7,7 @@ import styled from "styled-components";
 const GridElement = styled.div`
 background: grey;
  height: auto;
-  width: auto;`;
+  min-width: 150px`;
 
 class PictureElement extends React.Component{
     constructor(props) {

@@ -16,12 +16,18 @@ const Container = styled(BaseContainer)`
 
 const GridContainer = styled.div`
   
-  display: flex;
-  flex-direction: column;
+  display: grid;
   align-items: center;
   min-height: 300px;
   min-width: 600px;
   justify-content: center;
+  
+  grid-template-areas: 
+  'empty 1 2 3 4'
+  'A G G G G'
+  'B G G G G'
+  'C G G G G'
+  'D G G G G';
  
 `;
 
@@ -44,9 +50,12 @@ const Grid = styled.div`
   
   background: linear-gradient(rgb(27, 124, 186), rgb(2, 46, 101));
   transition: opacity 0.5s ease, transform 0.5s ease;
-  grid-template-columns: repeat(5,1fr);
-  grid-template-rows: repeat(5,1fr);
-  
+  grid-template-columns: repeat(4,1fr);
+  grid-template-rows: repeat(4,1fr);
+  grid-row-start: 2;
+  grid-row-end: span 4;
+  grid-column-start: 2;
+  grid-column-end: span 4;
 `;
 
 
@@ -63,6 +72,8 @@ const GridVoid = styled.div`
 background: transparent;
  height: auto;
   width: auto;
+  grid-row-start: 1;
+  grid-column-start: 1;
 `;
 
 const UserBar = styled.div`
@@ -80,6 +91,7 @@ border-radius: 5px;
 //TODO Board needs get Request for pictures (depending on api)
 //TODO add getRequest for after guessing for ending guesses
 //TODO will need to be styled
+//TODO getRequest for Lobby participants
 
 // made Picture element a separate class so it can store its coordinates,
 // so when the time comes to select a specific coordinate it will be able to ti pass it on directly
@@ -88,52 +100,46 @@ class Board extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            coordinate: [['A1','A2','A3','A4'],
-                ['B1','B2','B3','B4'],
-                ['C1','C2','C3','C4'],
-                ['D1','D2','D3','D4']]
+            coordinate: [0,1,2,3,
+                4,5,6,7,
+                8,9,10,11,
+                12,13,14,15],
+            pictureLink: null
         };
     }
 
 
+
+
     render(){
+
+        const location = this.state.coordinate;
+        const pictureElements = location.map(coordinate => {
+            return <PictureElement coordinates={coordinate}></PictureElement>
+        })
+        const numberColumn =[1,2,3,4];
+        const columnCoordinates = numberColumn.map((number) => {
+            return <GridCoordinate>{number}</GridCoordinate>
+        })
+
+        const letterColumn =['A','B','C','D'];
+        const rowCoordinates = letterColumn.map((letter) => {
+            return <GridCoordinate>{letter}</GridCoordinate>
+        })
+
         return(<Container>
-            <UserBar></UserBar>
+
             <GridContainer>
+                <GridVoid/>
+                {columnCoordinates}
+                {rowCoordinates}
 
                 <Grid>
-                    <GridVoid></GridVoid>
-
-                    <GridCoordinate>1</GridCoordinate>
-                    <GridCoordinate>2</GridCoordinate>
-                    <GridCoordinate>3</GridCoordinate>
-                    <GridCoordinate>4</GridCoordinate>
-
-                    <GridCoordinate>A</GridCoordinate>
-                    <PictureElement coordinates={this.state.coordinate[0][0]}></PictureElement>
-                    <PictureElement coordinates={this.state.coordinate[0][1]}></PictureElement>
-                    <PictureElement coordinates={this.state.coordinate[0][2]}></PictureElement>
-                    <PictureElement coordinates={this.state.coordinate[0][3]}></PictureElement>
-
-                    <GridCoordinate>B</GridCoordinate>
-                    <PictureElement coordinates={this.state.coordinate[1][0]}></PictureElement>
-                    <PictureElement coordinates={this.state.coordinate[1][1]}></PictureElement>
-                    <PictureElement coordinates={this.state.coordinate[1][2]}></PictureElement>
-                    <PictureElement coordinates={this.state.coordinate[1][3]}></PictureElement>
-
-                    <GridCoordinate>C</GridCoordinate>
-                    <PictureElement coordinates={this.state.coordinate[2][0]}></PictureElement>
-                    <PictureElement coordinates={this.state.coordinate[2][1]}></PictureElement>
-                    <PictureElement coordinates={this.state.coordinate[2][2]}></PictureElement>
-                    <PictureElement coordinates={this.state.coordinate[2][3]}></PictureElement>
-
-                    <GridCoordinate>D</GridCoordinate>
-                    <PictureElement coordinates={this.state.coordinate[3][0]}></PictureElement>
-                    <PictureElement coordinates={this.state.coordinate[3][1]}></PictureElement>
-                    <PictureElement coordinates={this.state.coordinate[3][2]}></PictureElement>
-                    <PictureElement coordinates={this.state.coordinate[3][3]}></PictureElement>
+                    {pictureElements}
                 </Grid>
+
             </GridContainer>
+            <UserBar></UserBar>
         </Container>);
     }
 
