@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import styled from "styled-components";
 import {BaseContainer} from "../../helpers/layout";
 import PictureElement from "./PictureElement";
+import {api, handleError} from "../../helpers/api";
 //TODO define game states
 
 const Container = styled(BaseContainer)`
@@ -64,7 +65,9 @@ const GridCoordinate = styled.div`
   width: 100px;
 background: pink;
 border-radius: 50px;
-margin: auto;
+margin: 15px;
+
+
 
 `;
 
@@ -87,30 +90,54 @@ border-radius: 5px;
 `;
 
 
-//TODO Board will need PUT request for guesses
-//TODO Board needs get Request for pictures (depending on api)
+
 //TODO add getRequest for after guessing for ending guesses
 //TODO will need to be styled
-//TODO getRequest for Lobby participants
+
+//TODO map urls to components
 
 // made Picture element a separate class so it can store its coordinates,
 // so when the time comes to select a specific coordinate it will be able to ti pass it on directly
 // could also be useful for the pictures
-class Board extends React.Component{
+class MainBoard extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
+            players: null,
+            pictureURLs: null,
             coordinate: [0,1,2,3,
                 4,5,6,7,
                 8,9,10,11,
                 12,13,14,15],
-            pictureLink: null
+
         };
     }
 
+//API REQUESTS//
+    async getPictures(){
+        try {
+            const response = await api.get("/pictures");
+            this.setState({pictureLink: response});
 
+            }
+     catch (error) {
+        alert(`Something went wrong getting the Pictures: \n${handleError(error)}`);
+    }
+    }
 
+    async getPlayersFromLobby(){
+        try {
+            const response = await api.get("/players");
+            this.setState({players: response});
 
+        }
+        catch (error) {
+            alert(`Something went wrong getting the Players: \n${handleError(error)}`);
+        }
+    }
+
+    componentDidMount() {}
+//DISPLAY//
     render(){
 
         const location = this.state.coordinate;
@@ -145,4 +172,4 @@ class Board extends React.Component{
 
 
 }
-export default withRouter(Board);
+export default withRouter(MainBoard);

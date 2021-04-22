@@ -4,7 +4,7 @@ import { GameGuard } from "../routeProtectors/GameGuard";
 import GameRouter from "./GameRouter";
 import { LoginGuard } from "../routeProtectors/LoginGuard";
 import Login from "../../login/Login";
-import Board from "../../game/Board";
+import Board from "../../game/MainBoard";
 
 /**
  * Main router of your application.
