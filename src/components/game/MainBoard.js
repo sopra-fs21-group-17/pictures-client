@@ -4,6 +4,7 @@ import styled from "styled-components";
 import {BaseContainer} from "../../helpers/layout";
 import PictureElement from "./PictureElement";
 import {api, handleError} from "../../helpers/api";
+import {Button} from "../../views/design/Button";
 //TODO define game states
 
 const Container = styled(BaseContainer)`
@@ -32,8 +33,6 @@ const GridContainer = styled.div`
  
 `;
 
-
-
 const Grid = styled.div`
   display: grid;
   flex-direction: column;
@@ -58,7 +57,6 @@ const Grid = styled.div`
   grid-column-start: 2;
   grid-column-end: span 4;
 `;
-
 
 const GridCoordinate = styled.div`
  height: 100px;
@@ -87,6 +85,13 @@ height: 600px;
 background: pink;
 margin: 15px;
 border-radius: 5px;
+`;
+
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
 `;
 
 
@@ -166,10 +171,27 @@ class MainBoard extends React.Component{
                 </Grid>
 
             </GridContainer>
-            <UserBar></UserBar>
+            <UserBar>
+                <div>Your coordinates: XX</div>
+                <div>Your set: YY</div>
+            </UserBar>
+
+            <ButtonContainer>
+            <Button
+                width="50%"
+                onClick={() => {
+                    this.showBuildScreen();
+                }}
+            >
+                take me to build screen
+            </Button>
+        </ButtonContainer>
         </Container>);
     }
 
 
+    showBuildScreen() {
+        this.props.history.push(`/buildScreen`);
+    }
 }
 export default withRouter(MainBoard);
