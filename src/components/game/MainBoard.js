@@ -172,8 +172,8 @@ class MainBoard extends React.Component{
 
             </GridContainer>
             <UserBar>
-                <div>Your coordinates: XX</div>
-                <div>Your set: YY</div>
+                <div>Build the picture located at "{localStorage.getItem("myCoordinates")}"</div>
+                <div>with the set "{localStorage.getItem("mySet")}"</div>
             </UserBar>
 
             <ButtonContainer>

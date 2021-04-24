@@ -8,6 +8,8 @@ import { Spinner } from '../../views/design/Spinner';
 import { Button } from '../../views/design/Button';
 import { withRouter } from 'react-router-dom';
 
+import testPic from '../../test_pictures/doggo1.jpg';
+
 const Container = styled(BaseContainer)`
   color: white;
   text-align: center;
@@ -61,11 +63,18 @@ class BuildScreen extends React.Component {
     render() {
         return (
             <Container>
-                <h2>BuildScreen</h2>
+                <h2>BUILD SCREEN</h2>
                 {!this.state.users ? (
                     <Spinner />
                 ) : (
                     <div>
+                        <p></p>
+                        <div> [ here goes the set building stuff... ] </div>
+
+                        <img src={testPic}/>
+
+                        <p></p>
+
                         <Button
                             width="100%"
                             onClick={() => {

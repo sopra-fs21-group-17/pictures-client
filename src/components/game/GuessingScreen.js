@@ -10,6 +10,27 @@ import { withRouter } from 'react-router-dom';
 import PictureElement from "./PictureElement";
 
 
+const InputField = styled.input`
+  &::placeholder {
+    color: rgba(255, 255, 255, 1.0);
+  }
+  height: 35px;
+  width: 50px;
+  padding-left: 15px;
+  margin-left: -4px;
+  border: none;
+  border-radius: 20px;
+  margin-bottom: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+`;
+
+const Label = styled.label`
+  color: white;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+`;
+
 const Container = styled(BaseContainer)`
   color: white;
   text-align: center;
@@ -86,8 +107,6 @@ margin: 15px;
 border-radius: 5px;
 `;
 
-
-
 const Users = styled.ul`
   list-style: none;
   padding-left: 0;
@@ -108,6 +127,7 @@ class GuessingScreen extends React.Component {
             pictureURLs: null,
             coordinate: [0,1,2,3],
             userNames: ["adam", "eva", "fritzli", "voldemort"],
+            guess1: null, guess2: null, guess3: null, guess4: null, guess5: null
         };
     }
 
@@ -136,37 +156,133 @@ class GuessingScreen extends React.Component {
         }
     }
 
+    handleInputChange(key, value) {
+        // Example: if the key is username, this statement is the equivalent to the following one:
+        // this.setState({'username': value});
+        this.setState({ [key]: value });
+    }
+
+    showScoreScreen() {
+        this.props.history.push(`/scoreScreen`);
+    }
+
     render() {
-
-        const location = this.state.coordinate;
-
-        // map each picture to a coordinate
-        const pictureElements = location.map(coordinate => {
-            return <PictureElement coordinates={coordinate}></PictureElement>
-        })
-
-        // map each username to a container
-        const selectUsers = location.map(userName => {
-            return <PictureElement coordinates={userName}></PictureElement>
-        })
-
-        const numberColumn =[1,2,3,4];
-        const columnCoordinates = numberColumn.map((number) => {
-            return <GridCoordinate>{number}</GridCoordinate>
-        })
-
-        const letterColumn =['A','B','C','D'];
-        const rowCoordinates = letterColumn.map((letter) => {
-            return <GridCoordinate>{letter}</GridCoordinate>
-        })
 
         return (
             <Container>
-                <h2>GuessingScreen</h2>
-                {!this.state.users ? (
-                    <Spinner />
-                ) : (
+                <h1>GUESSING SCREEN</h1>
                     <div>
+                        <h3 align={"left"}>Make your guesses</h3>
+                        <p align={"left"}>Select the coordinates corresponding to the pictures position:</p>
+                        <table align={"left"}>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>coordinates</td>
+                            </tr>
+                            <tr>
+                                <td>SCREENSHOT 1</td>
+                                <td>
+                                    <InputField
+                                        placeholder="A1"
+                                        onChange={e => {
+                                            this.handleInputChange('guess1', e.target.value);
+                                        }}
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>SCREENSHOT 2</td>
+                                <td>
+                                    <InputField
+                                        placeholder="A1"
+                                        onChange={e => {
+                                            this.handleInputChange('guess2', e.target.value);
+                                        }}
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>SCREENSHOT 3</td>
+                                <td>
+                                    <InputField
+                                        placeholder="A1"
+                                        onChange={e => {
+                                            this.handleInputChange('guess3', e.target.value);
+                                        }}
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>SCREENSHOT 4</td>
+                                <td>
+                                    <InputField
+                                        placeholder="A1"
+                                        onChange={e => {
+                                            this.handleInputChange('guess4', e.target.value);
+                                        }}
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>SCREENSHOT 5</td>
+                                <td>
+                                    <InputField
+                                        placeholder="A1"
+                                        onChange={e => {
+                                            this.handleInputChange('guess5', e.target.value);
+                                        }}
+                                    />
+                                </td>
+                            </tr>
+                        </table>
+
+                        <p></p>
+                        <p align={"center-right"}>"ORIGINAL PICTURES"</p>
+                        <p></p>
+
+                        <table align={"center"}>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>1</td>
+                                <td>2</td>
+                                <td>3</td>
+                                <td>4</td>
+                                <td>5</td>
+                            </tr>
+                            <tr>
+                                <td>A</td>
+                                <td>XXX</td>
+                                <td>XXX</td>
+                                <td>XXX</td>
+                                <td>XXX</td>
+                                <td>XXX</td>
+                            </tr>
+                            <tr>
+                                <td>B</td>
+                                <td>XXX</td>
+                                <td>XXX</td>
+                                <td>XXX</td>
+                                <td>XXX</td>
+                                <td>XXX</td>
+                            </tr>
+                            <tr>
+                                <td>C</td>
+                                <td>XXX</td>
+                                <td>XXX</td>
+                                <td>XXX</td>
+                                <td>XXX</td>
+                                <td>XXX</td>
+                            </tr>
+                            <tr>
+                                <td>D</td>
+                                <td>XXX</td>
+                                <td>XXX</td>
+                                <td>XXX</td>
+                                <td>XXX</td>
+                                <td>XXX</td>
+                            </tr>
+                        </table>
+
                         <Button
                             width="100%"
                             onClick={() => {
@@ -176,22 +292,8 @@ class GuessingScreen extends React.Component {
                             Guessing is done!
                         </Button>
                     </div>
-                )}
             </Container>
         );
-    }
-
-    async startGame() {
-        try {
-            // Login successfully worked --> navigate to the route /game in the GameRouter
-            this.props.history.push(`/board`);
-        } catch (error) {
-            alert(`Something went wrong during the login: \n${handleError(error)}`);
-        }
-    }
-
-    showScoreScreen() {
-        this.props.history.push(`/scoreScreen`);
     }
 }
 
