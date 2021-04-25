@@ -120,16 +120,17 @@ class GuessingScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            userID: null,
             players: null,
             pictureURLs: null,
             coordinate: [0,1,2,3],
             userNames: ["adam", "eva", "fritzli", "voldemort"],
             // userNames: [],
-            guesses: []
-
+            guesses: [],
+            guess1: {"adam":null}, guess2: {"eva": null}, guess3: null, guess4: null,
         }
         //this.getUsers();
-         //   guess1: null, guess2: null, guess3: null, guess4: null, guess5: null
+        this.setState({username: localStorage.getItem(id)})
         };
 
 
@@ -152,23 +153,30 @@ class GuessingScreen extends React.Component {
             alert(`Something went wrong while fetching the users: \n${handleError(error)}`);
         }
     }
-
+//PUT REQUEST
     async sendGuesses(){
-        const requestBody = JSON.stringify({
-            username: this.state.username,   // todo change this to userID
-            guesses: this.state.guesses})
-     //   await api.put("/guess");
+
+        try{
+            const guesses = [this.state.guess1, this.state.guess2, this.state.guess3, this.state.guess4]
+            const requestBody = JSON.stringify({
+                username: this.state.username,   // todo change this to userID
+                guess: guesses                      //todo change Coordinate strings to integer
+            })
+            await api.put("/guess", requestBody);
+        } catch(error) {
+            alert(`Something went wrong while sending the guesses: \n${handleError(error)}`);
+        }
 
     }
 
-    handleInputChange(key, dictKey, value) {
-        // Example: if the key is username, this statement is the equivalent to the following one:
-        // this.setState({'username': value});
-     //   this.setState({ [key]:{ dictKey :value }});
-        this.state.guesses.push(dictKey,value);
-        localStorage.setItem("testvariable", key+" "+dictKey+" "+value);
+    handleInputChange(key, value) {
+     //   this.setState({ [key]:{ key: dictKey,//                              value: value }});
+     //   this.state.guesses.push(dictKey,value);
+        localStorage.setItem(key,value);
         console.log(this.state.guesses);
     }
+
+
 
     showScoreScreen() {
         this.props.history.push(`/scoreScreen`);
@@ -176,21 +184,22 @@ class GuessingScreen extends React.Component {
 
     render() {
 
-        const guessInput = this.state.userNames.map(user =>{
-
-
-           return(
-               <tr>
-                   <td>SCREENSHOT 1</td>
-               <td><InputField
-                placeholder="A1"
-                onChange={e => {
-                    this.handleInputChange('guesses', user,e.target.value);
-                }}
-               />  </td>
-               </tr>
-           )
-        })
+        // const guessInput = this.state.userNames.map(user =>{
+        //
+        //
+        //    return(
+        //        <tr>
+        //            <td>SCREENSHOT 1</td>
+        //        <td><InputField
+        //         placeholder="A1"
+        //         onChange={e => {
+        //             this.state.guesses.push(user,"");
+        //             this.handleInputChange('guesses', user,e.target.value);
+        //         }}
+        //        />  </td>
+        //        </tr>
+        //    )
+        // })
 
         return (
             <Container>
@@ -205,63 +214,52 @@ class GuessingScreen extends React.Component {
                                 <td>coordinates</td>
 
                             </tr>
-                            {guessInput}
-                        {/*    <tr>*/}
-                        {/*        <td>SCREENSHOT 1</td>*/}
-                        {/*        <td>*/}
+                            {/*{guessInput}*/}
+                            <tr>
+                                <td>SCREENSHOT 1</td>
+                                <td>
 
-                        {/*            <InputField*/}
-                        {/*                placeholder="A1"*/}
-                        {/*                onChange={e => {*/}
-                        {/*                    this.handleInputChange('guess', e.target.key,e.target.value);*/}
-                        {/*                }}*/}
-                        {/*            />*/}
-                        {/*        </td>*/}
-                        {/*    </tr>*/}
-                        {/*    <tr>*/}
-                        {/*        <td>SCREENSHOT 2</td>*/}
-                        {/*        <td>*/}
-                        {/*            <InputField*/}
-                        {/*                placeholder="A1"*/}
-                        {/*                onChange={e => {*/}
-                        {/*                    this.handleInputChange('guess', e.target.key,e.target.value);*/}
-                        {/*                }}*/}
-                        {/*            />*/}
-                        {/*        </td>*/}
-                        {/*    </tr>*/}
-                        {/*    <tr>*/}
-                        {/*        <td>SCREENSHOT 3</td>*/}
-                        {/*        <td>*/}
-                        {/*            <InputField*/}
-                        {/*                placeholder="A1"*/}
-                        {/*                onChange={e => {*/}
-                        {/*                    this.handleInputChange('guess', e.target.key,e.target.value);*/}
-                        {/*                }}*/}
-                        {/*            />*/}
-                        {/*        </td>*/}
-                        {/*    </tr>*/}
-                        {/*    <tr>*/}
-                        {/*        <td>SCREENSHOT 4</td>*/}
-                        {/*        <td>*/}
-                        {/*            <InputField*/}
-                        {/*                placeholder="A1"*/}
-                        {/*                onChange={e => {*/}
-                        {/*                    this.handleInputChange('guess', e.target.key,e.target.value);*/}
-                        {/*                }}*/}
-                        {/*            />*/}
-                        {/*        </td>*/}
-                        {/*    </tr>*/}
-                        {/*    <tr>*/}
-                        {/*        <td>SCREENSHOT 5</td>*/}
-                        {/*        <td>*/}
-                        {/*            <InputField*/}
-                        {/*                placeholder="A1"*/}
-                        {/*                onChange={e => {*/}
-                        {/*                    this.handleInputChange('guess', e.target.key,e.target.value);*/}
-                        {/*                }}*/}
-                        {/*            />*/}
-                        {/*        </td>*/}
-                        {/*    </tr>*/}
+                                    <InputField
+                                        placeholder="A1"
+                                        onChange={e => {
+                                            this.handleInputChange('guess1', e.target.value);
+                                        }}
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>SCREENSHOT 2</td>
+                                <td>
+                                    <InputField
+                                        placeholder="A1"
+                                        onChange={e => {
+                                            this.handleInputChange('guess2',e.target.value);
+                                        }}
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>SCREENSHOT 3</td>
+                                <td>
+                                    <InputField
+                                        placeholder="A1"
+                                        onChange={e => {
+                                            this.handleInputChange('guess3',e.target.value);
+                                        }}
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>SCREENSHOT 4</td>
+                                <td>
+                                    <InputField
+                                        placeholder="A1"
+                                        onChange={e => {
+                                            this.handleInputChange('guess4',e.target.value);
+                                        }}
+                                    />
+                                </td>
+                            </tr>
                         </table>
 
                         <p></p>
@@ -314,7 +312,8 @@ class GuessingScreen extends React.Component {
                         <Button
                             width="100%"
                             onClick={() => {
-                                this.userIsDoneGuessing();
+                                this.sendGuesses();
+
                             }}
                         >
                             I'm done guessing!
@@ -332,9 +331,6 @@ class GuessingScreen extends React.Component {
         );
     }
 
-    userIsDoneGuessing() {
-        
-    }
 }
 
 export default withRouter(GuessingScreen);
