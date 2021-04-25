@@ -84,9 +84,6 @@ const GridCoordinate = styled.div`
 background: pink;
 border-radius: 50px;
 margin: 15px;
-
-
-
 `;
 
 const GridVoid = styled.div`
@@ -127,9 +124,11 @@ class GuessingScreen extends React.Component {
             pictureURLs: null,
             coordinate: [0,1,2,3],
             userNames: ["adam", "eva", "fritzli", "voldemort"],
+            // userNames: [],
             guesses: []
 
         }
+        //this.getUsers();
          //   guess1: null, guess2: null, guess3: null, guess4: null, guess5: null
         };
 
