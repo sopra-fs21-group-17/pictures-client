@@ -1,4 +1,4 @@
-import React, {createContext, useEffect, useState} from "react";
+import React, {createContext, createRef, useEffect, useRef, useState} from "react";
 import styled from "styled-components";
 import {DndProvider, useDrag, useDrop} from 'react-dnd';
 import {HTML5Backend} from "react-dnd-html5-backend";
@@ -12,14 +12,43 @@ import {FreeBoard} from "./Boards/FreeBoard";
 import {ItemsSet1} from "./SetItemLists/ItemsSet1";
 import {ItemsSet2} from "./SetItemLists/ItemsSet2";
 import {withRouter} from "react-router-dom";
+import { useScreenshot } from 'use-react-screenshot'
+import {OptionsType} from "html-to-image";
 
 const FormContainer = styled.div`
   margin-top: 2em;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 300px;
+  
   justify-content: center;
+`;
+const Button = styled.div`
+  &:hover {
+    transform: translateY(-2px);
+  }
+  padding: 6px;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 18px;
+  text-align: center;
+  color: rgba(300, 255, 255, 1);
+  width: 90px;
+  height: 50px;
+  border: none;
+  border-radius: 5px;
+  cursor: ${props => (props.disabled ? "default" : "pointer")};
+  opacity: ${props => (props.disabled ? 0.4 : 1)};
+  background: green;
+  transition: all 0.3s ease;
+  float: right;
+  
+`;
+
+
+
+
+const ButtonContainer = styled.div`
+padding-bottom: 25px;
+  
 `;
 const SquareFieldContainer = styled.div`
   display:grid;
@@ -64,6 +93,10 @@ export const ItemContext = createContext({
     markAsInventory: null,
     markAsSquareField: null,
 })
+
+
+
+
 
 
 
@@ -127,20 +160,50 @@ export const SetTemplate = () => {
         setItemList(ItemsSet1)
     }, [])
 
+    const ref = createRef()
+    const [screenshot, takeScreenshot] = useScreenshot()
+    const   getImage = () => takeScreenshot(ref.current)
+    console.log(screenshot)
+
+
+
+
+
 
     return (
         <DndProvider backend={HTML5Backend}>
+
             <ItemContext.Provider value={{ markAsInventory, markAsBoard, markAsSquareField }}>
                 <BaseContainer>
+
+
+
                     <FormContainer>
+                        <div ref={ref}>
                         <BorderContainer>
+
+
+
+
                             <BoardContainer>
+
                                 <GridBoard itemlist={itemList}/>
+
                             </BoardContainer>
+
+
+
                         </BorderContainer>
+                </div>
+
+
 
 
                     </FormContainer>
+                   <ButtonContainer>
+                    <Button onClick={getImage}>Submit</Button>
+                   </ButtonContainer>
+
                     <Inventory>
                         {itemList
                             .filter((task, i) => task.location === 'inventory')
