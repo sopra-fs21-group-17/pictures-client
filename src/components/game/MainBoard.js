@@ -85,6 +85,8 @@ height: 600px;
 background: pink;
 margin: 15px;
 border-radius: 5px;
+
+color: black;
 `;
 
 
