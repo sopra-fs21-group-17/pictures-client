@@ -171,7 +171,7 @@ export const SetTemplate = () => {
                         <div ref={ref}>
                             <BorderContainer>
                                 <BoardContainer>
-                                    <GridBoard itemlist={itemList}/>
+                                    <FreeBoard itemlist={itemList}></FreeBoard>
                                 </BoardContainer>
                             </BorderContainer>
                         </div>
