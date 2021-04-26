@@ -66,7 +66,7 @@ background: transparent;
   grid-column-start: 1;
 `;
 
-
+//TODO add api call method to the rendermethod so pictures are taken from backend
 class PictureGrid extends React.Component{
     constructor(props){
         super(props);

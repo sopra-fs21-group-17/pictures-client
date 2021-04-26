@@ -11,7 +11,10 @@ import Home from "../../home/Home";
 import Game from "../../game/Game";
 import {LobbyGuard} from "../routeProtectors/LobbyGuard";
 import Lobby from "../../lobby/Lobby";
-
+import MainBoard from "../../game/MainBoard";
+import BuildScreen from "../../game/BuildScreen";
+import GuessingScreen from "../../game/GuessingScreen";
+import ScoreScreen from "../../game/ScoreScreen";
 
 /**
  * Main router of your application.
@@ -55,7 +58,7 @@ class AppRouter extends React.Component {
                   path="/board"
                   exact
                   render={() => (
-                      <Board />
+                      <MainBoard />
                   )}
               />
               <Route

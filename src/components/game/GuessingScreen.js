@@ -8,6 +8,7 @@ import { Spinner } from '../../views/design/Spinner';
 import { Button } from '../../views/design/Button';
 import { withRouter } from 'react-router-dom';
 import PictureElement from "./PictureElement";
+import PictureGrid from "./PictureGrid";
 
 
 const InputField = styled.input`
@@ -266,48 +267,8 @@ class GuessingScreen extends React.Component {
                         <p align={"center-right"}>"ORIGINAL PICTURES"</p>
                         <p></p>
 
-                        <table align={"center"}>
-                            <tr>
-                                <td>&nbsp;</td>
-                                <td>1</td>
-                                <td>2</td>
-                                <td>3</td>
-                                <td>4</td>
-                                <td>5</td>
-                            </tr>
-                            <tr>
-                                <td>A</td>
-                                <td>XXX</td>
-                                <td>XXX</td>
-                                <td>XXX</td>
-                                <td>XXX</td>
-                                <td>XXX</td>
-                            </tr>
-                            <tr>
-                                <td>B</td>
-                                <td>XXX</td>
-                                <td>XXX</td>
-                                <td>XXX</td>
-                                <td>XXX</td>
-                                <td>XXX</td>
-                            </tr>
-                            <tr>
-                                <td>C</td>
-                                <td>XXX</td>
-                                <td>XXX</td>
-                                <td>XXX</td>
-                                <td>XXX</td>
-                                <td>XXX</td>
-                            </tr>
-                            <tr>
-                                <td>D</td>
-                                <td>XXX</td>
-                                <td>XXX</td>
-                                <td>XXX</td>
-                                <td>XXX</td>
-                                <td>XXX</td>
-                            </tr>
-                        </table>
+
+                        <PictureGrid></PictureGrid>
 
                         <Button
                             width="100%"

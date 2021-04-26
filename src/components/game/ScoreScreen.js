@@ -32,7 +32,7 @@ class ScoreScreen extends React.Component {
         };
     }
 
-    async componentDidMount() {
+    async getUsers() {
         try {
             const response = await api.get('/users');
             // delays continuous execution of an async operation for 1 second.
