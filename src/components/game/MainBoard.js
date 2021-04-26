@@ -5,6 +5,7 @@ import {BaseContainer} from "../../helpers/layout";
 import PictureElement from "./PictureElement";
 import {api, handleError} from "../../helpers/api";
 import {Button} from "../../views/design/Button";
+import PictureGrid from "./PictureGrid"
 //TODO define game states
 
 const Container = styled(BaseContainer)`
@@ -147,32 +148,33 @@ class MainBoard extends React.Component{
 //DISPLAY//
     render(){
 
-        const location = this.state.coordinate;
-        const pictureElements = location.map(coordinate => {
-            return <PictureElement coordinates={coordinate}></PictureElement>
-        })
-        const numberColumn =[1,2,3,4];
-        const columnCoordinates = numberColumn.map((number) => {
-            return <GridCoordinate>{number}</GridCoordinate>
-        })
-
-        const letterColumn =['A','B','C','D'];
-        const rowCoordinates = letterColumn.map((letter) => {
-            return <GridCoordinate>{letter}</GridCoordinate>
-        })
+        // const location = this.state.coordinate;
+        // const pictureElements = location.map(coordinate => {
+        //     return <PictureElement coordinates={coordinate}></PictureElement>
+        // })
+        // const numberColumn =[1,2,3,4];
+        // const columnCoordinates = numberColumn.map((number) => {
+        //     return <GridCoordinate>{number}</GridCoordinate>
+        // })
+        //
+        // const letterColumn =['A','B','C','D'];
+        // const rowCoordinates = letterColumn.map((letter) => {
+        //     return <GridCoordinate>{letter}</GridCoordinate>
+        // })
 
         return(<Container>
 
-            <GridContainer>
-                <GridVoid/>
-                {columnCoordinates}
-                {rowCoordinates}
+            {/*<GridContainer>*/}
+            {/*    <GridVoid/>*/}
+            {/*    {columnCoordinates}*/}
+            {/*    {rowCoordinates}*/}
 
-                <Grid>
-                    {pictureElements}
-                </Grid>
+            {/*    <Grid>*/}
+            {/*        {pictureElements}*/}
+            {/*    </Grid>*/}
 
-            </GridContainer>
+            {/*</GridContainer>*/}
+            <PictureGrid/>
             <UserBar>
                 <div>Build the picture located at "{localStorage.getItem("myCoordinates")}"</div>
                 <div>with the set "{localStorage.getItem("mySet")}"</div>

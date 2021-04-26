@@ -130,7 +130,7 @@ class GuessingScreen extends React.Component {
             guess1: {"adam":null}, guess2: {"eva": null}, guess3: null, guess4: null,
         }
         //this.getUsers();
-        this.setState({username: localStorage.getItem(id)})
+   //     this.setState({username: localStorage.getItem(id)})
         };
 
 
