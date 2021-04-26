@@ -1,19 +1,14 @@
-import React, {createContext, createRef, useEffect, useRef, useState} from "react";
+import React, {createContext, createRef, useEffect, useState} from "react";
 import styled from "styled-components";
-import {DndProvider, useDrag, useDrop} from 'react-dnd';
+import {DndProvider} from 'react-dnd';
 import {HTML5Backend} from "react-dnd-html5-backend";
 import {BaseContainer} from "../../helpers/layout";
 import {Square} from "./Items/Square";
 import {GridBoard} from "./Boards/GridBoard";
-import {ItemTypes} from "../utils/Items";
 import {Inventory} from "./Inventory";
-import {SquareField} from "./Boards/SquareField";
-import {FreeBoard} from "./Boards/FreeBoard";
 import {ItemsSet1} from "./SetItemLists/ItemsSet1";
-import {ItemsSet2} from "./SetItemLists/ItemsSet2";
 import {withRouter} from "react-router-dom";
-import { useScreenshot } from 'use-react-screenshot'
-import {OptionsType} from "html-to-image";
+import {useScreenshot} from 'use-react-screenshot'
 import img from './wood_texture_background.jpg';
 
 
@@ -46,10 +41,9 @@ const Button = styled.div`
   
 `;
 
-const ButtonContainer = styled.div`
-padding-bottom: 25px;
 
-  
+const ButtonContainer = styled.div`
+padding-bottom: 25px;  
 `;
 const SquareFieldContainer = styled.div`
   display:grid;
@@ -67,8 +61,7 @@ const BoardContainer = styled.div`
   background: #c4c4c4;
   justify-content: center;
   align-items: center;
-  
-  
+
 `;
 const BorderContainer = styled.div`
   width: 60vh;
@@ -98,22 +91,14 @@ export const ItemContext = createContext({
 })
 
 
-
-
-
-
-
 export const SetTemplate = () => {
-    const [itemList, setItemList] = useState([
-
-    ]);
-
+    const [itemList, setItemList] = useState([]);
 
 
     const markAsBoard = _id => {
         const item = itemList.filter((item, i) => item._id === _id);
         item[0].location = 'board';
-        item[0].amount = item[0].amount-1;
+        item[0].amount = item[0].amount - 1;
         setItemList((itemList.filter((item, i) => item._id < _id).concat(item[0])).concat(itemList.filter((item, i) => item._id > _id)));
     };
 
@@ -128,31 +113,31 @@ export const SetTemplate = () => {
         const newList = itemList.filter((item, i) => item._id !== _id)
 
         //only apply changes when item is moved from board to inventory
-        if(movedItem[0].location != 'inventory'){
+        if (movedItem[0].location != 'inventory') {
             inventoryItem[0].amount += 1;
             setItemList((newList.filter((item, i) => item._id < inventoryItem[0]._id).concat(inventoryItem[0])).concat(newList.filter((item, i) => item._id > inventoryItem[0]._id)));
         }
     };
 
-    const markAsSquareField = (square,x) => {
+    const markAsSquareField = (square, x) => {
         //gets the item that was moved
         const item = itemList.filter((item, i) => item._id === square.id);
 
         //creates a new item
         const newSquare = {
-                _id: square.id+10*square.id*square.amount,
-                location: 'squarefield'+x,
-                color: item[0].color,
-                amount: item[0].amount-1,
-            };
+            _id: square.id + 10 * square.id * square.amount,
+            location: 'squarefield' + x,
+            color: item[0].color,
+            amount: item[0].amount - 1,
+        };
 
         //only applies changes if item moved to a empty square or the inventory
-        if(itemList.filter((item, i) => item.location === 'squarefield'+x).length === 0){
-            if(square.location != 'inventory'){
-                item[0].location = 'squarefield'+x;
+        if (itemList.filter((item, i) => item.location === 'squarefield' + x).length === 0) {
+            if (square.location != 'inventory') {
+                item[0].location = 'squarefield' + x;
                 setItemList(itemList.filter((item, i) => item._id !== square.id).concat(item[0]));
             } else {
-                item[0].amount = item[0].amount-1;
+                item[0].amount = item[0].amount - 1;
                 setItemList(((itemList.filter((item, i) => item._id < square.id).concat(item[0])).concat(itemList.filter((item, i) => item._id > square.id))).concat(newSquare));
             }
         }
@@ -165,48 +150,27 @@ export const SetTemplate = () => {
 
     const ref = createRef()
     const [screenshot, takeScreenshot] = useScreenshot()
-    const   getImage = () => takeScreenshot(ref.current)
+    const getImage = () => takeScreenshot(ref.current)
     console.log(screenshot)
-
-
-
-
 
 
     return (
         <DndProvider backend={HTML5Backend}>
 
-            <ItemContext.Provider value={{ markAsInventory, markAsBoard, markAsSquareField }}>
+            <ItemContext.Provider value={{markAsInventory, markAsBoard, markAsSquareField}}>
                 <BaseContainer>
-
-
-
                     <FormContainer>
                         <div ref={ref}>
-                        <BorderContainer>
-
-
-
-
-                            <BoardContainer>
-
-                                <GridBoard itemlist={itemList}/>
-
-                            </BoardContainer>
-
-
-
-                        </BorderContainer>
+                            <BorderContainer>
+                                <BoardContainer>
+                                    <GridBoard itemlist={itemList}/>
+                                </BoardContainer>
+                            </BorderContainer>
                         </div>
-
-
-
-
                     </FormContainer>
-                   <ButtonContainer>
-                    <Button onClick={getImage}>Submit</Button>
-                   </ButtonContainer>
-
+                    <ButtonContainer>
+                        <Button onClick={getImage}>Submit</Button>
+                    </ButtonContainer>
                     <Inventory>
                         {itemList
                             .filter((task, i) => task.location === 'inventory')
