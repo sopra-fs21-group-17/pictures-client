@@ -4,7 +4,6 @@ import {ItemTypes} from "../../utils/Items";
 import React, {useCallback, useContext, useState} from "react";
 import {ItemContext} from "../SetTemplate";
 import update from 'immutability-helper';
-import {Box} from "../Box";
 import {Stick} from "../Items/Stick";
 
 const BoardContainer = styled.div`
@@ -17,60 +16,41 @@ const BoardContainer = styled.div`
   // grid-template-rows: repeat(3, 1fr);
 `;
 
-const BorderContainer = styled.div`
-  width: 60vh;
-  height: 60vh;
-  background: #1f1f1f;
-  padding-top: 2.5%;
-  padding-bottom: 2.5%;
-  padding-left: 2.5%;
-  padding-right: 2.5%;
-  
-`;
+export const FreeBoard = ({ itemlist }) => {
 
-export const FreeBoard = ({ hideSourceOnDrag }) => {
-
-    const { markAsBoard } = useContext(ItemContext)
-
-    const [boxes, setBoxes] = useState({
-        a: {top: 20, left: 80, title: 'Drag me around'},
-        b: {top: 180, left: 20, title: 'Drag me too'},
-    });
-
-    const moveBox = useCallback((id, left, top) => {
-        setBoxes(update(boxes, {
-            [id]: {
-                $merge: { left, top },
-            },
-        }));
-    }, [boxes,setBoxes]);
-
-
+    const { moveItem } = useContext(ItemContext)
 
     const [ , drop] = useDrop(() => ({
-            accept: ItemTypes.STICK,
+            accept: ItemTypes.ITEM,
             drop(item, monitor) {
                 const delta = monitor.getDifferenceFromInitialOffset();
                 const left = Math.round(item.left + delta.x);
                 const top = Math.round(item.top + delta.y);
-                moveBox(item.id, left, top);
+                moveItem(item._id, left, top);
                 return undefined;
             },
-        }), [moveBox]);
+        }), [moveItem]);
 
         return (
-            <BorderContainer>
-                <BoardContainer
-                    ref={drop}>
-                    {Object.keys(boxes).map((key) => {
-                        const { left, top, title } = boxes[key];
-                        return ( <Stick key={key} id={key} left={left} top={top} hideSourceOnDrag={hideSourceOnDrag}>
-                            {title}
-                        </Stick>);
-                    })}
-                </BoardContainer>
-            </BorderContainer>
-
+            <BoardContainer
+                ref={drop}>
+                {itemlist
+                    .filter((task, i) => task.location === 'board')
+                    .map((key) => {
+                    return (
+                        <Stick
+                            key={key._id}
+                            _id={key._id}
+                            location={key.location}
+                            left={key.left}
+                            top={key.top}
+                            color={key.color}
+                            amount={key.amount}
+                            hideSourceOnDrag={key.hideSourceOnDrag}
+                        />
+                    );
+                })}
+            </BoardContainer>
         );
 
 
