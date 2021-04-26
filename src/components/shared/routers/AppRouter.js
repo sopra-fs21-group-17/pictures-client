@@ -4,11 +4,8 @@ import { GameGuard } from "../routeProtectors/GameGuard";
 import GameRouter from "./GameRouter";
 import { LoginGuard } from "../routeProtectors/LoginGuard";
 import Login from "../../login/Login";
-import Board from "../../game/MainBoard";
-import Lobby from "../../game/Lobby";
-import BuildScreen from "../../game/BuildScreen";
-import GuessingScreen from "../../game/GuessingScreen";
-import ScoreScreen from "../../game/ScoreScreen";
+import SetOne from "../../Sets/SetTemplate";
+import {SetTemplate} from "../../Sets/SetTemplate";
 
 /**
  * Main router of your application.
@@ -84,7 +81,23 @@ class AppRouter extends React.Component {
                 </GameGuard>
               )}
             />
-
+            <Route
+              path="/login"
+              exact
+              render={() => (
+                <LoginGuard>
+                  <Login />
+                </LoginGuard>
+              )}
+            />
+            <Route
+                path="/SetTemplate"
+                exact
+                render={() => (
+                        <SetTemplate />
+                )}
+            />
+            <Route path="/" exact render={() => <Redirect to={"/game"} />} />
           </div>
         </Switch>
       </BrowserRouter>

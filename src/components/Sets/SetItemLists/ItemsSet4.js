@@ -1,0 +1,116 @@
+export const ItemsSet4 = [
+    {
+        _id: 1,
+        location: 'inventory',
+        color: 'black',
+        amount: 1,
+    },
+    {
+        _id: 2,
+        location: 'inventory',
+        color: 'white',
+        amount: 1,
+    },
+    {
+        _id: 3,
+        location: 'inventory',
+        color: 'darkgray',
+        amount: 1,
+    },
+    {
+        _id: 4,
+        location: 'inventory',
+        color: 'red',
+        amount: 1,
+    },
+    {
+        _id: 5,
+        location: 'inventory',
+        color: 'limegreen',
+        amount: 1,
+    },
+    {
+        _id: 6,
+        location: 'inventory',
+        color: 'yellow',
+        amount: 1,
+    },
+    {
+        _id: 7,
+        location: 'inventory',
+        color: 'blue',
+        amount: 1,
+    },
+    {
+        _id: 8,
+        location: 'inventory',
+        color: 'brown',
+        amount: 1,
+    },
+    {
+        _id: 9,
+        location: 'inventory',
+        color: 'brown',
+        amount: 1,
+    },
+    {
+        _id: 10,
+        location: 'inventory',
+        color: 'brown',
+        amount: 1,
+    },
+    {
+        _id: 11,
+        location: 'inventory',
+        color: 'brown',
+        amount: 1,
+    },
+    {
+        _id: 12,
+        location: 'inventory',
+        color: 'brown',
+        amount: 1,
+    },
+    {
+        _id: 13,
+        location: 'inventory',
+        color: 'brown',
+        amount: 1,
+    },
+    {
+        _id: 14,
+        location: 'inventory',
+        color: 'brown',
+        amount: 1,
+    },
+    {
+        _id: 15,
+        location: 'inventory',
+        color: 'brown',
+        amount: 1,
+    },
+    {
+        _id: 16,
+        location: 'inventory',
+        color: 'brown',
+        amount: 1,
+    },
+    {
+        _id: 17,
+        location: 'inventory',
+        color: 'brown',
+        amount: 1,
+    },
+    {
+        _id: 18,
+        location: 'inventory',
+        color: 'brown',
+        amount: 1,
+    },
+    {
+        _id: 19,
+        location: 'inventory',
+        color: 'brown',
+        amount: 1,
+    }
+]
