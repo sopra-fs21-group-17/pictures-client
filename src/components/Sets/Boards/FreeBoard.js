@@ -1,6 +1,6 @@
 import { useDrop} from "react-dnd";
 import styled from "styled-components";
-import {ItemTypes} from "../../utils/Items";
+import {ItemTypes} from "../utils/Items";
 import React, {useCallback, useContext, useState} from "react";
 import {ItemContext} from "../SetTemplate";
 import update from 'immutability-helper';

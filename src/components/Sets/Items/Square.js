@@ -4,7 +4,7 @@ import {useDrag} from "react-dnd";
 
 import React from "react";
 
-import {ItemTypes} from '../../utils/Items';
+import {ItemTypes} from '../utils/Items';
 
 
 const SquareContainer = styled.div`

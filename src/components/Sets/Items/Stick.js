@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import {useDrag} from "react-dnd";
-import {ItemTypes} from '../../utils/Items';
+import {ItemTypes} from '../utils/Items';
 
 const StickContainer = styled.div`
   display: flex;

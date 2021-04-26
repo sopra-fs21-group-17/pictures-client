@@ -5,7 +5,7 @@ import {HTML5Backend} from "react-dnd-html5-backend";
 import {BaseContainer} from "../../helpers/layout";
 import {Square} from "./Items/Square";
 import {GridBoard} from "./Boards/GridBoard";
-import {ItemTypes} from "../utils/Items";
+import {ItemTypes} from "./utils/Items";
 import {Inventory} from "./Inventory";
 import {SquareField} from "./Boards/SquareField";
 import {FreeBoard} from "./Boards/FreeBoard";
