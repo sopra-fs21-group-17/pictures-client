@@ -14,6 +14,8 @@ import {ItemsSet2} from "./SetItemLists/ItemsSet2";
 import {withRouter} from "react-router-dom";
 import { useScreenshot } from 'use-react-screenshot'
 import {OptionsType} from "html-to-image";
+import img from './wood_texture_background.jpg';
+
 
 const FormContainer = styled.div`
   margin-top: 2em;
@@ -25,6 +27,7 @@ const Button = styled.div`
   &:hover {
     transform: translateY(-2px);
   }
+  
   padding: 6px;
   font-weight: 700;
   text-transform: uppercase;
@@ -43,11 +46,9 @@ const Button = styled.div`
   
 `;
 
-
-
-
 const ButtonContainer = styled.div`
 padding-bottom: 25px;
+
   
 `;
 const SquareFieldContainer = styled.div`
@@ -67,15 +68,17 @@ const BoardContainer = styled.div`
   justify-content: center;
   align-items: center;
   
+  
 `;
 const BorderContainer = styled.div`
   width: 60vh;
   height: 60vh;
-  background: #1f1f1f;
-  padding-top: 2.5%;
-  padding-bottom: 2.5%;
-  padding-left: 2.5%;
-  padding-right: 2.5%;
+  background-image: url(${img});
+
+  padding-top: 3.5%;
+  padding-bottom: 3.5%;
+  padding-left: 3.5%;
+  padding-right: 3.5%;
 `;
 
 const ItemContainer = styled.div`
@@ -194,7 +197,7 @@ export const SetTemplate = () => {
 
 
                         </BorderContainer>
-                </div>
+                        </div>
 
 
 
