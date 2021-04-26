@@ -37,64 +37,6 @@ const Container = styled(BaseContainer)`
   text-align: center;
 `;
 
-const GridContainer = styled.div`
-  
-  display: grid;
-  align-items: center;
-  min-height: 300px;
-  min-width: 600px;
-  justify-content: center;
-  
-  grid-template-areas: 
-  'empty 1 2 3 4'
-  'A G G G G'
-  'B G G G G'
-  'C G G G G'
-  'D G G G G';
- 
-`;
-
-const Grid = styled.div`
-  display: grid;
-  flex-direction: column;
-  grid-gap: 10px;
-  
-  width: auto;
-  height: 600px;
-  
-  padding-left: 15px;
-  padding-right: 15px;
-  padding-top: 15px;
-  padding-bottom: 15px;
-  border-radius: 5px;
-  
-  
-  background: linear-gradient(rgb(27, 124, 186), rgb(2, 46, 101));
-  transition: opacity 0.5s ease, transform 0.5s ease;
-  grid-template-columns: repeat(4,1fr);
-  grid-template-rows: repeat(4,1fr);
-  grid-row-start: 2;
-  grid-row-end: span 4;
-  grid-column-start: 2;
-  grid-column-end: span 4;
-`;
-
-const GridCoordinate = styled.div`
- height: 100px;
-  width: 100px;
-background: pink;
-border-radius: 50px;
-margin: 15px;
-`;
-
-const GridVoid = styled.div`
-background: transparent;
- height: auto;
-  width: auto;
-  grid-row-start: 1;
-  grid-column-start: 1;
-`;
-
 const UserBar = styled.div`
 display: flex;
 flex-direction: row;
@@ -117,6 +59,7 @@ const PlayerContainer = styled.li`
   justify-content: center;
 `;
 
+//TODO add Constraints for coordinate guessing like only able to input A-D and 1-4 : if possible in js use Regex
 class GuessingScreen extends React.Component {
     constructor(props) {
         super(props);
@@ -127,7 +70,7 @@ class GuessingScreen extends React.Component {
             coordinate: [0,1,2,3],
             userNames: ["adam", "eva", "fritzli", "voldemort"],
             // userNames: [],
-            guesses: [],
+            guesses: {},
             guess1: {"adam":null}, guess2: {"eva": null}, guess3: null, guess4: null,
         }
         //this.getUsers();
@@ -158,10 +101,10 @@ class GuessingScreen extends React.Component {
     async sendGuesses(){
 
         try{
-            const guesses = [this.state.guess1, this.state.guess2, this.state.guess3, this.state.guess4]
+       //     const guesses = [this.state.guess1, this.state.guess2, this.state.guess3, this.state.guess4]
             const requestBody = JSON.stringify({
                 username: this.state.username,   // todo change this to userID
-                guess: guesses                      //todo change Coordinate strings to integer
+                guesses: this.state.guesses                  //todo change Coordinate strings to integer (maybe in BE)
             })
             await api.put("/guess", requestBody);
         } catch(error) {
@@ -170,37 +113,45 @@ class GuessingScreen extends React.Component {
 
     }
 
-    handleInputChange(key, value) {
-     //   this.setState({ [key]:{ key: dictKey,//                              value: value }});
-     //   this.state.guesses.push(dictKey,value);
-        localStorage.setItem(key,value);
+    // handleInputChange(key, value) {
+    //  //   this.setState({ [key]:{ key: dictKey,//                              value: value }});
+    //  //   this.state.guesses.push(dictKey,value);
+    //     localStorage.setItem(key,value);
+    //     console.log(this.state.guesses);
+    // }
+
+    saveGuessToDict(user, value) {
+
+        this.setState({...this.state,
+            guesses: {...this.state.guesses,[user]:value}})
+        localStorage.setItem(user,value);
         console.log(this.state.guesses);
     }
-
-
 
     showScoreScreen() {
         this.props.history.push(`/scoreScreen`);
     }
 
     render() {
+        let num = 1
+        const guessInput = this.state.userNames.map(user =>{
 
-        // const guessInput = this.state.userNames.map(user =>{
-        //
-        //
-        //    return(
-        //        <tr>
-        //            <td>SCREENSHOT 1</td>
-        //        <td><InputField
-        //         placeholder="A1"
-        //         onChange={e => {
-        //             this.state.guesses.push(user,"");
-        //             this.handleInputChange('guesses', user,e.target.value);
-        //         }}
-        //        />  </td>
-        //        </tr>
-        //    )
-        // })
+           return(
+               <tr>
+                   <td>SCREENSHOT {num++}</td>
+
+               <td>
+
+                   <InputField
+                placeholder="A1"
+                onChange={e => {
+                    this.saveGuessToDict( user,e.target.value);
+                }}
+               />  </td>
+               </tr>
+           )
+
+        })
 
         return (
             <Container>
@@ -215,52 +166,7 @@ class GuessingScreen extends React.Component {
                                 <td>coordinates</td>
 
                             </tr>
-                            {/*{guessInput}*/}
-                            <tr>
-                                <td>SCREENSHOT 1</td>
-                                <td>
-
-                                    <InputField
-                                        placeholder="A1"
-                                        onChange={e => {
-                                            this.handleInputChange('guess1', e.target.value);
-                                        }}
-                                    />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>SCREENSHOT 2</td>
-                                <td>
-                                    <InputField
-                                        placeholder="A1"
-                                        onChange={e => {
-                                            this.handleInputChange('guess2',e.target.value);
-                                        }}
-                                    />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>SCREENSHOT 3</td>
-                                <td>
-                                    <InputField
-                                        placeholder="A1"
-                                        onChange={e => {
-                                            this.handleInputChange('guess3',e.target.value);
-                                        }}
-                                    />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>SCREENSHOT 4</td>
-                                <td>
-                                    <InputField
-                                        placeholder="A1"
-                                        onChange={e => {
-                                            this.handleInputChange('guess4',e.target.value);
-                                        }}
-                                    />
-                                </td>
-                            </tr>
+                            {guessInput}
                         </table>
 
                         <p></p>
