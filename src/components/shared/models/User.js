@@ -12,7 +12,6 @@ class User {
     this.model = null;
     this.totalScore = null;
     this.isReady = null;
-    //this.status = null;
     Object.assign(this, data);
   }
 }

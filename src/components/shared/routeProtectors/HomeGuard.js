@@ -9,6 +9,6 @@ export const HomeGuard = props => {
     if (localStorage.getItem("token")) {
         return props.children;
     }
-    // if user is already logged in, redirects to the main /app
+
     return <Redirect to={"/login"} />;
 };

@@ -33,8 +33,8 @@ class Game extends React.Component {
   }
 
   logout() {
-    localStorage.removeItem('token');
-    this.props.history.push('/login');
+    // localStorage.removeItem('token');
+    this.props.history.push('/home');
   }
 
   async componentDidMount() {
@@ -66,30 +66,18 @@ class Game extends React.Component {
     return (
       <Container>
         <h2>Happy Coding! </h2>
-        <p>Get all users from secure end point:</p>
-        {!this.state.users ? (
-          <Spinner />
-        ) : (
+        <h1>GAME</h1>
+
           <div>
-            <Users>
-              {this.state.users.map(user => {
-                return (
-                  <PlayerContainer key={user.id}>
-                    <Player user={user} />
-                  </PlayerContainer>
-                );
-              })}
-            </Users>
             <Button
               width="100%"
               onClick={() => {
                 this.logout();
               }}
             >
-              Logout
+              Home
             </Button>
           </div>
-        )}
       </Container>
     );
   }

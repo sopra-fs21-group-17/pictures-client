@@ -7,7 +7,8 @@ body {
   margin: 0;
   padding: 0;
   font-family: "Open Sans", sans-serif;
-  background: radial-gradient(57.15% 49.22% at 50% 50%, rgba(104, 104, 104, 0.948138) 0%, rgba(70, 70, 70, 0.948138) 100%);
+  background:radial-gradient( rgba(104, 104, 104, 0.948138) , rgba(70, 70, 70, 0.948138));
+;
 
 }
 

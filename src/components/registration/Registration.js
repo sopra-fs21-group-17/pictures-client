@@ -5,9 +5,11 @@ import { api, handleError } from '../../helpers/api';
 import User from '../shared/models/User';
 import { withRouter } from 'react-router-dom';
 import { Button } from '../../views/design/Button';
+import Header from "../../views/Header";
 
 const FormContainer = styled.div`
   margin-top: 2em;
+  margin-bottom: 2em;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -20,7 +22,7 @@ const Form = styled.div`
   flex-direction: column;
   justify-content: center;
   width: 50%;
-  height: 400px;
+  height: 275px;
   font-size: 16px;
   font-weight: 300;
   padding-left: 37px;
@@ -39,7 +41,7 @@ const InputField = styled.input`
   margin-left: -4px;
   border: none;
   border-radius: 5px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   background: rgba(230, 230, 230, 0.2);
   color: white;
 `;
@@ -76,6 +78,7 @@ class Registration extends React.Component {
         this.state = {
             username: null,
             password: null,
+            birthdate: "",
         };
     }
     /**
@@ -87,7 +90,8 @@ class Registration extends React.Component {
         try {
             const requestBody = JSON.stringify({
                 username: this.state.username,
-                password: this.state.password
+                password: this.state.password,
+                birthdate: this.state.birthdate,
             });
             const response = await api.post('/users', requestBody);
 
@@ -133,15 +137,18 @@ class Registration extends React.Component {
     render() {
         return (
             <BaseContainer>
+                <Header height={"100"} />
+                <h1 style={{color: "white", textAlign: "center", fontSize: "60px"}}>Register</h1>
                 <FormContainer>
                     <Form>
-                        <h1 style={{color: "white", textAlign: "center"}}>Registration</h1>
+                        <Label>Username</Label>
                         <InputField
                             placeholder="Username"
                             onChange={e => {
                                 this.handleInputChange('username', e.target.value);
                             }}
                         />
+                        <Label>Password</Label>
                         <InputField
                             placeholder="Password"
                             type="password"
@@ -149,29 +156,40 @@ class Registration extends React.Component {
                                 this.handleInputChange('password', e.target.value);
                             }}
                         />
-                        <ButtonContainer>
-                            <Button
-                                disabled={!this.state.username || !this.state.password}
-                                width="50%"
-                                onClick={() => {
-                                    this.register();
-                                }}
-                            >
-                                Register
-                            </Button>
-                        </ButtonContainer>
-                        <ButtonContainer>
-                            <Button
-                                width="50%"
-                                onClick={() => {
-                                    this.login();
-                                }}
-                            >
-                                 Back to login
-                            </Button>
-                        </ButtonContainer>
+                        <Label>Birthdate</Label>
+                        <InputField
+                            placeholder="Birthdate"
+                            type="date"
+                            max="2003-04-21"
+                            min="1903-01-02"
+                            onChange={e => {
+                                this.handleInputChange('birthdate', e.target.value);
+                            }}
+                        />
+
                     </Form>
                 </FormContainer>
+                <ButtonContainer>
+                    <Button
+                        disabled={!this.state.username || !this.state.password || !this.state.birthdate}
+                        width="20%"
+                        onClick={() => {
+                            this.register();
+                        }}
+                    >
+                        Register
+                    </Button>
+                </ButtonContainer>
+                <ButtonContainer>
+                    <Button
+                        width="20%"
+                        onClick={() => {
+                            this.login();
+                        }}
+                    >
+                        Go To Login
+                    </Button>
+                </ButtonContainer>
             </BaseContainer>
         );
     }

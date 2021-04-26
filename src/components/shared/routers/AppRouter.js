@@ -9,6 +9,8 @@ import Registration from "../../registration/Registration";
 import {HomeGuard} from "../routeProtectors/HomeGuard";
 import Home from "../../home/Home";
 import Game from "../../game/Game";
+import {LobbyGuard} from "../routeProtectors/LobbyGuard";
+import Lobby from "../../lobby/Lobby";
 
 
 /**
@@ -52,6 +54,24 @@ class AppRouter extends React.Component {
                     </RegistrationGuard>
                 )}
             />
+            <Route
+                path="/lobby"
+                render={() => (
+                    <LobbyGuard>
+                        <Lobby />
+                    </LobbyGuard>
+                )}
+            />
+              <Route
+                  path="/game"
+                  exact
+                  render={() => (
+                      <GameGuard>
+                          <Game />
+                      </GameGuard>
+                  )}
+              />
+
             <Route path="/" exact render={() => <Redirect to={"/home"} />} />
           </div>
         </Switch>

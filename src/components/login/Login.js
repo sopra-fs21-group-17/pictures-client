@@ -5,13 +5,15 @@ import { api, handleError } from '../../helpers/api';
 import User from '../shared/models/User';
 import { withRouter } from 'react-router-dom';
 import { Button } from '../../views/design/Button';
+import Header from "../../views/Header";
 
 const FormContainer = styled.div`
   margin-top: 2em;
+  margin-bottom: 2em;
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 300px;
+  min-height: 200px;
   justify-content: center;
 `;
 
@@ -20,11 +22,13 @@ const Form = styled.div`
   flex-direction: column;
   justify-content: center;
   width: 50%;
-  height: 400px;
+  height: 200px;
   font-size: 16px;
   font-weight: 300;
   padding-left: 37px;
   padding-right: 37px;
+  padding-top: 40px;
+  padding-bottom: 40px;
   border-radius: 5px;
   background: rgba(137, 137, 137, 1);
   transition: opacity 0.5s ease, transform 0.5s ease;
@@ -101,7 +105,7 @@ class Login extends React.Component {
 
       // Store the token into the local storage.
       localStorage.setItem('token', user.token);
-      localStorage.setItem('username', user.username)
+      localStorage.setItem('currentUsername', user.username)
 
 
       // Login successfully worked --> navigate to the route /home in the GameRouter
@@ -139,9 +143,10 @@ class Login extends React.Component {
   render() {
     return (
       <BaseContainer>
+        <Header height={"100"} />
+        <h1 style={{color: "white", textAlign: "center", fontSize:"60px"}}>Login</h1>
         <FormContainer>
           <Form>
-            <h1 style={{color: "white", textAlign: "center"}}>Login</h1>
             <InputField
               placeholder="Username"
               onChange={e => {
@@ -155,29 +160,30 @@ class Login extends React.Component {
                 this.handleInputChange('password', e.target.value);
               }}
             />
-            <ButtonContainer>
-              <Button
-                disabled={!this.state.username || !this.state.password}
-                width="50%"
-                onClick={() => {
-                  this.login();
-                }}
-              >
-                Login
-              </Button>
-            </ButtonContainer>
-            <ButtonContainer>
-              <Button
-                width="50%"
-                onClick={() => {
-                  this.register();
-                }}
-              >
-                Register Now
-              </Button>
-            </ButtonContainer>
+
           </Form>
         </FormContainer>
+        <ButtonContainer>
+          <Button
+              disabled={!this.state.username || !this.state.password}
+              width="20%"
+              onClick={() => {
+                this.login();
+              }}
+          >
+            Login
+          </Button>
+        </ButtonContainer>
+        <ButtonContainer>
+          <Button
+              width="20%"
+              onClick={() => {
+                this.register();
+              }}
+          >
+            Register Now
+          </Button>
+        </ButtonContainer>
       </BaseContainer>
     );
   }
