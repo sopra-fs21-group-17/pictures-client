@@ -8,9 +8,9 @@ import {GridBoard} from "./Boards/GridBoard";
 import {Inventory} from "./Inventory";
 import {ItemsSet1} from "./SetItemLists/ItemsSet1";
 import {withRouter} from "react-router-dom";
-import {useScreenshot} from 'use-react-screenshot'
+import { useScreenshot } from 'use-react-screenshot'
+import {OptionsType} from "html-to-image";
 import img from './wood_texture_background.jpg';
-
 
 const FormContainer = styled.div`
   margin-top: 2em;
@@ -40,7 +40,6 @@ const Button = styled.div`
   float: right;
   
 `;
-
 
 const ButtonContainer = styled.div`
 padding-bottom: 25px;  
@@ -85,6 +84,7 @@ const ItemContainer = styled.div`
 `;
 
 export const ItemContext = createContext({
+
   markAsBoard: null,
   markAsInventory: null,
   markAsSquareField: null,
@@ -192,6 +192,8 @@ export const SetTemplate = () => {
       </DndProvider>
 
   );
+
+
 };
 
 export default withRouter(SetTemplate);
