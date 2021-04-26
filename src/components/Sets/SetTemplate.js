@@ -85,113 +85,113 @@ const ItemContainer = styled.div`
 `;
 
 export const ItemContext = createContext({
-    markAsBoard: null,
-    markAsInventory: null,
-    markAsSquareField: null,
+  markAsBoard: null,
+  markAsInventory: null,
+  markAsSquareField: null,
 })
 
 
 export const SetTemplate = () => {
-    const [itemList, setItemList] = useState([]);
+  const [itemList, setItemList] = useState([]);
 
 
-    const markAsBoard = _id => {
-        const item = itemList.filter((item, i) => item._id === _id);
-        item[0].location = 'board';
+  const markAsBoard = _id => {
+    const item = itemList.filter((item, i) => item._id === _id);
+    item[0].location = 'board';
+    item[0].amount = item[0].amount - 1;
+    setItemList((itemList.filter((item, i) => item._id < _id).concat(item[0])).concat(itemList.filter((item, i) => item._id > _id)));
+  };
+
+  const markAsInventory = _id => {
+    //gets the item which was moved
+    const movedItem = itemList.filter((item, i) => item._id === _id);
+
+    //gets the corresponding item in the inventory
+    const inventoryItem = (itemList.filter((item, i) => item.color === movedItem[0].color).filter((item, i) => item._id <= 8));
+
+    //creates new list without the item which was moved
+    const newList = itemList.filter((item, i) => item._id !== _id)
+
+    //only apply changes when item is moved from board to inventory
+    if (movedItem[0].location != 'inventory') {
+      inventoryItem[0].amount += 1;
+      setItemList((newList.filter((item, i) => item._id < inventoryItem[0]._id).concat(inventoryItem[0])).concat(newList.filter((item, i) => item._id > inventoryItem[0]._id)));
+    }
+  };
+
+  const markAsSquareField = (square, x) => {
+    //gets the item that was moved
+    const item = itemList.filter((item, i) => item._id === square.id);
+
+    //creates a new item
+    const newSquare = {
+      _id: square.id + 10 * square.id * square.amount,
+      location: 'squarefield' + x,
+      color: item[0].color,
+      amount: item[0].amount - 1,
+    };
+
+    //only applies changes if item moved to a empty square or the inventory
+    if (itemList.filter((item, i) => item.location === 'squarefield' + x).length === 0) {
+      if (square.location != 'inventory') {
+        item[0].location = 'squarefield' + x;
+        setItemList(itemList.filter((item, i) => item._id !== square.id).concat(item[0]));
+      } else {
         item[0].amount = item[0].amount - 1;
-        setItemList((itemList.filter((item, i) => item._id < _id).concat(item[0])).concat(itemList.filter((item, i) => item._id > _id)));
-    };
-
-    const markAsInventory = _id => {
-        //gets the item which was moved
-        const movedItem = itemList.filter((item, i) => item._id === _id);
-
-        //gets the corresponding item in the inventory
-        const inventoryItem = (itemList.filter((item, i) => item.color === movedItem[0].color).filter((item, i) => item._id <= 8));
-
-        //creates new list without the item which was moved
-        const newList = itemList.filter((item, i) => item._id !== _id)
-
-        //only apply changes when item is moved from board to inventory
-        if (movedItem[0].location != 'inventory') {
-            inventoryItem[0].amount += 1;
-            setItemList((newList.filter((item, i) => item._id < inventoryItem[0]._id).concat(inventoryItem[0])).concat(newList.filter((item, i) => item._id > inventoryItem[0]._id)));
-        }
-    };
-
-    const markAsSquareField = (square, x) => {
-        //gets the item that was moved
-        const item = itemList.filter((item, i) => item._id === square.id);
-
-        //creates a new item
-        const newSquare = {
-            _id: square.id + 10 * square.id * square.amount,
-            location: 'squarefield' + x,
-            color: item[0].color,
-            amount: item[0].amount - 1,
-        };
-
-        //only applies changes if item moved to a empty square or the inventory
-        if (itemList.filter((item, i) => item.location === 'squarefield' + x).length === 0) {
-            if (square.location != 'inventory') {
-                item[0].location = 'squarefield' + x;
-                setItemList(itemList.filter((item, i) => item._id !== square.id).concat(item[0]));
-            } else {
-                item[0].amount = item[0].amount - 1;
-                setItemList(((itemList.filter((item, i) => item._id < square.id).concat(item[0])).concat(itemList.filter((item, i) => item._id > square.id))).concat(newSquare));
-            }
-        }
-    };
+        setItemList(((itemList.filter((item, i) => item._id < square.id).concat(item[0])).concat(itemList.filter((item, i) => item._id > square.id))).concat(newSquare));
+      }
+    }
+  };
 
 
-    useEffect(() => {
-        setItemList(ItemsSet1)
-    }, [])
+  useEffect(() => {
+    setItemList(ItemsSet1)
+  }, [])
 
-    const ref = createRef()
-    const [screenshot, takeScreenshot] = useScreenshot()
-    const getImage = () => takeScreenshot(ref.current)
-    console.log(screenshot)
+  const ref = createRef()
+  const [screenshot, takeScreenshot] = useScreenshot()
+  const getImage = () => takeScreenshot(ref.current)
+  console.log(screenshot)
 
 
-    return (
-        <DndProvider backend={HTML5Backend}>
+  return (
+      <DndProvider backend={HTML5Backend}>
 
-            <ItemContext.Provider value={{markAsInventory, markAsBoard, markAsSquareField}}>
-                <BaseContainer>
-                    <FormContainer>
-                        <div ref={ref}>
-                            <BorderContainer>
-                                <BoardContainer>
-                                    <GridBoard itemlist={itemList}/>
-                                </BoardContainer>
-                            </BorderContainer>
-                        </div>
-                    </FormContainer>
-                    <ButtonContainer>
-                        <Button onClick={getImage}>Submit</Button>
-                    </ButtonContainer>
-                    <Inventory>
-                        {itemList
-                            .filter((task, i) => task.location === 'inventory')
-                            .filter((task, i) => task.amount > 0)
-                            .map((task, i) => (
-                                <ItemContainer>
-                                    <Square
-                                        key={task._id.toString()}
-                                        _id={task._id}
-                                        location={task.location}
-                                        color={task.color}
-                                        amount={task.amount}
-                                    />
-                                </ItemContainer>
-                            ))}
-                    </Inventory>
-                </BaseContainer>
-            </ItemContext.Provider>
-        </DndProvider>
+        <ItemContext.Provider value={{markAsInventory, markAsBoard, markAsSquareField}}>
+          <BaseContainer>
+            <FormContainer>
+              <div ref={ref}>
+                <BorderContainer>
+                  <BoardContainer>
+                    <GridBoard itemlist={itemList}/>
+                  </BoardContainer>
+                </BorderContainer>
+              </div>
+            </FormContainer>
+            <ButtonContainer>
+              <Button onClick={getImage}>Submit</Button>
+            </ButtonContainer>
+            <Inventory>
+              {itemList
+                  .filter((task, i) => task.location === 'inventory')
+                  .filter((task, i) => task.amount > 0)
+                  .map((task, i) => (
+                      <ItemContainer>
+                        <Square
+                            key={task._id.toString()}
+                            _id={task._id}
+                            location={task.location}
+                            color={task.color}
+                            amount={task.amount}
+                        />
+                      </ItemContainer>
+                  ))}
+            </Inventory>
+          </BaseContainer>
+        </ItemContext.Provider>
+      </DndProvider>
 
-    );
+  );
 };
 
 export default withRouter(SetTemplate);
