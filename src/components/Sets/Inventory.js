@@ -28,8 +28,8 @@ export const Inventory = props => {
     const { markAsInventory } = useContext(ItemContext)
 
     const[{isOver}, drop] = useDrop({
-        accept: ItemTypes.ITEM,
-        drop: (item, monitor) => markAsInventory(item._id),
+        accept: ItemTypes.SQUARE,
+        drop: (item, monitor) => markAsInventory(item.id),
         collect: monitor => ({
             isOver: !!monitor.isOver(),
         }),
