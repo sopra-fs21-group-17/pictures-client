@@ -14,6 +14,8 @@ import {ItemsSet2} from "./SetItemLists/ItemsSet2";
 import {withRouter} from "react-router-dom";
 import { useScreenshot } from 'use-react-screenshot'
 import {OptionsType} from "html-to-image";
+import {ItemsSet3} from "./SetItemLists/ItemsSet3";
+import {Stick} from "./Items/Stick";
 
 const FormContainer = styled.div`
   margin-top: 2em;
@@ -21,6 +23,7 @@ const FormContainer = styled.div`
   
   justify-content: center;
 `;
+
 const Button = styled.div`
   &:hover {
     transform: translateY(-2px);
@@ -40,25 +43,12 @@ const Button = styled.div`
   background: green;
   transition: all 0.3s ease;
   float: right;
-  
 `;
-
-
-
 
 const ButtonContainer = styled.div`
-padding-bottom: 25px;
-  
+  padding-bottom: 25px;
 `;
-const SquareFieldContainer = styled.div`
-  display:grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-  min-height: 100%;
-  min-width: 100%;
-  max-width: 100%;
-  max-height: 100%;
-  `;
+
 const BoardContainer = styled.div`
   width: 100%;
   height: 100%;
@@ -66,8 +56,8 @@ const BoardContainer = styled.div`
   background: #c4c4c4;
   justify-content: center;
   align-items: center;
-  
 `;
+
 const BorderContainer = styled.div`
   width: 60vh;
   height: 60vh;
@@ -89,29 +79,38 @@ const ItemContainer = styled.div`
 `;
 
 export const ItemContext = createContext({
-    markAsBoard: null,
+    moveItem: null,
     markAsInventory: null,
     markAsSquareField: null,
 })
-
-
-
-
-
-
 
 export const SetTemplate = () => {
     const [itemList, setItemList] = useState([
 
     ]);
 
+    const moveItem = (id, left, top) => {
 
+        const updatedItem = itemList.filter((item, i) => item._id === id);
 
-    const markAsBoard = _id => {
-        const item = itemList.filter((item, i) => item._id === _id);
-        item[0].location = 'board';
-        item[0].amount = item[0].amount-1;
-        setItemList((itemList.filter((item, i) => item._id < _id).concat(item[0])).concat(itemList.filter((item, i) => item._id > _id)));
+        const newItem = {
+            _id: id+10*id*updatedItem[0].amount,
+            location: 'board',
+            top: 300,
+            left: 300,
+            color: updatedItem[0].color,
+            amount: updatedItem[0].amount-1,
+            hideSourceOnDrag: true,
+        };
+
+        if(updatedItem[0].location !== 'inventory'){
+            updatedItem[0].left = left;
+            updatedItem[0].top = top;
+            setItemList(itemList.filter((item) => item._id !== id).concat(updatedItem[0]));
+        } else {
+            updatedItem[0].amount = updatedItem[0].amount-1;
+            setItemList(((itemList.filter((item, i) => item._id < id).concat(updatedItem[0])).concat(itemList.filter((item, i) => item._id > id))).concat(newItem));
+        }
     };
 
     const markAsInventory = _id => {
@@ -125,7 +124,7 @@ export const SetTemplate = () => {
         const newList = itemList.filter((item, i) => item._id !== _id)
 
         //only apply changes when item is moved from board to inventory
-        if(movedItem[0].location != 'inventory'){
+        if(movedItem[0].location !== 'inventory'){
             inventoryItem[0].amount += 1;
             setItemList((newList.filter((item, i) => item._id < inventoryItem[0]._id).concat(inventoryItem[0])).concat(newList.filter((item, i) => item._id > inventoryItem[0]._id)));
         }
@@ -133,11 +132,11 @@ export const SetTemplate = () => {
 
     const markAsSquareField = (square,x) => {
         //gets the item that was moved
-        const item = itemList.filter((item, i) => item._id === square.id);
+        const item = itemList.filter((item, i) => item._id === square._id);
 
         //creates a new item
         const newSquare = {
-                _id: square.id+10*square.id*square.amount,
+                _id: square._id+10*square._id*square.amount,
                 location: 'squarefield'+x,
                 color: item[0].color,
                 amount: item[0].amount-1,
@@ -145,16 +144,15 @@ export const SetTemplate = () => {
 
         //only applies changes if item moved to a empty square or the inventory
         if(itemList.filter((item, i) => item.location === 'squarefield'+x).length === 0){
-            if(square.location != 'inventory'){
+            if(square.location !== 'inventory'){
                 item[0].location = 'squarefield'+x;
-                setItemList(itemList.filter((item, i) => item._id !== square.id).concat(item[0]));
+                setItemList(itemList.filter((item, i) => item._id !== square._id).concat(item[0]));
             } else {
                 item[0].amount = item[0].amount-1;
-                setItemList(((itemList.filter((item, i) => item._id < square.id).concat(item[0])).concat(itemList.filter((item, i) => item._id > square.id))).concat(newSquare));
+                setItemList(((itemList.filter((item, i) => item._id < square._id).concat(item[0])).concat(itemList.filter((item, i) => item._id > square._id))).concat(newSquare));
             }
         }
     };
-
 
     useEffect(() => {
         setItemList(ItemsSet1)
@@ -165,45 +163,22 @@ export const SetTemplate = () => {
     const   getImage = () => takeScreenshot(ref.current)
     console.log(screenshot)
 
-
-
-
-
-
     return (
         <DndProvider backend={HTML5Backend}>
-
-            <ItemContext.Provider value={{ markAsInventory, markAsBoard, markAsSquareField }}>
+            <ItemContext.Provider value={{ markAsInventory, moveItem, markAsSquareField }}>
                 <BaseContainer>
-
-
-
                     <FormContainer>
                         <div ref={ref}>
-                        <BorderContainer>
-
-
-
-
-                            <BoardContainer>
-
-                                <GridBoard itemlist={itemList}/>
-
-                            </BoardContainer>
-
-
-
-                        </BorderContainer>
-                </div>
-
-
-
-
+                            <BorderContainer>
+                                <BoardContainer>
+                                    <GridBoard itemlist={itemList}/>
+                                </BoardContainer>
+                            </BorderContainer>
+                        </div>
                     </FormContainer>
-                   <ButtonContainer>
-                    <Button onClick={getImage}>Submit</Button>
-                   </ButtonContainer>
-
+                    <ButtonContainer>
+                        <Button onClick={getImage}>Submit</Button>
+                    </ButtonContainer>
                     <Inventory>
                         {itemList
                             .filter((task, i) => task.location === 'inventory')
@@ -223,7 +198,6 @@ export const SetTemplate = () => {
                 </BaseContainer>
             </ItemContext.Provider>
         </DndProvider>
-
     );
 };
 
