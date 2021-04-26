@@ -3,13 +3,15 @@
  */
 class User {
   constructor(data = {}) {
-    this.id = null;
-    this.name = null;
+    //this.id = null;
     this.username = null;
+    this.password = null;
+    this.birthdate = null;
     this.token = null;
-    this.status = null;
-    this.set = null;          // assigned set for that round
-    this.coordinates = null;  // assigned coordinates for that round
+    this.guess = null;
+    this.model = null;
+    this.totalScore = null;
+    this.isReady = null;
     Object.assign(this, data);
   }
 }

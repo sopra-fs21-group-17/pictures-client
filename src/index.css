@@ -7,7 +7,9 @@ body {
   margin: 0;
   padding: 0;
   font-family: "Open Sans", sans-serif;
-  background: #0e3d61;
+  background:radial-gradient( rgba(104, 104, 104, 0.948138) , rgba(70, 70, 70, 0.948138));
+;
+
 }
 
 input,

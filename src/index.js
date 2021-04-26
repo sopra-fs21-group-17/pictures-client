@@ -10,3 +10,12 @@ import App from "./App";
  * More: https://reactjs.org/docs/rendering-elements.html
  */
 ReactDOM.render(<App />, document.getElementById("root"));
+// const http = require("http");
+// const websSocketServer = require("websocket").server
+// const httpServer = http.createServer();
+// httpServer.listen(9090, () => console.log("Listening.. on 9090"))
+//
+// const wsServer = new websSocketServer({
+//     "httpServer": httpServer
+// })
+// wsServer.on("request, request =>")

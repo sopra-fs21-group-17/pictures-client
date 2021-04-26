@@ -32,6 +32,7 @@ const Title = styled.h1`
 const Header = props => {
   return (
     <Container height={props.height}>
+      <Title>Welcome to PICTURES!</Title>
     </Container>
   );
 };

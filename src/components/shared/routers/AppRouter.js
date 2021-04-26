@@ -4,8 +4,14 @@ import { GameGuard } from "../routeProtectors/GameGuard";
 import GameRouter from "./GameRouter";
 import { LoginGuard } from "../routeProtectors/LoginGuard";
 import Login from "../../login/Login";
-import SetOne from "../../Sets/SetTemplate";
-import {SetTemplate} from "../../Sets/SetTemplate";
+import {RegistrationGuard} from "../routeProtectors/RegistrationGuard";
+import Registration from "../../registration/Registration";
+import {HomeGuard} from "../routeProtectors/HomeGuard";
+import Home from "../../home/Home";
+import Game from "../../game/Game";
+import {LobbyGuard} from "../routeProtectors/LobbyGuard";
+import Lobby from "../../lobby/Lobby";
+
 
 /**
  * Main router of your application.
@@ -74,11 +80,11 @@ class AppRouter extends React.Component {
                   )}
               />
             <Route
-              path="/game"
+              path="/home"
               render={() => (
-                <GameGuard>
-                  <GameRouter base={"/game"} />
-                </GameGuard>
+                <HomeGuard>
+                  <GameRouter base={"/home"} />
+                </HomeGuard>
               )}
             />
             <Route
@@ -91,13 +97,33 @@ class AppRouter extends React.Component {
               )}
             />
             <Route
-                path="/SetTemplate"
+                path="/registration"
                 exact
                 render={() => (
-                        <SetTemplate />
+                    <RegistrationGuard>
+                        <Registration />
+                    </RegistrationGuard>
                 )}
             />
-            <Route path="/" exact render={() => <Redirect to={"/game"} />} />
+            <Route
+                path="/lobby"
+                render={() => (
+                    <LobbyGuard>
+                        <Lobby />
+                    </LobbyGuard>
+                )}
+            />
+              <Route
+                  path="/game"
+                  exact
+                  render={() => (
+                      <GameGuard>
+                          <Game />
+                      </GameGuard>
+                  )}
+              />
+
+            <Route path="/" exact render={() => <Redirect to={"/home"} />} />
           </div>
         </Switch>
       </BrowserRouter>
