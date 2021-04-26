@@ -16,6 +16,9 @@ import { useScreenshot } from 'use-react-screenshot'
 import {OptionsType} from "html-to-image";
 import {ItemsSet3} from "./SetItemLists/ItemsSet3";
 import {Stick} from "./Items/Stick";
+import img from "./wood_texture_background.jpg"
+import {ThickRectangle, Triangle} from "./Items/BuildingBlocks";
+
 
 const FormContainer = styled.div`
   margin-top: 2em;
@@ -61,7 +64,7 @@ const BoardContainer = styled.div`
 const BorderContainer = styled.div`
   width: 60vh;
   height: 60vh;
-  background: #1f1f1f;
+  background-image: url(${img});
   padding-top: 2.5%;
   padding-bottom: 2.5%;
   padding-left: 2.5%;
@@ -171,7 +174,7 @@ export const SetTemplate = () => {
                         <div ref={ref}>
                             <BorderContainer>
                                 <BoardContainer>
-                                    <FreeBoard itemlist={itemList}></FreeBoard>
+                                    <GridBoard itemlist={itemList}></GridBoard>
                                 </BoardContainer>
                             </BorderContainer>
                         </div>
