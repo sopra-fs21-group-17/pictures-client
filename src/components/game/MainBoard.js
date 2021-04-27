@@ -122,16 +122,7 @@ class MainBoard extends React.Component{
     }
 
 //API REQUESTS//
-    async getPictures(){
-        try {
-            const response = await api.get("/pictures");
-            this.setState({pictureLink: response});
 
-            }
-     catch (error) {
-        alert(`Something went wrong getting the Pictures: \n${handleError(error)}`);
-    }
-    }
 
     async getPlayersFromLobby(){
         try {
@@ -148,32 +139,8 @@ class MainBoard extends React.Component{
 //DISPLAY//
     render(){
 
-        // const location = this.state.coordinate;
-        // const pictureElements = location.map(coordinate => {
-        //     return <PictureElement coordinates={coordinate}></PictureElement>
-        // })
-        // const numberColumn =[1,2,3,4];
-        // const columnCoordinates = numberColumn.map((number) => {
-        //     return <GridCoordinate>{number}</GridCoordinate>
-        // })
-        //
-        // const letterColumn =['A','B','C','D'];
-        // const rowCoordinates = letterColumn.map((letter) => {
-        //     return <GridCoordinate>{letter}</GridCoordinate>
-        // })
-
         return(<Container>
 
-            {/*<GridContainer>*/}
-            {/*    <GridVoid/>*/}
-            {/*    {columnCoordinates}*/}
-            {/*    {rowCoordinates}*/}
-
-            {/*    <Grid>*/}
-            {/*        {pictureElements}*/}
-            {/*    </Grid>*/}
-
-            {/*</GridContainer>*/}
             <PictureGrid/>
             <UserBar>
                 <div>Build the picture located at "{localStorage.getItem("myCoordinates")}"</div>
