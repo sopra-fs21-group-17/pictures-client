@@ -18,13 +18,40 @@ import {ItemsSet3} from "./SetItemLists/ItemsSet3";
 import {Stick} from "./Items/Stick";
 import img from "./wood_texture_background.jpg"
 import {ThickRectangle, Triangle} from "./Items/BuildingBlocks";
-
+import testPic from '../../test_pictures/doggo1.jpg';
 
 const FormContainer = styled.div`
   margin-top: 2em;
   display: flex;
-  
+  flex-direction: row;
   justify-content: center;
+`;
+
+const ImageBorderContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 40vw;
+  height: 22vw;
+  min-height: 100px;
+  min-width: 177.5px;
+  max-height: 300px;
+  max-width: 533px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: 100px;
+  margin-right:20px;
+  background-image: url(${img});
+`;
+
+const ImageContainer = styled.img`
+  height: 100%;
+  width: 100%;
 `;
 
 const Button = styled.div`
@@ -178,6 +205,9 @@ export const SetTemplate = () => {
                                 </BoardContainer>
                             </BorderContainer>
                         </div>
+                        <ImageBorderContainer>
+                            <ImageContainer src="https://source.unsplash.com/random" className="img-fluid" alt=""/>
+                        </ImageBorderContainer>
                     </FormContainer>
                     <ButtonContainer>
                         <Button onClick={getImage}>Submit</Button>

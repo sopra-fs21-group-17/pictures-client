@@ -15,6 +15,7 @@ import GuessingScreen from "../../game/GuessingScreen";
 import BuildScreen from "../../game/BuildScreen";
 import ScoreScreen from "../../game/ScoreScreen";
 import MainBoard from "../../game/MainBoard";
+import {SetTemplate} from "../../Sets/SetTemplate";
 
 
 /**
@@ -67,6 +68,13 @@ class AppRouter extends React.Component {
                   exact
                   render={() => (
                       <BuildScreen />
+                  )}
+              />
+              <Route
+                  path="/SetTemplate"
+                  exact
+                  render={() => (
+                      <SetTemplate />
                   )}
               />
               <Route
