@@ -18,7 +18,9 @@ import {ItemsSet3} from "./SetItemLists/ItemsSet3";
 import {Stick} from "./Items/Stick";
 import img from "./wood_texture_background.jpg"
 import {ThickRectangle, Triangle} from "./Items/BuildingBlocks";
-import testPic from '../../test_pictures/doggo1.jpg';
+import {ItemsSet4} from "./SetItemLists/ItemsSet4";
+import {ItemsSet5} from "./SetItemLists/ItemsSet5";
+
 
 const FormContainer = styled.div`
   margin-top: 2em;
@@ -119,6 +121,103 @@ export const SetTemplate = () => {
 
     ]);
 
+    const [userSet, setUserSet] = useState([
+        {
+            set: 3,
+        },
+    ]);
+
+
+
+    const selectBoard = () => {
+        if(userSet[0].set === 1){
+            return (
+                <GridBoard itemlist={itemList}></GridBoard>
+            );
+        } else {
+            return (
+                <FreeBoard itemlist={itemList}></FreeBoard>
+            );
+        }
+    };
+
+    useEffect(() => {
+        if(userSet[0].set === 1){
+            setItemList(ItemsSet1)
+        } else if (userSet[0].set === 2){
+            setItemList(ItemsSet2)
+        }else if (userSet[0].set === 3){
+            setItemList(ItemsSet3)
+        }else if (userSet[0].set === 4){
+            setItemList(ItemsSet4)
+        }else {
+            setItemList(ItemsSet5)
+        }
+    }, [])
+
+    const selectItems = () => {
+        if(userSet[0].set === 1){
+            return (
+                <Inventory>
+                    {itemList
+                        .filter((task, i) => task.location === 'inventory')
+                        .filter((task, i) => task.amount > 0)
+                        .map((task, i) => (
+                            <ItemContainer>
+                                <Square
+                                    key={task._id.toString()}
+                                    _id={task._id}
+                                    location={task.location}
+                                    color={task.color}
+                                    amount={task.amount}
+                                />
+                            </ItemContainer>
+                        ))}
+                </Inventory>
+            );
+        // } else if(userSet[0].set === 2){
+        //     return (
+        //         <Inventory>
+        //             {itemList
+        //                 .filter((task, i) => task.location === 'inventory')
+        //                 .filter((task, i) => task.amount > 0)
+        //                 .map((task, i) => (
+        //                     <ItemContainer>
+        //                         <BuildingBlocks
+        //                             key={task._id.toString()}
+        //                             _id={task._id}
+        //                             location={task.location}
+        //                             color={task.color}
+        //                             amount={task.amount}
+        //                         />
+        //                     </ItemContainer>
+        //                 ))}
+        //         </Inventory>
+        //     );
+        } else if(userSet[0].set === 3){
+            return (
+                <Inventory>
+                    {itemList
+                        .filter((task, i) => task.location === 'inventory')
+                        .filter((task, i) => task.amount > 0)
+                        .map((task, i) => (
+                            <ItemContainer>
+                                <Stick
+                                    key={task._id.toString()}
+                                    _id={task._id}
+                                    location={task.location}
+                                    color={task.color}
+                                    amount={task.amount}
+                                />
+                            </ItemContainer>
+                        ))}
+                </Inventory>
+            );
+        }
+
+
+    }
+
     const moveItem = (id, left, top) => {
 
         const updatedItem = itemList.filter((item, i) => item._id === id);
@@ -184,10 +283,6 @@ export const SetTemplate = () => {
         }
     };
 
-    useEffect(() => {
-        setItemList(ItemsSet1)
-    }, [])
-
     const ref = createRef()
     const [screenshot, takeScreenshot] = useScreenshot()
     const   getImage = () => takeScreenshot(ref.current)
@@ -201,7 +296,7 @@ export const SetTemplate = () => {
                         <div ref={ref}>
                             <BorderContainer>
                                 <BoardContainer>
-                                    <GridBoard itemlist={itemList}></GridBoard>
+                                    {selectBoard()}
                                 </BoardContainer>
                             </BorderContainer>
                         </div>
@@ -212,22 +307,7 @@ export const SetTemplate = () => {
                     <ButtonContainer>
                         <Button onClick={getImage}>Submit</Button>
                     </ButtonContainer>
-                    <Inventory>
-                        {itemList
-                            .filter((task, i) => task.location === 'inventory')
-                            .filter((task, i) => task.amount > 0)
-                            .map((task, i) => (
-                                <ItemContainer>
-                                    <Square
-                                        key={task._id.toString()}
-                                        _id={task._id}
-                                        location={task.location}
-                                        color={task.color}
-                                        amount={task.amount}
-                                    />
-                                </ItemContainer>
-                            ))}
-                    </Inventory>
+                    {selectItems()}
                 </BaseContainer>
             </ItemContext.Provider>
         </DndProvider>
