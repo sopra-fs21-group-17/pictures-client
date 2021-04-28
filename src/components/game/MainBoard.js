@@ -1,3 +1,8 @@
+// TODO define game states
+// TODO add getRequest for after guessing for ending guesses
+// TODO will need to be styled
+// TODO map urls to components
+
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import styled from "styled-components";
@@ -6,7 +11,6 @@ import PictureElement from "./PictureElement";
 import {api, handleError} from "../../helpers/api";
 import {Button} from "../../views/design/Button";
 import PictureGrid from "./PictureGrid"
-//TODO define game states
 
 const Container = styled(BaseContainer)`
   display: flex;
@@ -90,19 +94,12 @@ border-radius: 5px;
 color: black;
 `;
 
-
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 20px;
 `;
 
-
-
-//TODO add getRequest for after guessing for ending guesses
-//TODO will need to be styled
-
-//TODO map urls to components
 
 // made Picture element a separate class so it can store its coordinates,
 // so when the time comes to select a specific coordinate it will be able to ti pass it on directly
@@ -117,12 +114,10 @@ class MainBoard extends React.Component{
                 4,5,6,7,
                 8,9,10,11,
                 12,13,14,15],
-
         };
     }
 
-//API REQUESTS//
-
+    //API REQUESTS//
 
     async getPlayersFromLobby(){
         try {
@@ -135,17 +130,41 @@ class MainBoard extends React.Component{
         }
     }
 
+    async initGame(){
+        try {
+            const response = await api.post("/board");
+            this.setState({players: response});
+            console.log(response);
+        }
+        catch (error) {
+            alert(`Something went wrong getting the Players: \n${handleError(error)}`);
+        }
+    }
+
     componentDidMount() {}
-//DISPLAY//
+
+    //DISPLAY//
+
     render(){
 
         return(<Container>
 
             <PictureGrid/>
             <UserBar>
-                <div>Build the picture located at "{localStorage.getItem("myCoordinates")}"</div>
+                <div>Build the picture located at "{}"</div>
                 <div>with the set "{localStorage.getItem("mySet")}"</div>
             </UserBar>
+
+            <ButtonContainer>
+                <Button
+                    width="50%"
+                    onClick={() => {
+                        this.initGame();
+                    }}
+                >
+                    get me set & token!
+                </Button>
+            </ButtonContainer>
 
             <ButtonContainer>
             <Button
@@ -159,7 +178,6 @@ class MainBoard extends React.Component{
         </ButtonContainer>
         </Container>);
     }
-
 
     showBuildScreen() {
         this.props.history.push(`/buildScreen`);

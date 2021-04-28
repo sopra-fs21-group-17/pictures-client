@@ -97,7 +97,8 @@ class GuessingScreen extends React.Component {
             alert(`Something went wrong while fetching the users: \n${handleError(error)}`);
         }
     }
-//PUT REQUEST
+
+    // PUT REQUEST
     async sendGuesses(){
 
         try{
@@ -139,7 +140,6 @@ class GuessingScreen extends React.Component {
            return(
                <tr>
                    <td>SCREENSHOT {num++}</td>
-
                <td>
 
                    <InputField
@@ -158,7 +158,7 @@ class GuessingScreen extends React.Component {
                 <h1>GUESSING SCREEN</h1>
                     <div>
                         <h3 align={"left"}>Make your guesses</h3>
-                        <p align={"left"}>Select the coordinates corresponding to the pictures position:</p>
+                        <p align={"left"}>Type in the coordinates corresponding to the pictures position:</p>
 
                         <table align={"left"}>
                             <tr>
