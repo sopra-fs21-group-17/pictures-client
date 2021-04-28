@@ -68,17 +68,14 @@ class GuessingScreen extends React.Component {
             players: null,
             pictureURLs: null,
             coordinate: [0,1,2,3],
-            userNames: ["adam", "eva", "fritzli", "voldemort"],
+            userNames: ["0", "1", "2"], // for test purposes
             // userNames: [],
             guesses: {},
-            guess1: {"adam":null}, guess2: {"eva": null}, guess3: null, guess4: null,
+            //guess1: {"adam":null}, guess2: {"eva": null}, guess3: null, guess4: null,
         }
         //this.getUsers();
    //     this.setState({username: localStorage.getItem(id)})
         };
-
-
-
 
     async getUsers() {
         try {
@@ -99,19 +96,17 @@ class GuessingScreen extends React.Component {
     }
 
     // PUT REQUEST
-    async sendGuesses(){
-
+    async sendUserGuesses(){
         try{
        //     const guesses = [this.state.guess1, this.state.guess2, this.state.guess3, this.state.guess4]
             const requestBody = JSON.stringify({
                 username: this.state.username,   // todo change this to userID
-                guesses: this.state.guesses                  //todo change Coordinate strings to integer (maybe in BE)
+                guesses: this.state.guesses     // todo change Coordinate strings to integer (maybe in BE)
             })
             await api.put("/guess", requestBody);
         } catch(error) {
             alert(`Something went wrong while sending the guesses: \n${handleError(error)}`);
         }
-
     }
 
     // handleInputChange(key, value) {
@@ -122,7 +117,6 @@ class GuessingScreen extends React.Component {
     // }
 
     saveGuessToDict(user, value) {
-
         this.setState({...this.state,
             guesses: {...this.state.guesses,[user]:value}})
         localStorage.setItem(user,value);
@@ -136,21 +130,19 @@ class GuessingScreen extends React.Component {
     render() {
         let num = 1
         const guessInput = this.state.userNames.map(user =>{
-
-           return(
-               <tr>
-                   <td>SCREENSHOT {num++}</td>
-               <td>
-
-                   <InputField
-                placeholder="A1"
-                onChange={e => {
-                    this.saveGuessToDict( user,e.target.value);
-                }}
-               />  </td>
-               </tr>
-           )
-
+            return (
+                <tr>
+                    <td>SCREENSHOT {num++}</td>
+                    <td>
+                        <InputField
+                            placeholder="A1"
+                            onChange={e => {
+                                this.saveGuessToDict(user, e.target.value);
+                            }}
+                        />
+                    </td>
+                </tr>
+            )
         })
 
         return (
@@ -164,7 +156,6 @@ class GuessingScreen extends React.Component {
                             <tr>
                                 <td>&nbsp;</td>
                                 <td>coordinates</td>
-
                             </tr>
                             {guessInput}
                         </table>
@@ -173,31 +164,30 @@ class GuessingScreen extends React.Component {
                         <p align={"center-right"}>"ORIGINAL PICTURES"</p>
                         <p></p>
 
-
                         <PictureGrid></PictureGrid>
 
                         <Button
                             width="100%"
                             onClick={() => {
-                                this.sendGuesses();
+                                this.sendUserGuesses();
 
                             }}
                         >
-                            I'm done guessing!
+                            My guess is done!
                         </Button>
+
                         <Button
                             width="100%"
                             onClick={() => {
                                 this.showScoreScreen();
                             }}
                         >
-                            Guessing is done!
+                            DEV: "Guessing is done!"
                         </Button>
                     </div>
             </Container>
         );
     }
-
 }
 
 export default withRouter(GuessingScreen);

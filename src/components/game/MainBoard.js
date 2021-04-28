@@ -123,7 +123,6 @@ class MainBoard extends React.Component{
         try {
             const response = await api.get("/players");
             this.setState({players: response});
-
         }
         catch (error) {
             alert(`Something went wrong getting the Players: \n${handleError(error)}`);
@@ -132,7 +131,7 @@ class MainBoard extends React.Component{
 
     async initGame(){
         try {
-            const response = await api.post("/board");
+            const response = await api.get("/board");
             this.setState({players: response});
             console.log(response);
         }
