@@ -11,10 +11,11 @@ import Home from "../../home/Home";
 import Game from "../../game/Game";
 import {LobbyGuard} from "../routeProtectors/LobbyGuard";
 import Lobby from "../../lobby/Lobby";
-import MainBoard from "../../game/MainBoard";
-import BuildScreen from "../../game/BuildScreen";
 import GuessingScreen from "../../game/GuessingScreen";
+import BuildScreen from "../../game/BuildScreen";
 import ScoreScreen from "../../game/ScoreScreen";
+import MainBoard from "../../game/MainBoard";
+
 
 /**
  * Main router of your application.
@@ -35,7 +36,7 @@ class AppRouter extends React.Component {
                   path="/"
                   exact
                   render={() => (
-                      <Redirect to={"/game"} />
+                      <Redirect to={"/home"} />
                   )}
               />
               <Route
@@ -90,15 +91,7 @@ class AppRouter extends React.Component {
                 </HomeGuard>
               )}
             />
-            <Route
-              path="/login"
-              exact
-              render={() => (
-                <LoginGuard>
-                  <Login />
-                </LoginGuard>
-              )}
-            />
+
             <Route
                 path="/registration"
                 exact
@@ -108,14 +101,7 @@ class AppRouter extends React.Component {
                     </RegistrationGuard>
                 )}
             />
-            <Route
-                path="/lobby"
-                render={() => (
-                    <LobbyGuard>
-                        <Lobby />
-                    </LobbyGuard>
-                )}
-            />
+
               <Route
                   path="/game"
                   exact
