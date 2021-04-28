@@ -108,7 +108,15 @@ class MainBoard extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            players: null,
+            players: {},
+            currentPlayerUserName: "1", // TODO correct this for real data
+            mySet: "-",
+            myCoordinates: "-",
+            coordinateNames: [
+                "A1", "A2", "A3", "A4",
+                "B1", "B2", "B3", "B4",
+                "C1", "C2", "C3", "C4",
+                "D1", "D2", "D3", "D4"],
             pictureURLs: null,
             coordinate: [0,1,2,3,
                 4,5,6,7,
@@ -132,8 +140,20 @@ class MainBoard extends React.Component{
     async initGame(){
         try {
             const response = await api.get("/board");
-            this.setState({players: response});
-            console.log(response);
+            this.setState({players: response.data});
+
+            // update players assigned coord. & set to display it to them
+            for(const [key, val] of Object.entries(this.state.players)){
+                if(val.username === this.state.currentPlayerUserName){
+                    this.setState({
+                        mySet: val.assignedSet,
+                        myCoordinates: this.state.coordinateNames[val.assignedCoordinates]
+                    });
+                    break;
+                }
+            }
+
+            localStorage.setItem("mySet", this.state.mySet);
         }
         catch (error) {
             alert(`Something went wrong getting the Players: \n${handleError(error)}`);
@@ -145,13 +165,11 @@ class MainBoard extends React.Component{
     //DISPLAY//
 
     render(){
-
         return(<Container>
-
             <PictureGrid/>
             <UserBar>
-                <div>Build the picture located at "{}"</div>
-                <div>with the set "{localStorage.getItem("mySet")}"</div>
+                <div>Build the picture located at: {this.state.myCoordinates}</div>
+                <div>with the: {this.state.mySet}</div>
             </UserBar>
 
             <ButtonContainer>
