@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import img from ".././wood_texture_background2.jpg"
+import stoneimg from ".././stone_background.jpg"
 
 export const ThickRectangle = styled.div`
   position: absolute;
@@ -23,16 +24,23 @@ export const Formcontainer = styled.div`
     -webkit-transform-origin:0 0;
     `;
 export const Triangle = styled.div`
+    z-index: 3;
+    position: absolute;
+    display: flex;
+    flexDirection: column;
+    justifyContent: center;
     width: 5vw;
     height: 5vw;
     /* The points are: centered top, left bottom, right bottom */
     clip-path: polygon( 50% 10%, 0 100%, 100% 100%);
     background-image: url(${img});
     cursor:move;
-    margin: 10px;
+ 
     
     `;
 export const Dice = styled.div`
+    z-index: 3;
+    position: absolute;
     width: 5vw;
     height: 5vw;
     cursor:move;
@@ -42,17 +50,20 @@ export const Dice = styled.div`
     `;
 
 export const Circle = styled.div`
+    z-index: 3;
+    position: absolute;
     height: 5vw;
     width: 5vw ;
     border-radius: 50%;
     background-image: url(${img});
     margin: 10px;
-    
     cursor:move;
     
 
     `;
 export const Rectangle = styled.div`
+    z-index: 3;
+    position: absolute;
     width: 10vw;
     height: 5vw;
     cursor:move;
@@ -60,6 +71,8 @@ export const Rectangle = styled.div`
     
     `;
 export const ThinRectangle = styled.div`
+    z-index: 3;
+    position: absolute;
     width: 10vw;
     height: 2.5vw;
     cursor:move;
@@ -69,10 +82,13 @@ export const ThinRectangle = styled.div`
     `;
 
 export const Bridgecontainer = styled.div`
+    position: absolute;
     width: 10vw;
     height: 5vw;      
     background-color: inherit;
-    
+    margin: 10px;
+    position:relative;
+    cursor:move;
 
     
     `;
@@ -80,17 +96,24 @@ export const Bridgecontainer = styled.div`
 export const BridgeRectangle = styled.div`
     width: 10vw;
     height: 5vw;            
-    position: relative;
+    position: absolute;
     z-index: 1;
     background-image: url(${img});
+    
     `;
 export const Halfcircle = styled.div`
-    height:45px;
-    width:90px;
+    position: absolute;
+    height: 3vw;
+    width:4.3vw;
     border-radius: 90px 90px 0 0;
-    background:green;
+    background-color: inherit;
     position:absolute;
     z-index: 2;
+    bottom: 0;
+    left: 28%;
+    
+    
+    
     `;
 
 export const Bridge = styled.div`
@@ -101,4 +124,32 @@ export const Bridge = styled.div`
     background-image: url(${img});
     border-radius: %;    
     `;
+
+export const Stone =styled.div`
+    position: absolute;
+    transform: rotate(30deg);
+    
+    width: 5vw;
+    height: 2.7vw;
+    background: red;
+    border-radius: 100px / 50px;
+    cursor:move;
+    border: 2px solid black;
+    background-image: url(${stoneimg});
+`;
+export  const Stick =styled.div`
+    position: absolute;
+    width: 1.3vw;
+    height: 9vw;
+    transform: rotate(30deg);
+    border: 2px solid black;
+    cursor: move;
+    display: flex;
+    flexDirection: column;
+    justifyContent: center;
+    background-image: url(${img});
+
+
+
+`;
 

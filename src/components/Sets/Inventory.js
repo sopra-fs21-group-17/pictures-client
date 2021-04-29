@@ -3,6 +3,7 @@ import styled from "styled-components";
 import {ItemTypes} from "./utils/Items";
 import React, {useContext} from "react";
 import {ItemContext} from "./SetTemplate";
+import {Bridgecontainer, BridgeRectangle, Halfcircle, Stone} from "./Items/BuildingBlocks";
 
 const InventoryContainer = styled.div`
   display: flex;
@@ -40,6 +41,8 @@ export const Inventory = props => {
             style={isOver ? {background: '#65656b'} : {background: '#303036'}}
             ref={drop}>
                 {props.children}
+
+
         </InventoryContainer>
     )
 }

@@ -15,7 +15,7 @@ import {withRouter} from "react-router-dom";
 import { useScreenshot } from 'use-react-screenshot'
 import {OptionsType} from "html-to-image";
 import {ItemsSet3} from "./SetItemLists/ItemsSet3";
-import {Stick} from "./Items/Stick";
+import {Item} from "./Items/Item";
 import img from "./wood_texture_background.jpg"
 import {ThickRectangle, Triangle} from "./Items/BuildingBlocks";
 import {ItemsSet4} from "./SetItemLists/ItemsSet4";
@@ -123,7 +123,7 @@ export const SetTemplate = () => {
 
     const [userSet, setUserSet] = useState([
         {
-            set: 3,
+            set: 2,
         },
     ]);
 
@@ -175,25 +175,26 @@ export const SetTemplate = () => {
                         ))}
                 </Inventory>
             );
-        // } else if(userSet[0].set === 2){
-        //     return (
-        //         <Inventory>
-        //             {itemList
-        //                 .filter((task, i) => task.location === 'inventory')
-        //                 .filter((task, i) => task.amount > 0)
-        //                 .map((task, i) => (
-        //                     <ItemContainer>
-        //                         <BuildingBlocks
-        //                             key={task._id.toString()}
-        //                             _id={task._id}
-        //                             location={task.location}
-        //                             color={task.color}
-        //                             amount={task.amount}
-        //                         />
-        //                     </ItemContainer>
-        //                 ))}
-        //         </Inventory>
-        //     );
+        } else if(userSet[0].set === 2){
+            return (
+                <Inventory>
+                    {itemList
+                        .filter((task, i) => task.location === 'inventory')
+                        .filter((task, i) => task.amount > 0)
+                        .map((task, i) => (
+                            <ItemContainer>
+                                <Item
+                                    key={task._id.toString()}
+                                    _id={task._id}
+                                    location={task.location}
+                                    color={task.color}
+                                    amount={task.amount}
+                                    style={task.style}
+                                />
+                            </ItemContainer>
+                        ))}
+                </Inventory>
+            );
         } else if(userSet[0].set === 3){
             return (
                 <Inventory>
@@ -202,12 +203,13 @@ export const SetTemplate = () => {
                         .filter((task, i) => task.amount > 0)
                         .map((task, i) => (
                             <ItemContainer>
-                                <Stick
+                                <Item
                                     key={task._id.toString()}
                                     _id={task._id}
                                     location={task.location}
                                     color={task.color}
                                     amount={task.amount}
+                                    style={task.style}
                                 />
                             </ItemContainer>
                         ))}
@@ -220,6 +222,7 @@ export const SetTemplate = () => {
 
     const moveItem = (id, left, top) => {
 
+
         const updatedItem = itemList.filter((item, i) => item._id === id);
 
         const newItem = {
@@ -230,6 +233,7 @@ export const SetTemplate = () => {
             color: updatedItem[0].color,
             amount: updatedItem[0].amount-1,
             hideSourceOnDrag: true,
+            style:updatedItem[0].style,
         };
 
         if(updatedItem[0].location !== 'inventory'){

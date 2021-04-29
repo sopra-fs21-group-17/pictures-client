@@ -16,11 +16,7 @@ import BuildScreen from "../../game/BuildScreen";
 import ScoreScreen from "../../game/ScoreScreen";
 import MainBoard from "../../game/MainBoard";
 import {SetTemplate} from "../../Sets/SetTemplate";
-import Lobby from "../../game/Lobby";
-import BuildScreen from "../../game/BuildScreen";
-import GuessingScreen from "../../game/GuessingScreen";
-import ScoreScreen from "../../game/ScoreScreen";
-import MainBoard from "../../game/MainBoard";
+
 
 
 /**
