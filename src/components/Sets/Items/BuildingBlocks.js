@@ -26,9 +26,6 @@ export const Formcontainer = styled.div`
 export const Triangle = styled.div`
     z-index: 3;
     position: absolute;
-    display: flex;
-    flexDirection: column;
-    justifyContent: center;
     width: 5vw;
     height: 5vw;
     /* The points are: centered top, left bottom, right bottom */
@@ -85,7 +82,7 @@ export const Bridgecontainer = styled.div`
     position: absolute;
     width: 10vw;
     height: 5vw;      
-    background-color: inherit;
+    background: inherit;
     margin: 10px;
     position:relative;
     cursor:move;
@@ -96,8 +93,9 @@ export const Bridgecontainer = styled.div`
 export const BridgeRectangle = styled.div`
     width: 10vw;
     height: 5vw;            
-    position: absolute;
+    position: relative;
     z-index: 1;
+    background:inherit;
     background-image: url(${img});
     
     `;
@@ -106,14 +104,11 @@ export const Halfcircle = styled.div`
     height: 3vw;
     width:4.3vw;
     border-radius: 90px 90px 0 0;
-    background-color: inherit;
+    background: inherit;
     position:absolute;
     z-index: 2;
     bottom: 0;
     left: 28%;
-    
-    
-    
     `;
 
 export const Bridge = styled.div`

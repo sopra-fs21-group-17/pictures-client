@@ -24,6 +24,7 @@ const InventoryContainer = styled.div`
 `;
 
 
+
 export const Inventory = props => {
 
     const { markAsInventory } = useContext(ItemContext)
@@ -38,9 +39,11 @@ export const Inventory = props => {
 
     return (
         <InventoryContainer
+
             style={isOver ? {background: '#65656b'} : {background: '#303036'}}
             ref={drop}>
                 {props.children}
+
 
 
         </InventoryContainer>

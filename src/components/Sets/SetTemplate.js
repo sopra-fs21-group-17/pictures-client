@@ -108,6 +108,7 @@ const ItemContainer = styled.div`
   width: max;
   margin-left: 1vw;
   margin-right: 1vw;
+  background: inherit;
 `;
 
 export const ItemContext = createContext({
