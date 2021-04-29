@@ -2,9 +2,6 @@
   "name": "sopra-fs21-client-template",
   "version": "0.1.0",
   "private": true,
-  "engines": {
-    "node": "14.x"
-  },
   "dependencies": {
     "axios": "^0.21.1",
     "express": "^4.17.1",
