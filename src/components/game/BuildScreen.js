@@ -9,6 +9,7 @@ import { Button } from '../../views/design/Button';
 import { withRouter } from 'react-router-dom';
 
 import testPic from '../../test_pictures/doggo1.jpg';
+import {SetTemplate} from "../Sets/SetTemplate";
 
 const Container = styled(BaseContainer)`
   color: white;
@@ -31,8 +32,19 @@ class BuildScreen extends React.Component {
     constructor() {
         super();
         this.state = {
-            users: null
+            users: null,
+            
         };
+    }
+    async putscreenshot() {
+        try {
+
+            await api.put("/screenshot", localStorage.getItem("screenshot"));
+
+
+        } catch (error) {
+            alert(`Something went wrong  \n${handleError(error)}`);
+        }
     }
 
     async componentDidMount() {
@@ -69,9 +81,8 @@ class BuildScreen extends React.Component {
                 ) : (
                     <div>
                         <p></p>
-                        <div> [ here goes the set building stuff... ] </div>
+                        <SetTemplate/>
 
-                        <img src={testPic}/>
 
                         <p></p>
 
@@ -90,6 +101,7 @@ class BuildScreen extends React.Component {
     }
 
     userFinishedBuilding() {
+        this.putscreenshot()
         this.props.history.push(`/GuessingScreen`);
     }
 }

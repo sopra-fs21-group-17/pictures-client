@@ -288,10 +288,12 @@ export const SetTemplate = () => {
         }
     };
 
+
     const ref = createRef()
     const [screenshot, takeScreenshot] = useScreenshot()
     const   getImage = () => takeScreenshot(ref.current)
     console.log(screenshot)
+    localStorage.setItem('screenshot', screenshot)
 
     return (
         <DndProvider backend={HTML5Backend}>
