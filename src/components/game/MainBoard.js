@@ -64,14 +64,11 @@ const Grid = styled.div`
 `;
 
 const GridCoordinate = styled.div`
- height: 100px;
+  height: 100px;
   width: 100px;
-background: pink;
-border-radius: 50px;
-margin: 15px;
-
-
-
+  background: pink;
+  border-radius: 50px;
+  margin: 15px;
 `;
 
 const GridVoid = styled.div`
@@ -109,7 +106,7 @@ class MainBoard extends React.Component{
         super(props);
         this.state = {
             players: {},
-            currentPlayerUserName: "1", // TODO correct this for real data
+            myUserName: "1", // TODO correct this for real data
             mySet: "-",
             myCoordinates: "-",
             coordinateNames: [
@@ -144,7 +141,7 @@ class MainBoard extends React.Component{
 
             // update players assigned coord. & set to display it to them
             for(const [key, val] of Object.entries(this.state.players)){
-                if(val.username === this.state.currentPlayerUserName){
+                if(val.username === this.state.myUserName){
                     this.setState({
                         mySet: val.assignedSet,
                         myCoordinates: this.state.coordinateNames[val.assignedCoordinates]

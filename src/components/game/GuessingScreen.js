@@ -80,7 +80,7 @@ class GuessingScreen extends React.Component {
             guesses: {},
         }
         //this.getUsers();
-        this.getScreenshots();
+        //this.getScreenshots();
         };
 
     async getScreenshots(){
@@ -157,8 +157,6 @@ class GuessingScreen extends React.Component {
         for (var i = 0; i < 3; i++){
             test.push(
                 <tr>
-                    {this.state.screenshots[i][0]}
-                    {this.state.screenshots[i][0]}
                 </tr>
             )
         }
