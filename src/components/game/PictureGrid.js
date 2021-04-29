@@ -48,14 +48,12 @@ const Grid = styled.div`
 
 
 const GridCoordinate = styled.div`
- height: 100px;
-  width: 100px;
-background: pink;
-border-radius: 50px;
-margin: 15px;
-
-
-
+ height: 25px;
+  width: 25px;
+  color: black;
+  background: pink;
+  border-radius: 50px;
+  margin: 15px;
 `;
 
 const GridVoid = styled.div`
