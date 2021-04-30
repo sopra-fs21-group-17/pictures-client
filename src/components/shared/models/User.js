@@ -8,12 +8,13 @@ class User {
     this.password = null;
     this.birthdate = null;
     this.token = null;
-    this.guess = null;
+    this.guesses = null;
     this.model = null;
     this.totalScore = null;
     this.isReady = null;
     this.assignedSet = null;
     this.assignedCoordinates = null;
+    this.correctedGuesses = null;
     Object.assign(this, data);
   }
 }

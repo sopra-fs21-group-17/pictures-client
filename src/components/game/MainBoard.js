@@ -106,7 +106,7 @@ class MainBoard extends React.Component{
         super(props);
         this.state = {
             players: {},
-            myUserName: "1", // TODO correct this for real data
+            myUserName: "USER 1", // TODO correct this for real data
             mySet: "-",
             myCoordinates: "-",
             coordinateNames: [
@@ -120,10 +120,11 @@ class MainBoard extends React.Component{
                 8,9,10,11,
                 12,13,14,15],
         };
+        this.initGame();
     }
 
     //API REQUESTS//
-
+// TODO delete this comment
     async getPlayersFromLobby(){
         try {
             const response = await api.get("/players");
@@ -164,32 +165,23 @@ class MainBoard extends React.Component{
     render(){
         return(<Container>
             <PictureGrid/>
-            <UserBar>
-                <div>Build the picture located at: {this.state.myCoordinates}</div>
-                <div>with the: {this.state.mySet}</div>
-            </UserBar>
-
-            <ButtonContainer>
-                <Button
-                    width="50%"
-                    onClick={() => {
-                        this.initGame();
-                    }}
-                >
-                    get me set & token!
-                </Button>
-            </ButtonContainer>
-
-            <ButtonContainer>
-            <Button
-                width="50%"
-                onClick={() => {
-                    this.showBuildScreen();
-                }}
-            >
-                take me to build screen
-            </Button>
-        </ButtonContainer>
+            <table>
+                <td>
+                    <tr>Build the picture located at</tr>
+                    <tr>{this.state.myCoordinates}</tr>
+                    <tr>
+                        <ButtonContainer>
+                            <Button
+                                onClick={() => {
+                                    this.showBuildScreen();
+                                }}
+                            >
+                                take me to build screen
+                            </Button>
+                        </ButtonContainer>
+                    </tr>
+                </td>
+            </table>
         </Container>);
     }
 
