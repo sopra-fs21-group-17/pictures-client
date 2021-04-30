@@ -49,10 +49,11 @@ class AppRouter extends React.Component {
                   )}
               />
               <Route
-                  path="/lobby"
-                  exact
+                  path="/lobbies/"
                   render={() => (
-                      <Lobby />
+                      <LobbyGuard>
+                        <Lobby />
+                      </LobbyGuard>
                   )}
               />
               <Route

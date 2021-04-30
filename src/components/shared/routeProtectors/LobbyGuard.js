@@ -13,7 +13,7 @@ import { Redirect } from "react-router-dom";
 //if (localStorage.getItem("token") && window.location.pathname === ('/lobby'+ localStorage.getItem('currentRoomNumber'))) {
    // return props.children;
 export const LobbyGuard = props => {
-    if (localStorage.getItem("token")) {
+    if (localStorage.getItem("token") && window.location.pathname === ('/lobbies/'+ localStorage.getItem('lobbyId')) ) {
         return props.children;
     }
     return <Redirect to={"/"} />;

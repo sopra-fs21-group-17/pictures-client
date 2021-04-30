@@ -7,6 +7,8 @@ import { Spinner } from '../../views/design/Spinner';
 import { Button } from '../../views/design/Button';
 import { withRouter } from 'react-router-dom';
 import Header from "../../views/Header";
+import Lobby from "../shared/models/LobbyModel";
+import LobbyModel from "../shared/models/LobbyModel";
 
 const Container = styled(BaseContainer)`
   color: white;
@@ -44,12 +46,16 @@ const ButtonContainer = styled.div`
   margin-top: 15px;
 `;
 
+
+
 class Home extends React.Component {
     constructor() {
         super();
         this.state = {
             users: null,
-            roomNumber: null,
+            lobbyId: null,
+            lobbyIdInput: null,
+            count: null,
         };
     }
 
@@ -66,8 +72,55 @@ class Home extends React.Component {
             roomNumber += validCharacters.charAt(Math.floor(Math.random() * lengthValidCharacters));
         }
         return roomNumber
+    }
+
+    async createLobby(){
+        const requestBody = JSON.stringify({
+            lobbyId: localStorage.getItem('currentRoomNumber'),
+        });
+        const userReqBody = JSON.stringify({
+            username: localStorage.getItem('currentUsername'),
+            count: 20
+        });
+        //creates the new lobby in the backend if lobby with lobbyId don't exists
+        const response = await api.post('/lobbies', requestBody)
+        //adds the currentUser to the lobby
+        const userResp = await api.put('/lobbies/users/'+localStorage.getItem('currentRoomNumber'), userReqBody)
+
+        // get the returned lobby and updates a new object
+        const lobby = new LobbyModel(response.data);
+
+        //Store the lobbyId into the local storage.
+        localStorage.setItem('currentLobbyId', lobby.lobbyId);
+        localStorage.setItem('lobbyId', lobby.lobbyId);
+
+        this.props.history.push('/lobbies/' + lobby.lobbyId);
 
     }
+
+    async joinLobby(){
+        try {
+            const userReqBody = JSON.stringify({
+                username: localStorage.getItem('currentUsername')
+            });
+
+            localStorage.setItem('currentLobbyId', this.state.lobbyIdInput)
+
+            //adds the currentUser to the lobby
+            const checkLobby = await api.put('/lobbies/' + localStorage.getItem('currentLobbyId') + '/users');
+
+            const userResp = await api.put('/lobbies/users/' + localStorage.getItem('currentLobbyId'), userReqBody);
+
+
+            localStorage.setItem('lobbyId', localStorage.getItem('currentLobbyId'));
+            localStorage.setItem('currentRoomNumber', localStorage.getItem('currentLobbyId'));
+
+            this.props.history.push('/lobbies/' + localStorage.getItem('currentLobbyId'));
+        }catch (error) {
+            alert(`Something went wrong while fetching the users: \n${handleError(error)}`);
+        }
+    }
+
     handleInputChange(key, value) {
         // Example: if the key is username, this statement is the equivalent to the following one:
         // this.setState({'username': value});
@@ -79,30 +132,19 @@ class Home extends React.Component {
             const respons = await api.get('/users');
             const response = await api.get('/users/'+localStorage.getItem('currentUsername'));
             const createRoomNumber= this.randomRoomNumber(4);
-            // delays continuous execution of an async operation for 1 second.
-            // This is just a fake async call, so that the spinner can be displayed
-            // feel free to remove it :)
-            await new Promise(resolve => setTimeout(resolve, 1000));
+
 
             // Get the returned users and update the state.
             this.setState({ users: response.data });
-            if (this.state.roomNumber !== null){
-                localStorage.setItem('currentRoomNumber', this.state.roomNumber)
+
+            if (this.state.lobbyId !== null){
+                localStorage.setItem('currentRoomNumber', this.state.lobbyId)
             }else{
                 this.setState({roomNumber: createRoomNumber});
                 localStorage.setItem('currentRoomNumber', createRoomNumber)
             }
 
 
-            // This is just some data for you to see what is available.
-            // Feel free to remove it.
-            console.log('request to:', response.request.responseURL);
-            console.log('status code:', response.status);
-            console.log('status text:', response.statusText);
-            console.log('requested data:', response.data);
-
-            // See here to get more data.
-            console.log(response);
         } catch (error) {
             alert(`Something went wrong while fetching the users: \n${handleError(error)}`);
         }
@@ -134,14 +176,16 @@ class Home extends React.Component {
                             style={{visibility: "visible"}}
                             placeholder="Enter Code to Join Game"
                             onChange={e => {
-                                this.handleInputChange('roomCode', e.target.value);
+                                this.handleInputChange('lobbyIdInput', e.target.value);
                             }}
                         />
                         <ButtonContainer>
                             <Button
                                 width="70%"
+                                disabled={!this.state.lobbyIdInput}
                                 onClick={() => {
-                                    this.props.history.push('/lobby');
+                                    this.joinLobby();
+
                                 }}
                             >
                                 Join Game
@@ -151,7 +195,7 @@ class Home extends React.Component {
                             <Button
                                 width="70%"
                                 onClick={() => {
-                                    this.props.history.push('/lobby');
+                                    this.createLobby();
                                 }}
                             >
                                 Create Game
