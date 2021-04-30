@@ -20,28 +20,27 @@ class PictureElement extends React.Component{
         }
 
     }
-    async sendGuess() {
-        try {
-            const requestBody = JSON.stringify({
-                coordinate: this.state.coordinate
-            });
+    // async sendGuess() {
+    //     try {
+    //         const requestBody = JSON.stringify({
+    //             coordinate: this.state.coordinate
+    //         });
+    //
+    //         await api.put("/guess",requestBody);
+    //
+    //     } catch (error) {
+    //         alert(`Something went wrong during guessing: \n${handleError(error)}`);
+    //     }}
 
-            await api.put("/guess",requestBody);
-
-        } catch (error) {
-            alert(`Something went wrong during guessing: \n${handleError(error)}`);
-        }
-    }
 //TODO wait for functioning external api
     render(){
 
-        return <GridElement>
-        {/*<img>*/}
-        {/* src={this.state.pictureLink}*/}
-        {/*</img>*/}
-
-            {this.state.coordinate}
-        </GridElement>
+        return(
+        <GridElement>
+        <img>
+         src={this.state.pictureLink}
+        </img>
+        </GridElement>);
     }
 }
 
