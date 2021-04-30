@@ -15,7 +15,6 @@ import img from "../Sets/wood_texture_background.jpg";
 import {Square} from "../Sets/Items/Square";
 import {Inventory} from "../Sets/Inventory";
 
-import {SetTemplate} from "../Sets/SetTemplate";
 
 const Container = styled(BaseContainer)`
   color: black;
