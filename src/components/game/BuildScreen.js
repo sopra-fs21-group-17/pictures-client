@@ -1,6 +1,6 @@
 // temporary file to simulate BuildScreen for development
 
-import React from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components';
 import { BaseContainer } from '../../helpers/layout';
 import { api, handleError } from '../../helpers/api';
@@ -9,12 +9,18 @@ import { Button } from '../../views/design/Button';
 import { withRouter } from 'react-router-dom';
 
 import testPic from '../../test_pictures/doggo1.jpg';
+
+import img from "../Sets/wood_texture_background.jpg";
+import {Square} from "../Sets/Items/Square";
+import {Inventory} from "../Sets/Inventory";
+
 import {SetTemplate} from "../Sets/SetTemplate";
 
 const Container = styled(BaseContainer)`
-  color: white;
+  color: black;
   text-align: center;
 `;
+
 
 const Users = styled.ul`
   list-style: none;
@@ -47,6 +53,8 @@ class BuildScreen extends React.Component {
         }
     }
 
+
+
     async componentDidMount() {
         try {
             const response = await api.get('/users');
@@ -73,19 +81,14 @@ class BuildScreen extends React.Component {
     }
 
     render() {
+
         return (
             <Container>
-                <h2>BUILD SCREEN</h2>
                 {!this.state.users ? (
                     <Spinner />
                 ) : (
                     <div>
-                        <p></p>
                         <SetTemplate/>
-
-
-                        <p></p>
-
                         <Button
                             width="100%"
                             onClick={() => {
@@ -99,6 +102,7 @@ class BuildScreen extends React.Component {
             </Container>
         );
     }
+
 
     userFinishedBuilding() {
         this.putscreenshot()

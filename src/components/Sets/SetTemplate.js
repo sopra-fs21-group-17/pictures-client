@@ -20,13 +20,25 @@ import img from "./wood_texture_background.jpg"
 import {ThickRectangle, Triangle} from "./Items/BuildingBlocks";
 import {ItemsSet4} from "./SetItemLists/ItemsSet4";
 import {ItemsSet5} from "./SetItemLists/ItemsSet5";
+import { useHistory } from "react-router-dom";
 
-
-const FormContainer = styled.div`
+const TopContainer = styled.div`
   margin-top: 2em;
   display: flex;
   flex-direction: row;
   justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  max-height: 70vh; 
+`;
+
+const BottomContainer = styled.div`
+  display: flex;
+  padding-top: 2vh;
+  width: 100%;
+  height: 100%;
+  max-height: 30vh;
 `;
 
 const ImageBorderContainer = styled.div`
@@ -34,32 +46,33 @@ const ImageBorderContainer = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  width: 40vw;
-  height: 22vw;
-  min-height: 100px;
-  min-width: 177.5px;
-  max-height: 300px;
-  max-width: 533px;
-  padding-top: 20px;
-  padding-bottom: 20px;
-  padding-left: 20px;
-  padding-right: 20px;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  margin-left: 100px;
-  margin-right:20px;
+  width: auto;
+  height: auto;
+  max-height: 45vh;
+  max-width: 30vw;
+  min-height: 15vh;
+  min-width: 10vh;
+  margin: 5%;
   background-image: url(${img});
 `;
 
 const ImageContainer = styled.img`
-  height: 100%;
-  width: 100%;
+  height: auto;
+  width: auto;
+  max-height: 45vh;
+  max-width: 30vw;
+  min-height: 15vh;
+  min-width: 10vh;
+  padding: 3%
 `;
 
 const Button = styled.div`
   &:hover {
     transform: translateY(-2px);
   }
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 6px;
   font-weight: 700;
   text-transform: uppercase;
@@ -78,7 +91,9 @@ const Button = styled.div`
 `;
 
 const ButtonContainer = styled.div`
-  padding-bottom: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const BoardContainer = styled.div`
@@ -91,13 +106,14 @@ const BoardContainer = styled.div`
 `;
 
 const BorderContainer = styled.div`
-  width: 60vh;
-  height: 60vh;
+  height: 55vh;
+  width: 55vh;
   background-image: url(${img});
   padding-top: 2.5%;
   padding-bottom: 2.5%;
   padding-left: 2.5%;
   padding-right: 2.5%;
+  margin: 5%;
 `;
 
 const ItemContainer = styled.div`
@@ -105,7 +121,7 @@ const ItemContainer = styled.div`
   flex-direction: row;
   justify-content: center;
   height: 100%;
-  width: max;
+  //width: 100%;
   margin-left: 1vw;
   margin-right: 1vw;
   background: inherit;
@@ -124,7 +140,7 @@ export const SetTemplate = () => {
 
     const [userSet, setUserSet] = useState([
         {
-            set: 2,
+            set: 1,
         },
     ]);
 
@@ -229,8 +245,8 @@ export const SetTemplate = () => {
         const newItem = {
             _id: id+10*id*updatedItem[0].amount,
             location: 'board',
-            top: 300,
-            left: 300,
+            top: 150,
+            left: 150,
             color: updatedItem[0].color,
             amount: updatedItem[0].amount-1,
             hideSourceOnDrag: true,
@@ -288,33 +304,42 @@ export const SetTemplate = () => {
         }
     };
 
+    const history = useHistory();
 
     const ref = createRef()
     const [screenshot, takeScreenshot] = useScreenshot()
-    const   getImage = () => takeScreenshot(ref.current)
-    console.log(screenshot)
-    localStorage.setItem('screenshot', screenshot)
+    const   GetImage = () => {
+        takeScreenshot(ref.current);
+        console.log(screenshot);
+        localStorage.setItem('screenshot', screenshot);
+        history.push(`/GuessingScreen`);
+    }
+
 
     return (
         <DndProvider backend={HTML5Backend}>
             <ItemContext.Provider value={{ markAsInventory, moveItem, markAsSquareField }}>
                 <BaseContainer>
-                    <FormContainer>
-                        <div ref={ref}>
+                    <TopContainer>
+                        <div ref={ref} >
                             <BorderContainer>
                                 <BoardContainer>
                                     {selectBoard()}
                                 </BoardContainer>
                             </BorderContainer>
                         </div>
-                        <ImageBorderContainer>
-                            <ImageContainer src="https://source.unsplash.com/random" className="img-fluid" alt=""/>
-                        </ImageBorderContainer>
-                    </FormContainer>
-                    <ButtonContainer>
-                        <Button onClick={getImage}>Submit</Button>
-                    </ButtonContainer>
-                    {selectItems()}
+                        <div style={{padding: '5%', margin: '5%',  display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+                            <ImageBorderContainer>
+                                <ImageContainer src="https://source.unsplash.com/random" className="img-fluid" alt=""/>
+                            </ImageBorderContainer>
+                            <ButtonContainer>
+                                <Button onClick={GetImage}>Submit</Button>
+                            </ButtonContainer>
+                        </div>
+                    </TopContainer>
+                    <BottomContainer>
+                        {selectItems()}
+                    </BottomContainer>
                 </BaseContainer>
             </ItemContext.Provider>
         </DndProvider>

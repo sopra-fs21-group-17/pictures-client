@@ -8,12 +8,10 @@ import {ItemTypes} from '../utils/Items';
 
 
 const SquareContainer = styled.div`
-  width: 5vw;
-  height: 5vw;
-  min-height: 100%;
-  min-width: 100%;
-  // max-width: 100%;
-  // max-height: 100%;
+  width: 10vw;
+  height: 10vw;
+  max-width: 10vh;
+  max-height: 10vh;
   font-size: 26px;
   font-weight: 800;
   display: flex;

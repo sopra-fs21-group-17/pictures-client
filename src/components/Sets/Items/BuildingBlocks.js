@@ -86,6 +86,7 @@ export const Bridgecontainer = styled.div`
     margin: 10px;
     position:relative;
     cursor:move;
+    
 
     
     `;
@@ -123,7 +124,8 @@ export const Bridge = styled.div`
 export const Stone =styled.div`
     position: absolute;
     transform: rotate(30deg);
-    
+    justifyContent: center;
+    align-items: center;
     width: 5vw;
     height: 2.7vw;
     background: red;
@@ -142,9 +144,7 @@ export  const Stick =styled.div`
     display: flex;
     flexDirection: column;
     justifyContent: center;
+    align-items: center;
     background-image: url(${img});
-
-
-
 `;
 
