@@ -15,22 +15,68 @@ import {withRouter} from "react-router-dom";
 import { useScreenshot } from 'use-react-screenshot'
 import {OptionsType} from "html-to-image";
 import {ItemsSet3} from "./SetItemLists/ItemsSet3";
-import {Stick} from "./Items/Stick";
+import {Item} from "./Items/Item";
 import img from "./wood_texture_background.jpg"
 import {ThickRectangle, Triangle} from "./Items/BuildingBlocks";
+import {ItemsSet4} from "./SetItemLists/ItemsSet4";
+import {ItemsSet5} from "./SetItemLists/ItemsSet5";
+import { useHistory } from "react-router-dom";
 
-
-const FormContainer = styled.div`
+const TopContainer = styled.div`
   margin-top: 2em;
   display: flex;
-  
+  flex-direction: row;
   justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  max-height: 70vh; 
+`;
+
+const BottomContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding-top: 2vh;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  max-height: 30vh;
+`;
+
+const ImageBorderContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: auto;
+  height: auto;
+  max-height: 45vh;
+  max-width: 30vw;
+  min-height: 15vh;
+  min-width: 10vh;
+  margin: 5%;
+  background-image: url(${img});
+`;
+
+const ImageContainer = styled.img`
+  height: auto;
+  width: auto;
+  max-height: 45vh;
+  max-width: 30vw;
+  min-height: 15vh;
+  min-width: 10vh;
+  padding: 3%
 `;
 
 const Button = styled.div`
   &:hover {
     transform: translateY(-2px);
   }
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 6px;
   font-weight: 700;
   text-transform: uppercase;
@@ -49,7 +95,9 @@ const Button = styled.div`
 `;
 
 const ButtonContainer = styled.div`
-  padding-bottom: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const BoardContainer = styled.div`
@@ -62,23 +110,25 @@ const BoardContainer = styled.div`
 `;
 
 const BorderContainer = styled.div`
-  width: 60vh;
-  height: 60vh;
+  height: 55vh;
+  width: 55vh;
   background-image: url(${img});
   padding-top: 2.5%;
   padding-bottom: 2.5%;
   padding-left: 2.5%;
   padding-right: 2.5%;
+  margin: 5%;
 `;
 
 const ItemContainer = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: center;  
   height: 100%;
   width: max;
   margin-left: 1vw;
   margin-right: 1vw;
+  background: inherit;
 `;
 
 export const ItemContext = createContext({
@@ -92,18 +142,119 @@ export const SetTemplate = () => {
 
     ]);
 
+    const [userSet, setUserSet] = useState([
+        {
+            set: 3,
+        },
+    ]);
+
+
+
+    const selectBoard = () => {
+        if(userSet[0].set === 1){
+            return (
+                <GridBoard itemlist={itemList}></GridBoard>
+            );
+        } else {
+            return (
+                <FreeBoard itemlist={itemList}></FreeBoard>
+            );
+        }
+    };
+
+    useEffect(() => {
+        if(userSet[0].set === 1){
+            setItemList(ItemsSet1)
+        } else if (userSet[0].set === 2){
+            setItemList(ItemsSet2)
+        }else if (userSet[0].set === 3){
+            setItemList(ItemsSet3)
+        }else if (userSet[0].set === 4){
+            setItemList(ItemsSet4)
+        }else {
+            setItemList(ItemsSet5)
+        }
+    }, [])
+
+    const selectItems = () => {
+        if(userSet[0].set === 1){
+            return (
+                <Inventory>
+                    {itemList
+                        .filter((task, i) => task.location === 'inventory')
+                        .filter((task, i) => task.amount > 0)
+                        .map((task, i) => (
+                            <ItemContainer>
+                                <Square
+                                    key={task._id.toString()}
+                                    _id={task._id}
+                                    location={task.location}
+                                    color={task.color}
+                                    amount={task.amount}
+                                />
+                            </ItemContainer>
+                        ))}
+                </Inventory>
+            );
+        } else if(userSet[0].set === 2){
+            return (
+                <Inventory>
+                    {itemList
+                        .filter((task, i) => task.location === 'inventory')
+                        .filter((task, i) => task.amount > 0)
+                        .map((task, i) => (
+                            <ItemContainer>
+                                <Item
+                                    key={task._id.toString()}
+                                    _id={task._id}
+                                    location={task.location}
+                                    color={task.color}
+                                    amount={task.amount}
+                                    style={task.style}
+                                />
+                            </ItemContainer>
+                        ))}
+                </Inventory>
+            );
+        } else if(userSet[0].set === 3){
+            return (
+                <Inventory>
+                    {itemList
+                        .filter((task, i) => task.location === 'inventory')
+                        .filter((task, i) => task.amount > 0)
+                        .map((task, i) => (
+                            <ItemContainer>
+                                <Item
+                                    key={task._id.toString()}
+                                    _id={task._id}
+                                    location={task.location}
+                                    color={task.color}
+                                    amount={task.amount}
+                                    style={task.style}
+                                />
+                            </ItemContainer>
+                        ))}
+                </Inventory>
+            );
+        }
+
+
+    }
+
     const moveItem = (id, left, top) => {
+
 
         const updatedItem = itemList.filter((item, i) => item._id === id);
 
         const newItem = {
             _id: id+10*id*updatedItem[0].amount,
             location: 'board',
-            top: 300,
-            left: 300,
+            top: 150,
+            left: 150,
             color: updatedItem[0].color,
             amount: updatedItem[0].amount-1,
             hideSourceOnDrag: true,
+            style:updatedItem[0].style,
         };
 
         if(updatedItem[0].location !== 'inventory'){
@@ -157,47 +308,42 @@ export const SetTemplate = () => {
         }
     };
 
-    useEffect(() => {
-        setItemList(ItemsSet1)
-    }, [])
+    const history = useHistory();
 
     const ref = createRef()
     const [screenshot, takeScreenshot] = useScreenshot()
-    const   getImage = () => takeScreenshot(ref.current)
-    console.log(screenshot)
+    const   GetImage = () => {
+        takeScreenshot(ref.current);
+        console.log(screenshot);
+        localStorage.setItem('screenshot', screenshot);
+        history.push(`/GuessingScreen`);
+    }
+
 
     return (
         <DndProvider backend={HTML5Backend}>
             <ItemContext.Provider value={{ markAsInventory, moveItem, markAsSquareField }}>
                 <BaseContainer>
-                    <FormContainer>
-                        <div ref={ref}>
+                    <TopContainer>
+                        <div ref={ref} >
                             <BorderContainer>
                                 <BoardContainer>
-                                    <GridBoard itemlist={itemList}></GridBoard>
+                                    {selectBoard()}
                                 </BoardContainer>
                             </BorderContainer>
                         </div>
-                    </FormContainer>
-                    <ButtonContainer>
-                        <Button onClick={getImage}>Submit</Button>
-                    </ButtonContainer>
-                    <Inventory>
-                        {itemList
-                            .filter((task, i) => task.location === 'inventory')
-                            .filter((task, i) => task.amount > 0)
-                            .map((task, i) => (
-                                <ItemContainer>
-                                    <Square
-                                        key={task._id.toString()}
-                                        _id={task._id}
-                                        location={task.location}
-                                        color={task.color}
-                                        amount={task.amount}
-                                    />
-                                </ItemContainer>
-                            ))}
-                    </Inventory>
+                        <div style={{padding: '5%', margin: '5%',  display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+                            <ImageBorderContainer>
+                                <ImageContainer src="https://source.unsplash.com/random" className="img-fluid" alt=""/>
+                            </ImageBorderContainer>
+                            <ButtonContainer>
+                                <Button onClick={GetImage}>Submit</Button>
+                            </ButtonContainer>
+                        </div>
+                    </TopContainer>
+                    <BottomContainer>
+                        {selectItems()}
+                    </BottomContainer>
                 </BaseContainer>
             </ItemContext.Provider>
         </DndProvider>

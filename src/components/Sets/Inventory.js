@@ -3,6 +3,7 @@ import styled from "styled-components";
 import {ItemTypes} from "./utils/Items";
 import React, {useContext} from "react";
 import {ItemContext} from "./SetTemplate";
+import {Bridgecontainer, BridgeRectangle, Halfcircle, Stone} from "./Items/BuildingBlocks";
 
 const InventoryContainer = styled.div`
   display: flex;
@@ -15,12 +16,13 @@ const InventoryContainer = styled.div`
   bottom: 2%;
   width: max;
   height: auto;
-  min-height: 175px;
-  padding-top: 20px;
-  padding-bottom: 20px;
+  max-width: 100%;
+  min-height: 15vh;
+  padding: 2%;
   background: #303036;
   filter: brightness(75%);
 `;
+
 
 
 export const Inventory = props => {
@@ -37,9 +39,13 @@ export const Inventory = props => {
 
     return (
         <InventoryContainer
+
             style={isOver ? {background: '#65656b'} : {background: '#303036'}}
             ref={drop}>
                 {props.children}
+
+
+
         </InventoryContainer>
     )
 }

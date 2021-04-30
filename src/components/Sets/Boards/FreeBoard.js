@@ -4,7 +4,7 @@ import {ItemTypes} from "../utils/Items";
 import React, {useCallback, useContext, useState} from "react";
 import {ItemContext} from "../SetTemplate";
 import update from 'immutability-helper';
-import {Stick} from "../Items/Stick";
+import {Item} from "../Items/Item";
 
 const BoardContainer = styled.div`
   width: 100%;
@@ -38,7 +38,7 @@ export const FreeBoard = ({ itemlist }) => {
                     .filter((task, i) => task.location === 'board')
                     .map((key) => {
                     return (
-                        <Stick
+                        <Item
                             key={key._id}
                             _id={key._id}
                             location={key.location}
@@ -47,7 +47,9 @@ export const FreeBoard = ({ itemlist }) => {
                             color={key.color}
                             amount={key.amount}
                             hideSourceOnDrag={key.hideSourceOnDrag}
+                            style={key.style}
                         />
+
                     );
                 })}
             </BoardContainer>

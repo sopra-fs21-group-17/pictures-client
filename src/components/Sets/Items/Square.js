@@ -9,11 +9,12 @@ import {ItemTypes} from '../utils/Items';
 
 const SquareContainer = styled.div`
   width: 5vw;
+  //padding-bottom: 50%;
   height: 5vw;
   min-height: 100%;
   min-width: 100%;
-  // max-width: 100%;
-  // max-height: 100%;
+  //max-width: 10vh;
+  //max-height: 10vh;
   font-size: 26px;
   font-weight: 800;
   display: flex;

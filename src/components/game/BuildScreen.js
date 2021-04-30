@@ -1,6 +1,6 @@
 // temporary file to simulate BuildScreen for development
 
-import React from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components';
 import { BaseContainer } from '../../helpers/layout';
 import { api, handleError } from '../../helpers/api';
@@ -11,10 +11,17 @@ import SetTemplate from "../Sets/SetTemplate";
 
 import testPic from '../../test_pictures/doggo1.jpg';
 
+import img from "../Sets/wood_texture_background.jpg";
+import {Square} from "../Sets/Items/Square";
+import {Inventory} from "../Sets/Inventory";
+
+import {SetTemplate} from "../Sets/SetTemplate";
+
 const Container = styled(BaseContainer)`
-  color: white;
+  color: black;
   text-align: center;
 `;
+
 
 const Users = styled.ul`
   list-style: none;
@@ -32,9 +39,22 @@ class BuildScreen extends React.Component {
     constructor() {
         super();
         this.state = {
-            users: null
+            users: null,
+            
         };
     }
+    async putscreenshot() {
+        try {
+
+            await api.put("/screenshot", localStorage.getItem("screenshot"));
+
+
+        } catch (error) {
+            alert(`Something went wrong  \n${handleError(error)}`);
+        }
+    }
+
+
 
     async componentDidMount() {
         try {
@@ -62,30 +82,28 @@ class BuildScreen extends React.Component {
     }
 
     render() {
+
         return (
             <Container>
-                <h2>BUILD SCREEN</h2>
-                    <div>
-                        <p></p>
-                        <div> [ here goes the set building stuff... ] </div>
-                        <img src={testPic}/>
+                <div>
+                    <SetTemplate/>
 
-                        <p></p>
-
-                        <Button
-                            width="100%"
-                            onClick={() => {
-                                this.userFinishedBuilding();
-                            }}
-                        >
-                            I'm done building!
-                        </Button>
-                    </div>
+                    <Button
+                        width="100%"
+                        onClick={() => {
+                            this.userFinishedBuilding();
+                        }}
+                    >
+                        I'm done building!
+                    </Button>
+                </div>
             </Container>
         );
     }
 
+
     userFinishedBuilding() {
+        this.putscreenshot()
         this.props.history.push(`/GuessingScreen`);
     }
 }
