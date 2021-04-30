@@ -7,6 +7,7 @@ import { api, handleError } from '../../helpers/api';
 import { Spinner } from '../../views/design/Spinner';
 import { Button } from '../../views/design/Button';
 import { withRouter } from 'react-router-dom';
+import SetTemplate from "../Sets/SetTemplate";
 
 import testPic from '../../test_pictures/doggo1.jpg';
 
@@ -64,13 +65,9 @@ class BuildScreen extends React.Component {
         return (
             <Container>
                 <h2>BUILD SCREEN</h2>
-                {!this.state.users ? (
-                    <Spinner />
-                ) : (
                     <div>
                         <p></p>
                         <div> [ here goes the set building stuff... ] </div>
-
                         <img src={testPic}/>
 
                         <p></p>
@@ -84,7 +81,6 @@ class BuildScreen extends React.Component {
                             I'm done building!
                         </Button>
                     </div>
-                )}
             </Container>
         );
     }
