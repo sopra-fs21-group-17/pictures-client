@@ -10,8 +10,13 @@ const InventoryContainer = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  height: 100%;
+  position: fixed;
+  right: 2%;
+  left: 2%;
+  bottom: 2%;
+  width: max;
+  height: auto;
+  max-width: 100%;
   min-height: 15vh;
   padding: 2%;
   background: #303036;

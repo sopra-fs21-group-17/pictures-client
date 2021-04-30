@@ -35,8 +35,12 @@ const TopContainer = styled.div`
 
 const BottomContainer = styled.div`
   display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
   padding-top: 2vh;
   width: 100%;
+  max-width: 100%;
   height: 100%;
   max-height: 30vh;
 `;
@@ -119,9 +123,9 @@ const BorderContainer = styled.div`
 const ItemContainer = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: center;  
   height: 100%;
-  //width: 100%;
+  width: max;
   margin-left: 1vw;
   margin-right: 1vw;
   background: inherit;
@@ -140,7 +144,7 @@ export const SetTemplate = () => {
 
     const [userSet, setUserSet] = useState([
         {
-            set: 1,
+            set: 3,
         },
     ]);
 
