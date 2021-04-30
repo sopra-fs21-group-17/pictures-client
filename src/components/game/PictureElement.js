@@ -36,9 +36,9 @@ class PictureElement extends React.Component{
     render(){
 
         return <GridElement>
-        {/*<img>*/}
-        {/* src={this.state.pictureLink}*/}
-        {/*</img>*/}
+        <img>
+         src={this.state.pictureLink}
+        </img>
 
             {this.state.coordinate}
         </GridElement>

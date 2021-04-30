@@ -70,12 +70,13 @@ class PictureGrid extends React.Component{
         super(props);
         this.state ={
             currentGameState: "start",  /*idea to allow picture selection when in state guessing for the future*/
-            pictureURLs: null,
+            pictureURLs: [],
             coordinate: [0,1,2,3,
                 4,5,6,7,
                 8,9,10,11,
                 12,13,14,15],
         }
+        this.getPictures();
     }
 
     async getPictures(){
@@ -88,12 +89,13 @@ class PictureGrid extends React.Component{
             alert(`Something went wrong getting the Pictures: \n${handleError(error)}`);
         }
     }
+componentDidMount() {}
 
     render(){
 
-        const location = this.state.coordinate;
-        const pictureElements = location.map(coordinate => {
-            return <PictureElement coordinates={coordinate}></PictureElement>
+        const pictures = this.state.pictureURLs;
+        const pictureElements = pictures.map(picture => {
+            return <PictureElement pictureURL={picture}></PictureElement>
         })
         const numberColumn =[1,2,3,4];
         const columnCoordinates = numberColumn.map((number) => {
