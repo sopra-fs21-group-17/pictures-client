@@ -22,6 +22,11 @@ const PlayerContainer = styled.li`
   justify-content: center;
 `;
 
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+`;
 
 
 class ScoreScreen extends React.Component {
@@ -57,102 +62,77 @@ class ScoreScreen extends React.Component {
         }
     }
 
+    convertCorrectedGuessesToMap(correctedGuesses){
+        let tempUsername = "";
+        let tempCoordinates = "";
+        let result = [];
+
+        for(let i = 0; i < correctedGuesses.length; i++){
+            for(let j = 0; j < 1; j++){ // first letters is y/n for correct/incorrect guess
+                tempCoordinates += correctedGuesses.charAt(i+j);
+            }
+            i++; // skip coordinates, goto username
+
+            while(i < correctedGuesses.length-1 && correctedGuesses.charAt(i) !== '-'){
+                tempUsername += correctedGuesses.charAt(i);
+                i++;
+            }
+            result.push([tempUsername, tempCoordinates]);
+            tempUsername = tempCoordinates = "";
+        }
+
+        return result;
+    }
+
     render() {
+        const temp = this.convertCorrectedGuessesToMap(localStorage.getItem("correctedGuesses"));
+        const filledTableGuesses = temp.map( tuple =>{
+                return(
+                    <td>
+                        <tr>{tuple[0]}</tr>
+                        <tr>{tuple[1]}</tr>
+                    </td>
+                )
+            }
+        )
+
+        // TODO points table
+        const temp2 = this.convertCorrectedGuessesToMap(localStorage.getItem("correctedGuesses"));
+        const filledTablePoints = temp.map( tuple =>{
+                return(
+                    <td>
+                        <tr>{tuple[0]}</tr>
+                        <tr>10</tr>
+                    </td>
+                )
+            }
+        )
+
         return (
             <Container>
                 <h2>SCORE OVERVIEW</h2>
 
-                <table>
-                    <tr>
-                        <td>POINTS</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>&nbsp;</td>
-                        <td>USER 1</td>
-                        <td>USER 2</td>
-                        <td>USER 3</td>
-                        <td>USER 4</td>
-                        <td>USER 5</td>
-                    </tr>
-                    <tr>
-                        <td>ROUND 1</td>
-                        <td>X</td>
-                        <td>X</td>
-                        <td>X</td>
-                        <td>X</td>
-                        <td>X</td>
-                    </tr>
+
+                <p>Points overview:</p>
+                <table align={"center"}>
+                    {filledTablePoints}
                 </table>
 
-                <p></p>
-
-                <table>
-                    <tr>
-                        <td>CORRECT</td>
-                        <td>GUESSES</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>&nbsp;</td>
-                        <td>USER 1</td>
-                        <td>USER 2</td>
-                        <td>USER 3</td>
-                        <td>USER 4</td>
-                        <td>USER 5</td>
-                    </tr>
-                    <tr>
-                        <td>USER 1</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>USER 2</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>USER 3</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>USER 4</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>USER 5</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
+                <p>Your guesses:</p>
+                <table align={"center"}>
+                    {filledTableGuesses}
                 </table>
 
-                <Button
-                    width="100%"
-                    onClick={() => {
-                        this.nextRound();
-                    }}
-                >
-                    Ok, next round!
-                </Button>
+                <ButtonContainer>
+                    <Button
+                        width="25%"
+                        onClick={() => {
+                            this.nextRound();
+                        }}
+                    >
+                        Ok, next round!
+                    </Button>
+                </ButtonContainer>
             </Container>
         );
     }

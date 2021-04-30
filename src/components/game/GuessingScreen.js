@@ -101,7 +101,7 @@ class GuessingScreen extends React.Component {
 
             // Get the returned screenshots and update the state.
             this.setState({ screenshots: response.data });
-            //console.log(this.state.screenshots);
+            console.log(this.state.screenshots);
         } catch (error) {
             alert(`Something went wrong while fetching the users: \n${handleError(error)}`);
         }
@@ -137,17 +137,27 @@ class GuessingScreen extends React.Component {
 
     // PUT REQUEST
     async sendUserGuesses(){
+        // let temp = this.convertGuessesToString(this.state.guesses)
+        // try{
+        //     const requestBody = JSON.stringify({
+        //         username: this.state.username,
+        //         guesses: temp
+        //     })
+        //     //console.log(this.state.guesses);
+        //     await api.put("/guesses", requestBody);
+        // } catch(error) {
+        //     alert(`Something went wrong while sending the guesses: \n${handleError(error)}`);
+        // }
 
-        // guesses werden zurzeit als String im BE weiterverarbeitet...
-        let temp = this.convertGuessesToString(this.state.guesses);
-
+        let temp = this.convertGuessesToString(this.state.guesses)
         try{
             const requestBody = JSON.stringify({
                 username: this.state.username,
                 guesses: temp
             })
-            console.log(requestBody);
-            await api.put("/guesses", requestBody);
+            //console.log(this.state.guesses);
+            const response = api.post("/guesses", requestBody);
+            localStorage.setItem("correctedGuesses", (await response).data)
         } catch(error) {
             alert(`Something went wrong while sending the guesses: \n${handleError(error)}`);
         }
@@ -161,15 +171,16 @@ class GuessingScreen extends React.Component {
     }
 
     async showScoreScreen() {
-        // get corrected guesses
-        try{
-            const response = await api.get('/correctedGuesses');
-            console.log(response.data);
-        } catch(error) {
-            alert(`Something went wrong while sending the guesses: \n${handleError(error)}`);
-        }
+        // TODO get not returning anything at the moment
+        // // get corrected guesses
+        // try{
+        //     const response = await api.get('/correctedGuesses');
+        //     console.log(response.data);
+        // } catch(error) {
+        //     alert(`Something went wrong while sending the guesses: \n${handleError(error)}`);
+        // }
 
-        //this.props.history.push(`/scoreScreen`);
+        this.props.history.push(`/scoreScreen`);
     }
 
     render() {
