@@ -196,27 +196,7 @@ export const SetTemplate = () => {
                         ))}
                 </Inventory>
             );
-        } else if(userSet[0].set === 2){
-            return (
-                <Inventory>
-                    {itemList
-                        .filter((task, i) => task.location === 'inventory')
-                        .filter((task, i) => task.amount > 0)
-                        .map((task, i) => (
-                            <ItemContainer>
-                                <Item
-                                    key={task._id.toString()}
-                                    _id={task._id}
-                                    location={task.location}
-                                    color={task.color}
-                                    amount={task.amount}
-                                    style={task.style}
-                                />
-                            </ItemContainer>
-                        ))}
-                </Inventory>
-            );
-        } else if(userSet[0].set === 3){
+        } else {
             return (
                 <Inventory>
                     {itemList
@@ -237,8 +217,6 @@ export const SetTemplate = () => {
                 </Inventory>
             );
         }
-
-
     }
 
     const moveItem = (id, left, top) => {
@@ -286,24 +264,24 @@ export const SetTemplate = () => {
 
     const markAsSquareField = (square,x) => {
         //gets the item that was moved
-        const item = itemList.filter((item, i) => item._id === square._id);
+        const selectedItem = itemList.filter((item, i) => item._id === square._id);
 
         //creates a new item
         const newSquare = {
                 _id: square._id+10*square._id*square.amount,
                 location: 'squarefield'+x,
-                color: item[0].color,
-                amount: item[0].amount-1,
+                color: selectedItem[0].color,
+                amount: selectedItem[0].amount-1,
             };
 
         //only applies changes if item moved to a empty square or the inventory
         if(itemList.filter((item, i) => item.location === 'squarefield'+x).length === 0){
             if(square.location !== 'inventory'){
-                item[0].location = 'squarefield'+x;
-                setItemList(itemList.filter((item, i) => item._id !== square._id).concat(item[0]));
+                selectedItem[0].location = 'squarefield'+x;
+                setItemList(itemList.filter((item, i) => item._id !== square._id).concat(selectedItem[0]));
             } else {
-                item[0].amount = item[0].amount-1;
-                setItemList(((itemList.filter((item, i) => item._id < square._id).concat(item[0])).concat(itemList.filter((item, i) => item._id > square._id))).concat(newSquare));
+                selectedItem[0].amount = selectedItem[0].amount-1;
+                setItemList(((itemList.filter((item, i) => item._id < square._id).concat(selectedItem[0])).concat(itemList.filter((item, i) => item._id > square._id))).concat(newSquare));
             }
         }
     };
