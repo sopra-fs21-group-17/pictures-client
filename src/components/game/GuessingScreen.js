@@ -83,43 +83,32 @@ class GuessingScreen extends React.Component {
         this.state = {
             userID: null,
             players: null,
-            username: "USER 1", // for test purposes
+            username: "OLIVER", // for test purposes
             screenshots: [],
             guesses: {},
             guessesAsString: ""
         }
-        //this.getUsers();
         this.getScreenshots();
         };
 
     // GET REQUEST "/screenshots"
     async getScreenshots(){
+        localStorage.setItem("lobbyId", "test"); // für testzwecke
         try {
-            const response = await api.get('/screenshots');
-
+            const response = await api.get('/screenshots/'+localStorage.getItem("lobbyId"));
             await new Promise(resolve => setTimeout(resolve, 1000));
+
+            // remove screenshot of current user
+            for(let e in response.data){
+                // response_array[i][0] = username
+                if(response.data[e][0] === this.state.username) {
+                    response.data.splice(e, 1);
+                }
+            }
 
             // Get the returned screenshots and update the state.
             this.setState({ screenshots: response.data });
-            console.log(this.state.screenshots);
-        } catch (error) {
-            alert(`Something went wrong while fetching the users: \n${handleError(error)}`);
-        }
-    }
 
-    async getUsers() {
-        try {
-            const response = await api.get('/users');
-            // delays continuous execution of an async operation for 1 second.
-            // This is just a fake async call, so that the spinner can be displayed
-            // feel free to remove it :)
-            await new Promise(resolve => setTimeout(resolve, 1000));
-
-            // Get the returned users and update the state.
-            this.setState({ users: response.data });
-
-            // See here to get more data.
-            //console.log(response);
         } catch (error) {
             alert(`Something went wrong while fetching the users: \n${handleError(error)}`);
         }
@@ -157,7 +146,7 @@ class GuessingScreen extends React.Component {
             })
             //console.log(this.state.guesses);
             const response = api.post("/guesses", requestBody);
-            localStorage.setItem("correctedGuesses", (await response).data)
+            localStorage.setItem("correctedGuesses", (await response).data);
         } catch(error) {
             alert(`Something went wrong while sending the guesses: \n${handleError(error)}`);
         }
@@ -171,14 +160,14 @@ class GuessingScreen extends React.Component {
     }
 
     async showScoreScreen() {
-        // TODO get not returning anything at the moment
-        // // get corrected guesses
-        // try{
-        //     const response = await api.get('/correctedGuesses');
-        //     console.log(response.data);
-        // } catch(error) {
-        //     alert(`Something went wrong while sending the guesses: \n${handleError(error)}`);
-        // }
+        // get corrected guesses
+        localStorage.setItem("lobbyId", "test"); // für testzwecke
+        try{
+            const response = await api.get('/correctedGuesses/'+localStorage.getItem("lobbyId"));
+            console.log(response.data);
+        } catch(error) {
+            alert(`Something went wrong while sending the guesses: \n${handleError(error)}`);
+        }
 
         this.props.history.push(`/scoreScreen`);
     }
@@ -221,37 +210,36 @@ class GuessingScreen extends React.Component {
 
         return (
             <Container>
-                <h1>GUESSING SCREEN</h1>
-                    <div align={"center"}>
-                        <p>Which picture were the other players trying to build?</p>
-                        <h3>Make your guesses</h3>
+                <div align={"center"}>
+                    <h2>Which picture were the other players trying to build?</h2>
+                    <h3>Make your guesses</h3>
 
-                        <StyledTable>
-                            <StyledTr>
-                                <StyledTd>What the other players built:</StyledTd>
-                                <StyledTd>Coordinates of original picture:</StyledTd>
-                            </StyledTr>
-                            {filledTableRows}
-                        </StyledTable>
+                    <StyledTable>
+                        <StyledTr>
+                            <StyledTd>What the other players built:</StyledTd>
+                            <StyledTd>Coordinates of original picture:</StyledTd>
+                        </StyledTr>
+                        {filledTableRows}
+                    </StyledTable>
 
-                        <Button
-                            width="25%"
-                            onClick={() => {
-                                this.sendUserGuesses();
-                            }}
-                        >
-                            My guesses are done!
-                        </Button>
+                    <Button
+                        width="25%"
+                        onClick={() => {
+                            this.sendUserGuesses();
+                        }}
+                    >
+                        My guesses are done!
+                    </Button>
 
-                        <Button
-                            width="25%"
-                            onClick={() => {
-                                this.showScoreScreen();
-                            }}
-                        >
-                            DEV: "Guessing is done!"
-                        </Button>
-                    </div>
+                    <Button
+                        width="25%"
+                        onClick={() => {
+                            this.showScoreScreen();
+                        }}
+                    >
+                        DEV: "Guessing is done!"
+                    </Button>
+                </div>
 
                 <PictureGrid></PictureGrid>
 

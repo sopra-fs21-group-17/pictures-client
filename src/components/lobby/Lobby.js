@@ -101,8 +101,8 @@ const Countdown = styled.h1`
   font-size = 100px;
 `;
 
-class Lobby extends React.Component {
 
+class Lobby extends React.Component {
 
     constructor() {
         super();
@@ -112,8 +112,6 @@ class Lobby extends React.Component {
             count: 40.0,
         };
     }
-
-
 
     async ready(){
         const requestBodyPut = JSON.stringify({
@@ -125,18 +123,15 @@ class Lobby extends React.Component {
         document.getElementById("edit2").style.cssText="visibility: hidden";
 
     }
+
     backToHome(){
         localStorage.removeItem('lobbyId');
         this.props.history.push("/home")
     }
 
-
-
     async componentDidMount(){
 
-
         try {
-
 
             this.usersInterval = setInterval(async () =>{
                  const response = await api.get('/lobbies/users/'+localStorage.getItem('currentLobbyId'));
@@ -148,11 +143,11 @@ class Lobby extends React.Component {
                 const responseCheck = await api.get('/lobbies/ready/'+localStorage.getItem('currentLobbyId'));
                 this.setState({responseLobby: responseCheck.data})}, 100)
 
-
         } catch (error) {
             alert(`Something went wrong while fetching the users: \n${handleError(error)}`);
         }
     }
+
 
     render(){
 
@@ -161,10 +156,8 @@ class Lobby extends React.Component {
 
 
         return (
-
             <Container>
                 <h1>Lobby</h1>
-
 
                 <h2>Countdown: </h2>
                 {((this.state.count + lobby.timeDifference) <= 0.0 && lobby.lobbyReady) || lobby.lobbyReady? (

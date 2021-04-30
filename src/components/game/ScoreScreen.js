@@ -33,21 +33,22 @@ class ScoreScreen extends React.Component {
     constructor() {
         super();
         this.state = {
-            users: null
+            users: null,
+            players: {}
         };
     }
 
-    async getUsers() {
-        try {
-            const response = await api.get('/users');
-
-            // Get the returned users and update the state.
-            this.setState({ users: response.data });
-
-        } catch (error) {
-            alert(`Something went wrong while fetching the users: \n${handleError(error)}`);
-        }
-    }
+    // async getUsers() {
+    //     try {
+    //         const response = await api.get('/users');
+    //
+    //         // Get the returned users and update the state.
+    //         this.setState({ users: response.data });
+    //
+    //     } catch (error) {
+    //         alert(`Something went wrong while fetching the users: \n${handleError(error)}`);
+    //     }
+    // }
 
     convertCorrectedGuessesToMap(correctedGuesses){
         let tempUsername = "";
@@ -56,7 +57,13 @@ class ScoreScreen extends React.Component {
 
         for(let i = 0; i < correctedGuesses.length; i++){
             for(let j = 0; j < 1; j++){ // first letters is y/n for correct/incorrect guess
-                tempCoordinates += correctedGuesses.charAt(i+j);
+                //tempCoordinates += correctedGuesses.charAt(i+j);
+                if(correctedGuesses.charAt(i+j) == "y"){
+                    tempCoordinates = "✔";
+                }
+                else{
+                    tempCoordinates = "✘";
+                }
             }
             i++; // skip coordinates, goto username
 

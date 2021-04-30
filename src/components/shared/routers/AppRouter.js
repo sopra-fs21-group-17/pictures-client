@@ -22,7 +22,7 @@ import {SetTemplate} from "../../Sets/SetTemplate";
 // import BuildScreen from "../../game/BuildScreen";
 // import MainBoard from "../../game/MainBoard";
 
-
+// TODO lobby guard wieder hinzufügen
 
 /**
  * Main router of your application.
@@ -58,9 +58,7 @@ class AppRouter extends React.Component {
               <Route
                   path="/lobbies/"
                   render={() => (
-                      <LobbyGuard>
                         <Lobby />
-                      </LobbyGuard>
                   )}
               />
               <Route
