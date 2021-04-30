@@ -124,7 +124,7 @@ class MainBoard extends React.Component{
     }
 
     //API REQUESTS//
-
+// TODO delete this comment
     async getPlayersFromLobby(){
         try {
             const response = await api.get("/players");
