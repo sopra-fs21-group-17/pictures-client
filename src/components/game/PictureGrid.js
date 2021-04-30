@@ -76,6 +76,7 @@ class PictureGrid extends React.Component{
                 8,9,10,11,
                 12,13,14,15],
         }
+        this.getPictures();
     }
 
     async getPictures(){
@@ -91,9 +92,9 @@ class PictureGrid extends React.Component{
 
     render(){
 
-        const location = this.state.coordinate;
-        const pictureElements = location.map(coordinate => {
-            return <PictureElement coordinates={coordinate}></PictureElement>
+        const pictures = this.state.pictureURLs;
+        const pictureElements = pictures.map(picture => {
+            return <PictureElement pictureURL={picture}></PictureElement>
         })
         const numberColumn =[1,2,3,4];
         const columnCoordinates = numberColumn.map((number) => {
