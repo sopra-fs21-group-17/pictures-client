@@ -4,6 +4,7 @@ import React from "react";
 import styled from "styled-components";
 import {withRouter} from "react-router-dom";
 import {Button} from "../../views/design/Button";
+import PicturesModel from "../shared/models/PicturesModel";
 
 const GridContainer = styled.div`
   
@@ -77,12 +78,13 @@ class PictureGrid extends React.Component{
                 8,9,10,11,
                 12,13,14,15],
         }
+
     }
 
     async getPictures(){
         try {
             const response = await api.get("/pictures");
-            this.setState({pictureLink: response});
+            this.setState({pictureURLs: response.data});
 
         }
         catch (error) {
@@ -90,23 +92,37 @@ class PictureGrid extends React.Component{
         }
     }
 async componentDidMount() {
-    this.getPictures()
+    await this.getPictures()
+debugger
 }
 
 
+
     render(){
-        let pictureElements;
+
+        let pictureElements = new Array();
+        let index = 0;
         if(this.state.pictureURLs.length != 0) {
+
+
             const pictures = this.state.pictureURLs;
-             pictureElements = pictures.map(picture => {
-                return <PictureElement pictureURL={picture}></PictureElement>
-            })
-        } else{
-            const location = this.state.coordinate;
-             pictureElements = location.map(coordinate => {
-                return <PictureElement coordinate={coordinate}></PictureElement>
+
+            pictures.forEach(picture => {
+                let pic = new PicturesModel(picture);
+
+                debugger
+                pictureElements.push(<PictureElement pictureURL={pic.pictureLink}> </PictureElement>)
             })
         }
+        // else{
+        //
+        //     const location = this.state.coordinate;
+        //      pictureElements = location.map(coordinate => {
+        //         return <PictureElement coordinate={coordinate}></PictureElement>
+        //     })
+        // }
+
+        debugger
         const numberColumn =[1,2,3,4];
         const columnCoordinates = numberColumn.map((number) => {
             return <GridCoordinate>{number}</GridCoordinate>
