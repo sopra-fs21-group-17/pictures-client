@@ -36,8 +36,7 @@ class BuildScreen extends React.Component {
 
     async putscreenshot() {
         try {
-
-            await api.put("/screenshot", localStorage.getItem("screenshot"));
+            await api.put("/screenshot/"+localStorage.getItem("currentUsername"), localStorage.getItem("screenshot"));
         } catch (error) {
             alert(`Something went wrong  \n${handleError(error)}`);
         }

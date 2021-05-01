@@ -75,26 +75,32 @@ class Home extends React.Component {
     }
 
     async createLobby(){
-        const requestBody = JSON.stringify({
-            lobbyId: localStorage.getItem('currentRoomNumber'),
-        });
-        const userReqBody = JSON.stringify({
-            username: localStorage.getItem('currentUsername'),
-            count: 20
-        });
-        //creates the new lobby in the backend if lobby with lobbyId don't exists
-        const response = await api.post('/lobbies', requestBody)
-        //adds the currentUser to the lobby
-        const userResp = await api.put('/lobbies/users/'+localStorage.getItem('currentRoomNumber'), userReqBody)
+        try {
+            const requestBody = JSON.stringify({
+                lobbyId: localStorage.getItem('currentRoomNumber'),
+            });
+            const userReqBody = JSON.stringify({
+                username: localStorage.getItem('currentUsername'),
+                count: 20
+            });
+            //creates the new lobby in the backend if lobby with lobbyId don't exists
+            const response = await api.post('/lobbies', requestBody)
+            //adds the currentUser to the lobby
+            const userResp = await api.put('/lobbies/users/'+localStorage.getItem('currentRoomNumber'), userReqBody)
 
-        // get the returned lobby and updates a new object
-        const lobby = new LobbyModel(response.data);
+            // get the returned lobby and updates a new object
+            const lobby = new LobbyModel(response.data);
 
-        //Store the lobbyId into the local storage.
-        localStorage.setItem('currentLobbyId', lobby.lobbyId);
-        localStorage.setItem('lobbyId', lobby.lobbyId);
+            //Store the lobbyId into the local storage.
+            localStorage.setItem('currentLobbyId', lobby.lobbyId);
+            localStorage.setItem('lobbyId', lobby.lobbyId);
 
-        this.props.history.push('/lobbies/' + lobby.lobbyId);
+            this.props.history.push('/lobbies/' + lobby.lobbyId);
+        }
+        catch (error) {
+            alert(`Something went wrong getting the Lobby: \n${handleError(error)}`);
+        }
+
 
     }
 

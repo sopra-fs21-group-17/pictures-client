@@ -3,6 +3,7 @@
  */
 class LobbyModel {
     constructor(data = {}) {
+        this.usersList = {};
         this.lobbyId = null;
         this.crationTime = null;
         this.timeDifference = null;

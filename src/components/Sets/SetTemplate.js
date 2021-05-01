@@ -305,8 +305,20 @@ export const SetTemplate = () => {
         takeScreenshot(ref.current);
         console.log(screenshot);
         localStorage.setItem('screenshot', screenshot);
+        putscreenshot(); // added from old button
         history.push(`/GuessingScreen`);
     }
+
+    // neu hinzugefügt, da jetzt nur no grüner SUBMIT button benutzt
+    const putscreenshot = async () => {
+        localStorage.setItem("currentUsername", "OLIVER");
+        try {
+            await api.put("/screenshot/" + localStorage.getItem("currentUsername"), localStorage.getItem("screenshot"));
+        } catch (error) {
+            alert(`Something went wrong  \n${handleError(error)}`);
+        }
+    }
+
 
 
     return (
