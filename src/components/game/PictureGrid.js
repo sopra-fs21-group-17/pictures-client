@@ -71,7 +71,7 @@ class PictureGrid extends React.Component{
         super(props);
         this.state ={
             currentGameState: "start",  /*idea to allow picture selection when in state guessing for the future*/
-            pictureURLs: [] ,
+            pictureURLs: [],
             coordinate: [0,1,2,3,
                 4,5,6,7,
                 8,9,10,11,
@@ -90,12 +90,11 @@ class PictureGrid extends React.Component{
         }
     }
 async componentDidMount() {
-
+    this.getPictures()
 }
 
 
     render(){
-        this.getPictures()
         let pictureElements;
         if(this.state.pictureURLs.length != 0) {
             const pictures = this.state.pictureURLs;

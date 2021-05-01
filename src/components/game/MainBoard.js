@@ -107,7 +107,6 @@ class MainBoard extends React.Component{
         this.state = {
             requested: false,
             players: {},
-            myUserName: "USER 1", // TODO correct this for real data
             mySet: "-",
             myCoordinates: "-",
             coordinateNames: [
@@ -138,14 +137,19 @@ class MainBoard extends React.Component{
     }
 
     async initGame(){
+        localStorage.setItem("lobbyId", "test");
+        localStorage.setItem("currentUsername", "OLIVER");
         try {
+            // für testzwecke lobby erzeugen
+            const responseCheck = await api.get('/lobbies/ready/'+localStorage.getItem('lobbyId'));
+
             const response = await api.get("/board/"+localStorage.getItem("lobbyId"));
             this.setState({players: response.data});
             this.setState({requested: true});
 
             // update players assigned coord. & set to display it to them
             for(const [key, val] of Object.entries(this.state.players)){
-                if(val.username === this.state.myUserName){
+                if(val.username === localStorage.getItem('currentUsername')){
                     this.setState({
                         mySet: val.assignedSet,
                         myCoordinates: this.state.coordinateNames[val.assignedCoordinates]
@@ -181,6 +185,15 @@ class MainBoard extends React.Component{
                                 }}
                             >
                                 take me to build screen
+                            </Button>
+                        </ButtonContainer>
+                        <ButtonContainer>
+                            <Button
+                                onClick={() => {
+                                    this.initGame();
+                                }}
+                            >
+                                DEV: init game
                             </Button>
                         </ButtonContainer>
                     </tr>
