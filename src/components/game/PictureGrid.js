@@ -3,6 +3,7 @@ import PictureElement from "./PictureElement";
 import React from "react";
 import styled from "styled-components";
 import {withRouter} from "react-router-dom";
+import {Button} from "../../views/design/Button";
 
 const GridContainer = styled.div`
   
@@ -76,7 +77,6 @@ class PictureGrid extends React.Component{
                 8,9,10,11,
                 12,13,14,15],
         }
-        this.getPictures();
     }
 
     async getPictures(){
@@ -89,14 +89,24 @@ class PictureGrid extends React.Component{
             alert(`Something went wrong getting the Pictures: \n${handleError(error)}`);
         }
     }
-componentDidMount() {}
+async componentDidMount() {
+    this.getPictures()
+}
+
 
     render(){
-
-        const pictures = this.state.pictureURLs;
-        const pictureElements = pictures.map(picture => {
-            return <PictureElement pictureURL={picture}></PictureElement>
-        })
+        let pictureElements;
+        if(this.state.pictureURLs.length != 0) {
+            const pictures = this.state.pictureURLs;
+             pictureElements = pictures.map(picture => {
+                return <PictureElement pictureURL={picture}></PictureElement>
+            })
+        } else{
+            const location = this.state.coordinate;
+             pictureElements = location.map(coordinate => {
+                return <PictureElement coordinate={coordinate}></PictureElement>
+            })
+        }
         const numberColumn =[1,2,3,4];
         const columnCoordinates = numberColumn.map((number) => {
             return <GridCoordinate>{number}</GridCoordinate>
@@ -109,7 +119,7 @@ componentDidMount() {}
 
         return(
 
-        <GridContainer>
+        <GridContainer >
         <GridVoid/>
         {columnCoordinates}
         {rowCoordinates}

@@ -1,3 +1,5 @@
+// TODO define game states
+// TODO add getRequest for after guessing for ending guesses
 // TODO will need to be styled
 // TODO map urls to components
 
@@ -96,14 +98,18 @@ const ButtonContainer = styled.div`
 `;
 
 
+// made Picture element a separate class so it can store its coordinates,
+// so when the time comes to select a specific coordinate it will be able to ti pass it on directly
+// could also be useful for the pictures
 class MainBoard extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            myUserName: "OLIVER", // TODO correct this for real data
+            requested: false,
+            players: {},
+            myUserName: "USER 1", // TODO correct this for real data
             mySet: "-",
             myCoordinates: "-",
-            players: {},
             coordinateNames: [
                 "A1", "A2", "A3", "A4",
                 "B1", "B2", "B3", "B4",
@@ -115,14 +121,16 @@ class MainBoard extends React.Component{
                 8,9,10,11,
                 12,13,14,15],
         };
+        this.initGame();
     }
 
     //API REQUESTS//
-
+// TODO delete this comment
     async getPlayersFromLobby(){
         try {
             const response = await api.get("/players");
             this.setState({players: response});
+
         }
         catch (error) {
             alert(`Something went wrong getting the Players: \n${handleError(error)}`);
@@ -130,20 +138,17 @@ class MainBoard extends React.Component{
     }
 
     async initGame(){
-        await this.lobbyIsReady();
         try {
-            const response = await api.get('/board');
-            await new Promise(resolve => setTimeout(resolve, 1000));
-
-            //console.log("RESPONSE: ", response.data);
-            localStorage.setItem("players", response.data);
+            const response = await api.get("/board");
+            this.setState({players: response.data});
+            this.setState({requested: true});
 
             // update players assigned coord. & set to display it to them
-            for(const e of response.data){
-                if(e['username'] === this.state.myUserName){
+            for(const [key, val] of Object.entries(this.state.players)){
+                if(val.username === this.state.myUserName){
                     this.setState({
-                        mySet: e['assignedSet'],
-                        myCoordinates: this.state.coordinateNames[e['assignedCoordinates']]
+                        mySet: val.assignedSet,
+                        myCoordinates: this.state.coordinateNames[val.assignedCoordinates]
                     });
                     break;
                 }
@@ -156,20 +161,11 @@ class MainBoard extends React.Component{
         }
     }
 
+
     componentDidMount() {}
 
-    async lobbyIsReady(){
-        try {
-            // create test lobby
-            await api.post('/lobby/ready/' + "test");
-            await new Promise(resolve => setTimeout(resolve, 1000));
-        } catch (error) {
-            alert(`Something went wrong while fetching the users: \n${handleError(error)}`);
-        }
-    }
-
-
     //DISPLAY//
+
     render(){
         return(<Container>
             <PictureGrid/>
@@ -177,17 +173,6 @@ class MainBoard extends React.Component{
                 <td>
                     <tr>Build the picture located at</tr>
                     <tr>{this.state.myCoordinates}</tr>
-                    <tr>
-                        <ButtonContainer>
-                            <Button
-                                onClick={() => {
-                                    this.initGame();
-                                }}
-                            >
-                                DEV: init Game
-                            </Button>
-                        </ButtonContainer>
-                    </tr>
                     <tr>
                         <ButtonContainer>
                             <Button
