@@ -86,7 +86,7 @@ class GuessingScreen extends React.Component {
             username: "OLIVER", // for test purposes
             screenshots: [],
             guesses: {},
-            guessesAsString: ""
+            guessesAsString: "",
         }
         this.getScreenshots();
         };
@@ -159,14 +159,22 @@ class GuessingScreen extends React.Component {
         //console.log(this.state.guesses);
     }
 
+    // get corrected guesses and points
     async showScoreScreen() {
-        // get corrected guesses
+
         localStorage.setItem("lobbyId", "test"); // für testzwecke
         try{
-            const response = await api.get('/correctedGuesses/'+localStorage.getItem("lobbyId"));
-            console.log(response.data);
+            const response = await api.get('/score/'+localStorage.getItem("lobbyId"));
+
+            // punkte auslesen
+            let thePoints = {};
+            for(const [username, attribute] of Object.entries(response.data)){
+                thePoints[username] = attribute["points"];
+            }
+            localStorage.setItem("thePoints", JSON.stringify(thePoints));
+
         } catch(error) {
-            alert(`Something went wrong while sending the guesses: \n${handleError(error)}`);
+            alert(`Something went wrong while recieving the guesses and points: \n${handleError(error)}`);
         }
 
         this.props.history.push(`/scoreScreen`);
