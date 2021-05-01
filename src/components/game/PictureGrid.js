@@ -71,7 +71,6 @@ class PictureGrid extends React.Component{
     constructor(props){
         super(props);
         this.state ={
-            currentGameState: "start",  /*idea to allow picture selection when in state guessing for the future*/
             pictureURLs: [],
             coordinate: [0,1,2,3,
                 4,5,6,7,
@@ -114,15 +113,8 @@ debugger
                 pictureElements.push(<PictureElement pictureURL={pic.pictureLink}> </PictureElement>)
             })
         }
-        // else{
-        //
-        //     const location = this.state.coordinate;
-        //      pictureElements = location.map(coordinate => {
-        //         return <PictureElement coordinate={coordinate}></PictureElement>
-        //     })
-        // }
 
-        debugger
+
         const numberColumn =[1,2,3,4];
         const columnCoordinates = numberColumn.map((number) => {
             return <GridCoordinate>{number}</GridCoordinate>

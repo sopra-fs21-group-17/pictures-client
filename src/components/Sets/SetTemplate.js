@@ -23,6 +23,8 @@ import {ItemsSet5} from "./SetItemLists/ItemsSet5";
 import { useHistory } from "react-router-dom";
 import {api, handleError} from "../../helpers/api";
 import async from "async";
+import User from "../shared/models/User";
+import PicturesModel from "../shared/models/PicturesModel";
 
 const TopContainer = styled.div`
   margin-top: 2em;
@@ -139,10 +141,16 @@ export const ItemContext = createContext({
     markAsSquareField: null,
 })
 
+
 export const SetTemplate = () => {
     const [itemList, setItemList] = useState([
 
     ]);
+
+    const [pictureURL, setPictureURL ]= useState(
+        ""
+    )
+
 
     const selectBoard = () => {
         if((localStorage.getItem("mySet")) === "CUBES"){
@@ -156,8 +164,22 @@ export const SetTemplate = () => {
         }
     };
 
-    useEffect(() => {
+    const getPictureForUser = async () =>{
+        try {
 
+            const response = await api.get('/picture/'+localStorage.getItem("id"));
+            const picture = new PicturesModel(response.data)
+            return picture
+        }
+         catch (error) {
+            alert(`Something went wrong during getting picture: \n${handleError(error)}`);
+        }
+    }
+
+    useEffect(() => {
+       setPictureURL(getPictureForUser())
+
+    // const response = async () =>{ await api.get('/picture/'+localStorage.getItem(id));}
 
         // try {
         //     const response = api.get('/users/'+localStorage.getItem("currentUsername"));
@@ -319,8 +341,6 @@ export const SetTemplate = () => {
         }
     }
 
-
-
     return (
         <DndProvider backend={HTML5Backend}>
             <ItemContext.Provider value={{ markAsInventory, moveItem, markAsSquareField }}>
@@ -335,7 +355,7 @@ export const SetTemplate = () => {
                         </div>
                         <div style={{padding: '5%', margin: '5%',  display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
                             <ImageBorderContainer>
-                                <ImageContainer src="https://source.unsplash.com/random" className="img-fluid" alt=""/>
+                                <ImageContainer src={pictureURL} className="img-fluid" alt=""/>
                             </ImageBorderContainer>
                             <ButtonContainer>
                                 <Button onClick={GetImage}>Submit</Button>
