@@ -30,8 +30,8 @@ const ButtonContainer = styled.div`
 
 
 class ScoreScreen extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             users: null,
             players: {}
@@ -78,6 +78,16 @@ class ScoreScreen extends React.Component {
         return result;
     }
 
+    convertToArray(data){
+        let result = [];
+        for(const [username, attribute] of Object.entries(data)){
+            let tuple = [username, attribute];
+            result.push(tuple);
+        }
+
+        return result;
+    }
+
     render() {
         const temp = this.convertCorrectedGuessesToMap(localStorage.getItem("correctedGuesses"));
         const filledTableGuesses = temp.map( tuple =>{
@@ -90,13 +100,12 @@ class ScoreScreen extends React.Component {
             }
         )
 
-        // TODO points table
-        const temp2 = this.convertCorrectedGuessesToMap(localStorage.getItem("correctedGuesses"));
-        const filledTablePoints = temp.map( tuple =>{
+        const temp2 = this.convertToArray(JSON.parse((localStorage.getItem("thePoints"))));
+        const filledTablePoints = temp2.map( tuple =>{
                 return(
                     <td>
                         <tr>{tuple[0]}</tr>
-                        <tr>10</tr>
+                        <tr>{tuple[1]}</tr>
                     </td>
                 )
             }
@@ -105,7 +114,6 @@ class ScoreScreen extends React.Component {
         return (
             <Container>
                 <h2>SCORE OVERVIEW</h2>
-
 
                 <p>Points overview:</p>
                 <table align={"center"}>
@@ -133,7 +141,6 @@ class ScoreScreen extends React.Component {
 
     async nextRound() {
         try {
-            // Login successfully worked --> navigate to the route /game in the GameRouter
             this.props.history.push(`/board`);
         } catch (error) {
             alert(`Something went wrong during the login: \n${handleError(error)}`);
