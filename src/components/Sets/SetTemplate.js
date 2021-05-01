@@ -21,6 +21,8 @@ import {ThickRectangle, Triangle} from "./Items/BuildingBlocks";
 import {ItemsSet4} from "./SetItemLists/ItemsSet4";
 import {ItemsSet5} from "./SetItemLists/ItemsSet5";
 import { useHistory } from "react-router-dom";
+import {api, handleError} from "../../helpers/api";
+import async from "async";
 
 const TopContainer = styled.div`
   margin-top: 2em;
@@ -142,16 +144,8 @@ export const SetTemplate = () => {
 
     ]);
 
-    const [userSet, setUserSet] = useState([
-        {
-            set: 3,
-        },
-    ]);
-
-
-
     const selectBoard = () => {
-        if(userSet[0].set === 1){
+        if((localStorage.getItem("mySet")) === "CUBES"){
             return (
                 <GridBoard itemlist={itemList}></GridBoard>
             );
@@ -163,13 +157,30 @@ export const SetTemplate = () => {
     };
 
     useEffect(() => {
-        if(userSet[0].set === 1){
+
+
+        // try {
+        //     const response = api.get('/users/'+localStorage.getItem("currentUsername"));
+        //
+        //     const requestBody = JSON.stringify({
+        //         username: this.state.username,
+        //         password: this.state.password
+        //     });
+        //
+        //     const picture = api.get('/picture', requestBody)
+        //
+        // } catch (error) {
+        //     alert(`Something went wrong while fetching the users: \n${handleError(error)}`);
+        // }
+
+
+        if((localStorage.getItem("mySet")) === "CUBES"){
             setItemList(ItemsSet1)
-        } else if (userSet[0].set === 2){
+        } else if ((localStorage.getItem("mySet")) === "BLOCKS"){
             setItemList(ItemsSet2)
-        }else if (userSet[0].set === 3){
+        }else if ((localStorage.getItem("mySet")) === "STICKS"){
             setItemList(ItemsSet3)
-        }else if (userSet[0].set === 4){
+        }else if ((localStorage.getItem("mySet")) === "ICONS"){
             setItemList(ItemsSet4)
         }else {
             setItemList(ItemsSet5)
@@ -177,7 +188,7 @@ export const SetTemplate = () => {
     }, [])
 
     const selectItems = () => {
-        if(userSet[0].set === 1){
+        if((localStorage.getItem("mySet")) === "CUBES"){
             return (
                 <Inventory>
                     {itemList
