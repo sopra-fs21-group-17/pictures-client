@@ -165,9 +165,6 @@ class MainBoard extends React.Component{
         }
     }
 
-
-    componentDidMount() {}
-
     //DISPLAY//
 
     render(){
