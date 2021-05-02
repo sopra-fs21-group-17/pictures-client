@@ -110,35 +110,35 @@ class PictureGrid extends React.Component{
     }
 
     // TODO auskommentiert zum testen
-    async componentDidMount() {
-        await this.getPictures()
-    debugger
-    }
+    // async componentDidMount() {
+    //     await this.getPictures()
+    // debugger
+    // }
 
 
 
     render(){
 
         let pictureElements = new Array();
-        let index = 0;
-        if(this.state.pictureURLs.length != 0) {
+        // let index = 0;
+        // if(this.state.pictureURLs.length != 0) {
+        //
+        //
+        //     const pictures = this.state.pictureURLs;
+        //
+        //     pictures.forEach(picture => {
+        //         let pic = new PicturesModel(picture);
+        //
+        //         debugger
+        //         pictureElements.push(<PictureElement pictureURL={pic.pictureLink}> </PictureElement>)
+        //     })
+        // }
 
-
-            const pictures = this.state.pictureURLs;
-
-            pictures.forEach(picture => {
-                let pic = new PicturesModel(picture);
-
-                debugger
-                pictureElements.push(<PictureElement pictureURL={pic.pictureLink}> </PictureElement>)
-            })
-        }
-
-        // let i = 0;
-        // this.state.picsURLs.forEach(picture => {
-        //     pictureElements.push(<PictureElement pictureURL={this.state.picsURLs[i]}> </PictureElement>);
-        //     i++;
-        // })
+        let i = 0;
+        this.state.picsURLs.forEach(picture => {
+            pictureElements.push(<PictureElement pictureURL={this.state.picsURLs[i]}> </PictureElement>);
+            i++;
+        })
 
 
 
@@ -154,15 +154,15 @@ class PictureGrid extends React.Component{
 
         return(
 
-        <GridContainer >
-        <GridVoid/>
-        {columnCoordinates}
-        {rowCoordinates}
+            <GridContainer >
+                <GridVoid/>
+                {columnCoordinates}
+                {rowCoordinates}
 
-        <Grid>
-            {pictureElements}
-        </Grid>
-    </GridContainer>
+                <Grid>
+                    {pictureElements}
+                </Grid>
+            </GridContainer>
         );
     }
 }

@@ -92,7 +92,7 @@ class GuessingScreen extends React.Component {
             guessesAsString: "",
         }
         this.getScreenshots();
-        };
+    };
 
     // GET REQUEST "/screenshots"
     async getScreenshots(){
@@ -185,7 +185,7 @@ class GuessingScreen extends React.Component {
     render() {
         const infos = this.createGuessingInfo();
         const filledTableRows = infos.map( tuple =>{
-            return(
+                return(
                     <StyledTr>
                         {/*<StyledTd width={"25%"}><StyledImg src={tuple["1"]}/></StyledTd>*/}
                         <StyledTd width={"25%"}>{this.state.coordinateNames[tuple[1]]}</StyledTd>
@@ -198,7 +198,7 @@ class GuessingScreen extends React.Component {
                             />
                         </StyledTd>
                     </StyledTr>
-            )
+                )
             }
         )
 
