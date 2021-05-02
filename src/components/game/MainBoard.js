@@ -162,7 +162,7 @@ class MainBoard extends React.Component{
             const stringyfiedPlayers = JSON.stringify(response.data);
             localStorage.setItem("players", stringyfiedPlayers);
 
-            //update players assigned coord. & set to display it to them
+            // update players assigned coord. & set to display it to them
             for(const [key, val] of Object.entries(this.state.players)){
                 if(val.username === localStorage.getItem('currentUsername')){
                     this.setState({
