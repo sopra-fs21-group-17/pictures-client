@@ -166,13 +166,12 @@ export const SetTemplate = () => {
 
     const getPictureForUser = async () =>{
         try {
-
             const response = await api.get('/picture/'+localStorage.getItem("id"));
             const picture = new PicturesModel(response.data)
             return picture
         }
          catch (error) {
-            alert(`Something went wrong during getting picture: \n${handleError(error)}`);
+            alert(`Something went wrong while getting picture: \n${handleError(error)}`);
         }
     }
 
@@ -332,9 +331,6 @@ export const SetTemplate = () => {
     console.log(screenshot)
     localStorage.setItem("screenshot",screenshot)
 
-
-
-
     // neu hinzugefügt, da jetzt nur no grüner SUBMIT button benutzt
     const putscreenshot = async () => {
 
@@ -343,9 +339,13 @@ export const SetTemplate = () => {
             const requestBody = JSON.stringify({
                 URL: localStorage.getItem("screenshot")
             })
-            await api.put("/screenshot/" + localStorage.getItem("currentUsername"), requestBody);
 
-            console.log("SCREENIE??", localStorage.getItem("screenshot"));
+            console.log("REQUEST BODY: ", localStorage.getItem("screenshot"));
+
+            // TODO screenshot function too slow, is null
+           // await api.put("/screenshot/" + localStorage.getItem("currentUsername"), requestBody);
+
+            //console.log("SCREENIE??", localStorage.getItem("screenshot"));
             this.props.history.push(`/GuessingScreen`);
 
         } catch (error) {
