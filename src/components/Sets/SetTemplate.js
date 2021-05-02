@@ -176,7 +176,7 @@ export const SetTemplate = () => {
             setPictureURL(picture.data.pictureLink);
 
         } catch (error) {
-            alert(`Something went wrong while fetching the users: \n${handleError(error)}`);
+            alert(`Something went wrong while fetching the pictures: \n${handleError(error)}`);
         }
     }
 
@@ -307,38 +307,44 @@ export const SetTemplate = () => {
     };
 
     const history = useHistory();
+
     const ref = createRef()
     const [screenshot, takeScreenshot] = useScreenshot()
-    const   GetImage = () => {
-        takeScreenshot(ref.current);
-        console.log(screenshot);
-        localStorage.setItem('screenshot', screenshot);
-        putscreenshot(); // added from old button
-        history.push(`/GuessingScreen`);
-    }
+    const   GetImage = () => takeScreenshot(ref.current)
+    console.log(screenshot)
+    localStorage.setItem("screenshot",screenshot)
 
     // neu hinzugefügt, da jetzt nur no grüner SUBMIT button benutzt
     const putscreenshot = async () => {
+
         localStorage.setItem("currentUsername", "OLIVER");
         try {
             const requestBody = JSON.stringify({
                 URL: localStorage.getItem("screenshot")
             })
-            await api.put("/screenshot/" + localStorage.getItem("currentUsername"), requestBody);
 
-            console.log("SCREENIE??", localStorage.getItem("screenshot"));
+            console.log("REQUEST BODY: ", localStorage.getItem("screenshot"));
+
+            // TODO screenshot function too slow, is null
+           // await api.put("/screenshot/" + localStorage.getItem("currentUsername"), requestBody);
+
+            //console.log("SCREENIE??", localStorage.getItem("screenshot"));
+            this.props.history.push(`/GuessingScreen`);
+
         } catch (error) {
             alert(`Something went wrong while uploading the screenshot URL \n${handleError(error)}`);
         }
+
     }
+
 
     return (
         <DndProvider backend={HTML5Backend}>
             <ItemContext.Provider value={{ markAsInventory, moveItem, markAsSquareField }}>
                 <BaseContainer>
                     <TopContainer>
-                        <div ref={ref} >
-                            <BorderContainer>
+                        <div  >
+                            <BorderContainer ref={ref}>
                                 <BoardContainer>
                                     {selectBoard()}
                                 </BoardContainer>
@@ -351,7 +357,11 @@ export const SetTemplate = () => {
 
                             </ImageBorderContainer>
                             <ButtonContainer>
-                                <Button onClick={GetImage}>Submit</Button>
+                                <Button onClick={() => {
+                                    GetImage();
+                                    putscreenshot();
+
+                                }}>Submit</Button>
                             </ButtonContainer>
                         </div>
                     </TopContainer>

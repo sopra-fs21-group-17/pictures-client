@@ -15,6 +15,7 @@ class User {
     this.assignedSet = null;
     this.assignedCoordinates = null;
     this.correctedGuesses = null;
+    this.lobbyId = null;
     Object.assign(this, data);
   }
 }
