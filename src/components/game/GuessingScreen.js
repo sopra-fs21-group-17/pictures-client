@@ -83,6 +83,11 @@ class GuessingScreen extends React.Component {
         this.state = {
             userID: null,
             screenshots: [],
+            coordinateNames: [
+                "A1", "A2", "A3", "A4",
+                "B1", "B2", "B3", "B4",
+                "C1", "C2", "C3", "C4",
+                "D1", "D2", "D3", "D4"],
             guesses: {},
             guessesAsString: "",
         }
@@ -124,11 +129,8 @@ class GuessingScreen extends React.Component {
     async sendUserGuesses(){
         try{
             let temp = this.convertGuessesToString(this.state.guesses);
-            const stringyfiedUsername = JSON.stringify(localStorage.getItem("currentUsername"));
-
-            console.log("username: ", stringyfiedUsername);
             const requestBody = JSON.stringify({
-                username: stringyfiedUsername,
+                username: localStorage.getItem("currentUsername"),
                 guesses: temp
             })
             const response = api.post("/guesses/"+localStorage.getItem("currentLobbyId"), requestBody);
@@ -165,51 +167,46 @@ class GuessingScreen extends React.Component {
         this.props.history.push(`/scoreScreen`);
     }
 
-    render() {
+    createGuessingInfo(){
+        let result = [];
         const parsedPlayers = JSON.parse(localStorage.getItem("players"));
-        console.log("players: ", parsedPlayers);
 
-        const filledTableRows = this.state.screenshots.map( tuple =>{
+        for(const [key, val] of Object.entries(parsedPlayers)){
+            if(val.username !== localStorage.getItem('currentUsername')){
+                result.push([val.username, val.assignedCoordinates]);
+                // result["username"] = val.username;
+                // result["assignedCoordinates"] = val.assignedCoordinates;
+            }
+        }
+
+        return result;
+    }
+
+    render() {
+        const infos = this.createGuessingInfo();
+        const filledTableRows = infos.map( tuple =>{
             return(
-                <StyledTr>
-                    <StyledTd width={"25%"}><StyledImg src={tuple[1]}/></StyledTd>
-                    <StyledTd width={"25%"}>
-                        <InputField
-                            placeholder="A1"
-                            onChange={e => {
-                                this.saveGuessToDict(tuple[0], e.target.value);
-                            }}
-                        />
-                    </StyledTd>
-                </StyledTr>
+                    <StyledTr>
+                        {/*<StyledTd width={"25%"}><StyledImg src={tuple["1"]}/></StyledTd>*/}
+                        <StyledTd width={"25%"}>{this.state.coordinateNames[tuple[1]]}</StyledTd>
+                        <StyledTd width={"25%"}>
+                            <InputField
+                                placeholder="A1"
+                                onChange={e => {
+                                    this.saveGuessToDict(tuple[0], e.target.value);
+                                }}
+                            />
+                        </StyledTd>
+                    </StyledTr>
             )
             }
         )
-
-        // let num = 1
-        // const guessInput = this.state.userNames.map(user =>{
-        //     return (
-        //         <tr>
-        //             <td></td>
-        //             <img />
-        //             <td>
-        //                 <InputField
-        //                     placeholder="A1"
-        //                     onChange={e => {
-        //                         this.saveGuessToDict(user, e.target.value);
-        //                     }}
-        //                 />
-        //             </td>
-        //         </tr>
-        //     )
-        // })
 
         return (
             <Container>
                 <div align={"center"}>
                     <h2>Which picture were the other players trying to build?</h2>
                     <h3>Make your guesses</h3>
-
                     <StyledTable>
                         <StyledTr>
                             <StyledTd>What the other players built:</StyledTd>
@@ -222,6 +219,7 @@ class GuessingScreen extends React.Component {
                         width="25%"
                         onClick={() => {
                             this.sendUserGuesses();
+                            this.createGuessingInfo();
                         }}
                     >
                         My guesses are done!

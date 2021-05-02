@@ -38,18 +38,6 @@ class ScoreScreen extends React.Component {
         };
     }
 
-    // async getUsers() {
-    //     try {
-    //         const response = await api.get('/users');
-    //
-    //         // Get the returned users and update the state.
-    //         this.setState({ users: response.data });
-    //
-    //     } catch (error) {
-    //         alert(`Something went wrong while fetching the users: \n${handleError(error)}`);
-    //     }
-    // }
-
     convertCorrectedGuessesToMap(correctedGuesses){
         let tempUsername = "";
         let tempCoordinates = "";

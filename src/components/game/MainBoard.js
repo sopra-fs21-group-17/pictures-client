@@ -154,21 +154,13 @@ class MainBoard extends React.Component{
     // }
 
     async initGame(){
-        // zum testen
-        //localStorage.setItem("lobbyId", "test");
-        //localStorage.setItem("currentUsername", "OLIVER");
         try {
-            // für testzwecke lobby erzeugen
-           // const responseCheck = await api.get('/lobbies/ready/'+localStorage.getItem('lobbyId'));
-
             const response = await api.get("/board/"+localStorage.getItem("lobbyId"));
             this.setState({players: response.data});
             this.setState({requested: true});
 
             const stringyfiedPlayers = JSON.stringify(response.data);
             localStorage.setItem("players", stringyfiedPlayers);
-
-            //console.log("USERS: ", response.data);
 
             //update players assigned coord. & set to display it to them
             for(const [key, val] of Object.entries(this.state.players)){
@@ -206,15 +198,6 @@ class MainBoard extends React.Component{
                                 }}
                             >
                                 take me to build screen
-                            </Button>
-                        </ButtonContainer>
-                        <ButtonContainer>
-                            <Button
-                                onClick={() => {
-                                    this.initGame();
-                                }}
-                            >
-                                DEV: init game
                             </Button>
                         </ButtonContainer>
                     </tr>
