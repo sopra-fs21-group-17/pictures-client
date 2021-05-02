@@ -157,6 +157,33 @@ class Lobby extends React.Component {
     }
 
 
+    async initGame(){
+        try {
+            const response = await api.get("/board/"+localStorage.getItem('currentLobbyId'));
+            this.setState({players: response.data});
+            this.setState({requested: true});
+
+            // update players assigned coord. & set to display it to them
+            for(const [key, val] of Object.entries(this.state.players)){
+                if(val.username === this.state.myUserName){
+                    this.setState({
+                        mySet: val.assignedSet,
+                        myCoordinates: this.state.coordinateNames[val.assignedCoordinates]
+                    });
+                    break;
+                }
+            }
+
+            localStorage.setItem("mySet", this.state.mySet);
+            this.props.history.push("/board")
+        }
+        catch (error) {
+            alert(`Something went wrong getting the Players: \n${handleError(error)}`);
+        }
+    }
+
+
+
     render(){
 
 
