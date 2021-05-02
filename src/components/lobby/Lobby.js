@@ -128,9 +128,9 @@ class Lobby extends React.Component {
         }
     }
 
-    async backToHome() {
+     backToHome() {
         try {
-            await api.put('/lobby/' + localStorage.getItem('currentUsername') +"/"+ localStorage.getItem('currentRoomNumber'));
+            //await api.put('/lobby/' + localStorage.getItem('currentUsername') +"/"+ localStorage.getItem('currentRoomNumber'));
         } catch (error) {
             alert(`Something went wrong while calling "backTOHome()": \n${handleError(error)}`);
         }
@@ -174,6 +174,7 @@ class Lobby extends React.Component {
             }
 
             localStorage.setItem("mySet", this.state.mySet);
+            this.props.history.push("/board")
         }
         catch (error) {
             alert(`Something went wrong getting the Players: \n${handleError(error)}`);

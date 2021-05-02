@@ -75,13 +75,12 @@ class Home extends React.Component {
     }
 
     async createLobby(){
-        try {
+        // try {
             const requestBody = JSON.stringify({
                 lobbyId: localStorage.getItem('currentRoomNumber'),
             });
             const userReqBody = JSON.stringify({
                 username: localStorage.getItem('currentUsername'),
-                count: 20
             });
             //creates the new lobby in the backend if lobby with lobbyId don't exists
             const response = await api.post('/lobbies', requestBody)
@@ -96,10 +95,10 @@ class Home extends React.Component {
             localStorage.setItem('lobbyId', lobby.lobbyId);
 
             this.props.history.push('/lobbies/' + lobby.lobbyId);
-        }
-        catch (error) {
-            alert(`Something went wrong getting the Lobby: \n${handleError(error)}`);
-        }
+       // }
+        //catch (error) {
+            //alert(`Something went wrong getting the Lobby: \n${handleError(error)}`);
+       // }
 
 
     }
@@ -135,7 +134,7 @@ class Home extends React.Component {
 
     async componentDidMount() {
         try {
-            const respons = await api.get('/users');
+            //const respons = await api.get('/users');
             const response = await api.get('/users/'+localStorage.getItem('currentUsername'));
             const createRoomNumber= this.randomRoomNumber(4);
 
@@ -168,13 +167,10 @@ class Home extends React.Component {
                 ) : (
                     <div>
                         <Users>
-                            {/*{this.state.users.map(user => {*/}
-                            {/*    return (*/}
-                                    <PlayerContainer>
-                                        <Player user={this.state.users}
+                            <PlayerContainer>
+                                <Player user={this.state.users}
                                         hidden={localStorage.getItem('currentUsername') !== this.state.users.username}/>
-                                    </PlayerContainer>
-                                {/*);*/}
+                            </PlayerContainer>
 
                         </Users>
                         <InputField
