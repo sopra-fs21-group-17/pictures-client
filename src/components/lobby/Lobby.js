@@ -114,17 +114,26 @@ class Lobby extends React.Component {
     }
 
     async ready(){
-        const requestBodyPut = JSON.stringify({
-            username: null,
-        });
-        await api.put('/users/'+ localStorage.getItem('currentUsername'), requestBodyPut)
+        try{
+            const requestBodyPut = JSON.stringify({
+                username: null,
+            });
+            await api.put('/users/'+ localStorage.getItem('currentUsername'), requestBodyPut)
 
-        document.getElementById("edit").style.cssText="visibility: hidden";
-        document.getElementById("edit2").style.cssText="visibility: hidden";
+            document.getElementById("edit").style.cssText="visibility: hidden";
+            document.getElementById("edit2").style.cssText="visibility: hidden";
 
+        } catch (error) {
+            alert(`Something went wrong while calling "ready()": \n${handleError(error)}`);
+        }
     }
 
-    backToHome(){
+    async backToHome() {
+        try {
+            await api.put('/lobby/' + localStorage.getItem('currentUsername') +"/"+ localStorage.getItem('currentRoomNumber'));
+        } catch (error) {
+            alert(`Something went wrong while calling "backTOHome()": \n${handleError(error)}`);
+        }
         localStorage.removeItem('lobbyId');
         this.props.history.push("/home")
     }
@@ -132,7 +141,6 @@ class Lobby extends React.Component {
     async componentDidMount(){
 
         try {
-
             this.usersInterval = setInterval(async () =>{
                  const response = await api.get('/lobbies/users/'+localStorage.getItem('currentLobbyId'));
                  this.setState({users: response.data})}, 100)
