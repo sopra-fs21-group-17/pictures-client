@@ -2,7 +2,6 @@
 // TODO add getRequest for after guessing for ending guesses
 // TODO will need to be styled
 // TODO map urls to components
-// test comment
 
 import React from 'react';
 import { withRouter } from 'react-router-dom';
@@ -144,28 +143,34 @@ class MainBoard extends React.Component{
 
     //API REQUESTS//
 
-    async getPlayersFromLobby(){
-        try {
-            const response = await api.get("/players");
-            this.setState({players: response});
-        }
-        catch (error) {
-            alert(`Something went wrong getting the Players: \n${handleError(error)}`);
-        }
-    }
+    // async getPlayersFromLobby(){
+    //     try {
+    //         const response = await api.get("/players");
+    //         this.setState({players: response});
+    //     }
+    //     catch (error) {
+    //         alert(`Something went wrong getting the Players: \n${handleError(error)}`);
+    //     }
+    // }
 
     async initGame(){
-        localStorage.setItem("lobbyId", "test");
-        localStorage.setItem("currentUsername", "OLIVER");
+        // zum testen
+        //localStorage.setItem("lobbyId", "test");
+        //localStorage.setItem("currentUsername", "OLIVER");
         try {
             // für testzwecke lobby erzeugen
-            const responseCheck = await api.get('/lobbies/ready/'+localStorage.getItem('lobbyId'));
+           // const responseCheck = await api.get('/lobbies/ready/'+localStorage.getItem('lobbyId'));
 
             const response = await api.get("/board/"+localStorage.getItem("lobbyId"));
             this.setState({players: response.data});
             this.setState({requested: true});
 
-            // update players assigned coord. & set to display it to them
+            const stringyfiedPlayers = JSON.stringify(response.data);
+            localStorage.setItem("players", stringyfiedPlayers);
+
+            //console.log("USERS: ", response.data);
+
+            //update players assigned coord. & set to display it to them
             for(const [key, val] of Object.entries(this.state.players)){
                 if(val.username === localStorage.getItem('currentUsername')){
                     this.setState({
