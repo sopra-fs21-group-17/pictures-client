@@ -161,33 +161,21 @@ class MainBoard extends React.Component{
             // für testzwecke lobby erzeugen
            // const responseCheck = await api.get('/lobbies/ready/'+localStorage.getItem('lobbyId'));
 
-            const response = await api.get("/board/"+localStorage.getItem("lobbyId"));
-            this.setState({players: response.data});
-            this.setState({requested: true});
+            const response = await api.get('/users/' + localStorage.getItem("currentUsername"));
 
-            const stringyfiedPlayers = JSON.stringify(response.data);
-            localStorage.setItem("players", stringyfiedPlayers);
+            const user = response.data;
 
-            //console.log("USERS: ", response.data);
+            this.setState({myCoordinates: this.state.coordinateNames[user.assignedCoordinates]});
 
-            //update players assigned coord. & set to display it to them
-            for(const [key, val] of Object.entries(this.state.players)){
-                if(val.username === localStorage.getItem('currentUsername')){
-                    this.setState({
-                        mySet: val.assignedSet,
-                        myCoordinates: this.state.coordinateNames[val.assignedCoordinates]
-                    });
-                    localStorage.setItem("myPicURL", this.state.picsURLs[val.assignedCoordinates])
-                    break;
-                }
-            }
+            localStorage.setItem("mySet", user.assignedSet);
 
-            localStorage.setItem("mySet", this.state.mySet);
         }
         catch (error) {
             alert(`Something went wrong getting the Players: \n${handleError(error)}`);
         }
     }
+
+
 
     //DISPLAY//
 

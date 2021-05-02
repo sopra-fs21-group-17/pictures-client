@@ -141,6 +141,7 @@ class Lobby extends React.Component {
     async componentDidMount(){
 
         try {
+            await this.initGame();
             this.usersInterval = setInterval(async () =>{
                  const response = await api.get('/lobbies/users/'+localStorage.getItem('currentLobbyId'));
                  this.setState({users: response.data})}, 100)
@@ -175,7 +176,7 @@ class Lobby extends React.Component {
             }
 
             localStorage.setItem("mySet", this.state.mySet);
-            this.props.history.push("/board")
+            //this.props.history.push("/board")
         }
         catch (error) {
             alert(`Something went wrong getting the Players: \n${handleError(error)}`);

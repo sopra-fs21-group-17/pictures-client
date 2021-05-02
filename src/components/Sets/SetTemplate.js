@@ -336,7 +336,7 @@ export const SetTemplate = () => {
         // }
 
         // change to next screen
-        history.push(`/GuessingScreen`)
+        //history.push(`/GuessingScreen`)
 
 
         localStorage.setItem("currentUsername", "OLIVER");
@@ -351,7 +351,7 @@ export const SetTemplate = () => {
            // await api.put("/screenshot/" + localStorage.getItem("currentUsername"), requestBody);
 
             //console.log("SCREENIE??", localStorage.getItem("screenshot"));
-            this.props.history.push(`/GuessingScreen`);
+            history.push(`/GuessingScreen`);
 
         } catch (error) {
             alert(`Something went wrong while uploading the screenshot URL \n${handleError(error)}`);
