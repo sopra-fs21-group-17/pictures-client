@@ -24,7 +24,9 @@ import { useHistory } from "react-router-dom";
 import {api, handleError} from "../../helpers/api";
 import async from "async";
 import User from "../shared/models/User";
+
 import PicturesModel from "../shared/models/PicturesModel";
+
 
 const TopContainer = styled.div`
   margin-top: 2em;
@@ -151,7 +153,6 @@ export const SetTemplate = () => {
         ""
     )
 
-
     const selectBoard = () => {
         if((localStorage.getItem("mySet")) === "CUBES"){
             return (
@@ -164,38 +165,24 @@ export const SetTemplate = () => {
         }
     };
 
-    const getPictureForUser = async () =>{
+    const getPicture = async () => {
         try {
+            const response = await api.get('/users/' + localStorage.getItem("currentUsername"));
 
-            const response = await api.get('/picture/'+localStorage.getItem("id"));
-            const picture = new PicturesModel(response.data)
-            return picture
-        }
-         catch (error) {
-            alert(`Something went wrong during getting picture: \n${handleError(error)}`);
+            const user = response.data;
+
+            const picture = await api.get('/picture/'+(user.id));
+
+            setPictureURL(picture.data.pictureLink);
+
+        } catch (error) {
+            alert(`Something went wrong while fetching the users: \n${handleError(error)}`);
         }
     }
 
     useEffect(() => {
-       //setPictureURL(getPictureForUser())
-        setPictureURL(localStorage.getItem("myPicURL"))
 
-    // const response = async () =>{ await api.get('/picture/'+localStorage.getItem(id));}
-
-        // try {
-        //     const response = api.get('/users/'+localStorage.getItem("currentUsername"));
-        //
-        //     const requestBody = JSON.stringify({
-        //         username: this.state.username,
-        //         password: this.state.password
-        //     });
-        //
-        //     const picture = api.get('/picture', requestBody)
-        //
-        // } catch (error) {
-        //     alert(`Something went wrong while fetching the users: \n${handleError(error)}`);
-        // }
-
+        getPicture();
 
         if((localStorage.getItem("mySet")) === "CUBES"){
             setItemList(ItemsSet1)
@@ -254,7 +241,6 @@ export const SetTemplate = () => {
     }
 
     const moveItem = (id, left, top) => {
-
 
         const updatedItem = itemList.filter((item, i) => item._id === id);
 
@@ -321,7 +307,6 @@ export const SetTemplate = () => {
     };
 
     const history = useHistory();
-
     const ref = createRef()
     const [screenshot, takeScreenshot] = useScreenshot()
     const   GetImage = () => {
@@ -361,7 +346,9 @@ export const SetTemplate = () => {
                         </div>
                         <div style={{padding: '5%', margin: '5%',  display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
                             <ImageBorderContainer>
+
                                 <ImageContainer src={pictureURL} className="img-fluid" alt=""/>
+
                             </ImageBorderContainer>
                             <ButtonContainer>
                                 <Button onClick={GetImage}>Submit</Button>
