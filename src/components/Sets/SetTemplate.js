@@ -177,7 +177,8 @@ export const SetTemplate = () => {
     }
 
     useEffect(() => {
-       setPictureURL(getPictureForUser())
+       //setPictureURL(getPictureForUser())
+        setPictureURL(localStorage.getItem("myPicURL"))
 
     // const response = async () =>{ await api.get('/picture/'+localStorage.getItem(id));}
 
@@ -335,9 +336,14 @@ export const SetTemplate = () => {
     const putscreenshot = async () => {
         localStorage.setItem("currentUsername", "OLIVER");
         try {
-            await api.put("/screenshot/" + localStorage.getItem("currentUsername"), localStorage.getItem("screenshot"));
+            const requestBody = JSON.stringify({
+                URL: localStorage.getItem("screenshot")
+            })
+            await api.put("/screenshot/" + localStorage.getItem("currentUsername"), requestBody);
+
+            console.log("SCREENIE??", localStorage.getItem("screenshot"));
         } catch (error) {
-            alert(`Something went wrong  \n${handleError(error)}`);
+            alert(`Something went wrong while uploading the screenshot URL \n${handleError(error)}`);
         }
     }
 

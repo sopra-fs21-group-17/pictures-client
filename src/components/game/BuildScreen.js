@@ -59,16 +59,15 @@ class BuildScreen extends React.Component {
         return (
             <Container>
                 <div>
-                        <SetTemplate pictureURL={"https://i.picsum.photos/id/345/200/300.jpg?hmac=_qOjrd4yW7rtmkQN1PgF8hczgXJezqk92MxgRUzB06s"}/>
-
-                    <Button
-                        width="100%"
-                        onClick={() => {
-                            this.userFinishedBuilding();
-                        }}
-                    >
-                        I'm done building!
-                    </Button>
+                    <SetTemplate pictureURL={localStorage.getItem("myPicURL")}/>
+                    {/*<Button*/}
+                    {/*    width="100%"*/}
+                    {/*    onClick={() => {*/}
+                    {/*        this.userFinishedBuilding();*/}
+                    {/*    }}*/}
+                    {/*>*/}
+                    {/*    I'm done building!*/}
+                    {/*</Button>*/}
                 </div>
             </Container>
         );
