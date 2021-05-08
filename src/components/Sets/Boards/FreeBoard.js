@@ -26,7 +26,7 @@ export const FreeBoard = ({ itemlist }) => {
                 const delta = monitor.getDifferenceFromInitialOffset();
                 const left = Math.round(item.left + delta.x);
                 const top = Math.round(item.top + delta.y);
-                moveItem(item._id, left, top);
+                moveItem(item._id, left, top,);
                 return undefined;
             },
         }), [moveItem]);
@@ -48,6 +48,7 @@ export const FreeBoard = ({ itemlist }) => {
                             amount={key.amount}
                             hideSourceOnDrag={key.hideSourceOnDrag}
                             style={key.style}
+                            background={key.background}
                         />
 
                     );

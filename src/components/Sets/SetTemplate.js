@@ -231,6 +231,7 @@ export const SetTemplate = () => {
                                     color={task.color}
                                     amount={task.amount}
                                     style={task.style}
+                                    background={task.background}
                                 />
                             </ItemContainer>
                         ))}
@@ -255,6 +256,7 @@ export const SetTemplate = () => {
             amount: updatedItem[0].amount-1,
             hideSourceOnDrag: true,
             style:updatedItem[0].style,
+            background:updatedItem[0].background,
         };
 
         if(updatedItem[0].location !== 'inventory'){
@@ -272,7 +274,7 @@ export const SetTemplate = () => {
         const movedItem = itemList.filter((item, i) => item._id === _id);
 
         //gets the corresponding item in the inventory
-        const inventoryItem = (itemList.filter((item, i) => item.color === movedItem[0].color).filter((item, i) => item._id <= 8));
+        const inventoryItem = (itemList.filter((item, i) => item.color === movedItem[0].color).filter((item, i) => item._id <= 20));
 
         //creates new list without the item which was moved
         const newList = itemList.filter((item, i) => item._id !== _id)

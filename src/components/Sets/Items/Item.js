@@ -12,9 +12,11 @@ import {
     Stick,
     Stone,
     ThinRectangle,
-    Triangle
+    Triangle, Trianglecontainer
 } from "./BuildingBlocks";
 import React from 'react';
+import {Card,Icon} from "./Cards";
+import img from ".././wood_texture_background2.jpg"
 
 const ItemContainer = styled.div`
   
@@ -42,15 +44,15 @@ const stickstyle = {
     flexDirection: 'column',
     justifyContent: 'center',
 }
-export const Item = ({_id, location, left, top, color, amount, hideSourceOnDrag, style}) => {
+export const Item = ({_id, location, left, top, color, amount, hideSourceOnDrag, style, background: icon}) => {
 
     const [{isDragging}, drag] = useDrag(() => ({
         type: ItemTypes.ITEM,
-        item: {_id, location, left, top, color, amount, style},
+        item: {_id, location, left, top, color, amount, style,background: icon},
         collect: (monitor) => ({
             isDragging: monitor.isDragging(),
         }),
-    }), [_id, location, left, top, color, amount, style]);
+    }), [_id, location, left, top, color, amount, style,icon]);
 
     function showAmount() {
         if (location === 'inventory') {
@@ -84,8 +86,11 @@ export const Item = ({_id, location, left, top, color, amount, hideSourceOnDrag,
     } else if (style === 'triangle') {
         return (
             <ItemContainer>
-                <Triangle ref={drag} style={{location, left, top, amount}} role="Box">
-                </Triangle>
+                <Trianglecontainer ref={drag} style={{location, left, top, amount}} role="Box">
+                    <Triangle/>
+                </Trianglecontainer>
+         {/*<Triangle ref={drag} style={{location, left, top, amount}} role="Box">*/}
+         {/*</Triangle>*/}
             </ItemContainer>
 
         );
@@ -133,7 +138,20 @@ export const Item = ({_id, location, left, top, color, amount, hideSourceOnDrag,
             </ItemContainer>
 
         );
-    } else {
+    }
+    else if (style === 'card') {
+        return (
+            <ItemContainer>
+
+                <Card ref={drag} style={{location, left, top, amount}} role="Box">
+
+                    <Icon style={{backgroundImage: icon}}> </Icon>
+                </Card>
+            </ItemContainer>
+
+        );
+    }
+    else {
         return (
             <ItemContainer>
                 <div ref={drag} style={{...stickstyle, location, left, top, amount}} role="Box">
