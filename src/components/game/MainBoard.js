@@ -206,7 +206,13 @@ class MainBoard extends React.Component{
         </Container>);
     }
 
-    showBuildScreen() {
+    async showBuildScreen() {
+        const requestBody = JSON.stringify({
+            roomId: localStorage.getItem('currentRoomNumber'),
+        });
+
+        const response = await api.post('/buildRooms', requestBody)
+
         this.props.history.push(`/buildScreen`);
     }
 }
