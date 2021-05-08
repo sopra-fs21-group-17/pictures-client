@@ -49,6 +49,17 @@ const BottomContainer = styled.div`
   max-height: 30vh;
 `;
 
+const ArrowContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+  font-size: 42px;
+  font-weight: 800;
+  cursor: pointer;
+`;
+
 const ImageBorderContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -151,6 +162,19 @@ export const SetTemplate = () => {
         ""
     )
 
+    const showArrows = () => {
+        if((localStorage.getItem("mySet")) === "STICKS" || (localStorage.getItem("mySet")) === "BLOCKS"){
+            return (
+                    <ArrowContainer>
+                        <div style={{margin: "5px"}} onClick={() => {
+                            Rotate("Clockwise");
+                        }}>↻ </div>
+                        <div style={{margin: "5px"}} onClick={() => {
+                            Rotate("Counterclockwise");                                }}> ↺</div>
+                    </ArrowContainer>
+                )
+        }
+    }
 
     const selectBoard = () => {
         if((localStorage.getItem("mySet")) === "CUBES"){
@@ -252,13 +276,28 @@ export const SetTemplate = () => {
         }
     }
 
-    const moveItem = (id, left, top) => {
+    const Rotate = (direction) => {
+        const selectedItem = itemList.filter((item) => item.selected === true);
 
+        if(selectedItem.length > 0){
+            if(direction === "Clockwise"){
+
+                selectedItem[0].rotation = (parseInt(selectedItem[0].rotation)+10).toString();
+            } else {
+                selectedItem[0].rotation = (parseInt(selectedItem[0].rotation)-10).toString();
+            }
+            setItemList(itemList.filter((item) => item.selected !== true).concat(selectedItem[0]));
+        }
+    }
+
+    const moveItem = (id, left, top) => {
 
         const updatedItem = itemList.filter((item, i) => item._id === id);
 
+        const lastSelectedItem = itemList.filter((item) => item.selected === true);
+
         const newItem = {
-            _id: id+10*id*updatedItem[0].amount,
+            _id: id+10*id*updatedItem[0].amount, //TODO fix random id (issue with sticks & stones when adding two returning first and adding another)
             location: 'board',
             top: 150,
             left: 150,
@@ -266,11 +305,19 @@ export const SetTemplate = () => {
             amount: updatedItem[0].amount-1,
             hideSourceOnDrag: true,
             style:updatedItem[0].style,
+            selected: true,
+            rotation: '0',
         };
+
+        if(lastSelectedItem.length > 0){
+            lastSelectedItem[0].selected = false;
+            setItemList(itemList.filter((item) => item._id !== lastSelectedItem[0]._id).concat(lastSelectedItem[0]));
+        }
 
         if(updatedItem[0].location !== 'inventory'){
             updatedItem[0].left = left;
             updatedItem[0].top = top;
+            updatedItem[0].selected = true;
             setItemList(itemList.filter((item) => item._id !== id).concat(updatedItem[0]));
         } else {
             updatedItem[0].amount = updatedItem[0].amount-1;
@@ -323,7 +370,14 @@ export const SetTemplate = () => {
 
 
 
+    const removeSelected = () => {
+        const SelectedItem = itemList.filter((item) => item.selected === true);
 
+        if(SelectedItem.length > 0){
+            SelectedItem[0].selected = false;
+            setItemList(itemList.filter((item) => item._id !== SelectedItem[0]._id).concat(SelectedItem[0]));
+        }
+    }
 
     const ref = createRef()
     const [screenshot, takeScreenshot] = useScreenshot()
@@ -372,8 +426,10 @@ export const SetTemplate = () => {
                             <ImageBorderContainer>
                                 <ImageContainer src={pictureURL} className="img-fluid" alt=""/>
                             </ImageBorderContainer>
+                            {showArrows()}
                             <ButtonContainer>
                                 <Button onClick={() => {
+                                    removeSelected();
                                     GetImage();
                                     putscreenshot();
                                 }}>Submit</Button>
