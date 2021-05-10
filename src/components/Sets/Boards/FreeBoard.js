@@ -38,18 +38,22 @@ export const FreeBoard = ({ itemlist }) => {
                     .filter((task, i) => task.location === 'board')
                     .map((key) => {
                     return (
-                        <Item
-                            key={key._id}
-                            _id={key._id}
-                            location={key.location}
-                            left={key.left}
-                            top={key.top}
-                            color={key.color}
-                            amount={key.amount}
-                            hideSourceOnDrag={key.hideSourceOnDrag}
-                            style={key.style}
-                            background={key.background}
-                        />
+
+
+                            <Item
+                                key={key._id}
+                                _id={key._id}
+                                location={key.location}
+                                left={key.left}
+                                top={key.top}
+                                color={key.color}
+                                amount={key.amount}
+                                hideSourceOnDrag={key.hideSourceOnDrag}
+                                style={key.style}
+                                selected={key.selected}
+                                rotation={key.rotation}
+                                background={key.background}
+                            />
 
                     );
                 })}

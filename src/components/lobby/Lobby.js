@@ -7,10 +7,13 @@ import { Spinner } from '../../views/design/Spinner';
 import { Button } from '../../views/design/Button';
 import { withRouter } from 'react-router-dom';
 import Registration from "../registration/Registration";
+import LobbyModel from "../shared/models/LobbyModel";
+import User from "../shared/models/User";
 
 const Container = styled(BaseContainer)`
   color: white;
   text-align: center;
+  
 `;
 
 const Players = styled.div`
@@ -90,142 +93,101 @@ const Button1 = styled.button`
   cursor: ${props => (props.disabled ? "default" : "pointer")};
   opacity: ${props => (props.disabled ? 0.4 : 1)};
   background: rgba(110, 190, 110, 1);
-  transition: all 0.3s ease;
+  transition: all 0.0s ease;
 `;
 
-const Countdown = styled.h1`
+const Countdown = styled.div`
   margin-top = 10px;
   margin-bottom = 20px;
-  font-size = 100px;
+  font-size = large;
 `;
-
-// let countdownTime = 20;
-// let timePassed = 0;
-// let timeLeft = countdownTime;
-//
-// let countDownInterval = null;
-//
-// function countDownFormat(time){
-//     let seconds = time % 60;
-//     return `${seconds}`;
-// }
-
-// function makeCountdown(){
-//     countDownInterval = setInterval(() => {
-//         timePassed += 1;
-//         timeLeft = countdownTime - timePassed;
-//
-//         document.getElementById("countdown") = formatTime
-//     }, 1000);
-// }
-
-
 
 
 class Lobby extends React.Component {
+
     constructor() {
         super();
         this.state = {
             users: null,
-            count: 10,
+            responseLobby: null,
+            count: 100.0,
         };
     }
 
-
-
     async ready(){
-        const requestBodyPut = JSON.stringify({
-            username: null,
-        });
-        await api.put('/users/'+ localStorage.getItem('currentUsername'), requestBodyPut)
-        //this.forceUpdate();
-        const responsed = await api.get('/users');
+        try{
+            const requestBodyPut = JSON.stringify({
+                username: null,
+            });
+            await api.put('/users/'+ localStorage.getItem('currentUsername'), requestBodyPut)
 
-        window.location.reload(false);
+            document.getElementById("edit").style.cssText="visibility: hidden";
+            document.getElementById("edit2").style.cssText="visibility: hidden";
 
-
+        } catch (error) {
+            alert(`Something went wrong while calling "ready()": \n${handleError(error)}`);
+        }
     }
 
+     backToHome() {
+        try {
+            //await api.put('/lobby/' + localStorage.getItem('currentUsername') +"/"+ localStorage.getItem('currentRoomNumber'));
+        } catch (error) {
+            alert(`Something went wrong while calling "backTOHome()": \n${handleError(error)}`);
+        }
+        localStorage.removeItem('lobbyId');
+        this.props.history.push("/home")
+    }
 
-
-     async componentDidMount(){
-         // async function getUsers() {
-         //     const response = await api.get('/users');
-         //     this.setState({users: response.data});
-
-           // }
+    async componentDidMount(){
 
         try {
+            this.usersInterval = setInterval(async () =>{
+                 const response = await api.get('/lobbies/users/'+localStorage.getItem('currentLobbyId'));
+                 this.setState({users: response.data})}, 100)
+            this.countInterval = setInterval(async () =>{
+                await api.put('/lobbies/count/'+localStorage.getItem('currentLobbyId'))
+            }, 100)
+            this.checkInterval = setInterval(async () =>{
+                const responseCheck = await api.get('/lobbies/ready/'+localStorage.getItem('currentLobbyId'));
+                this.setState({responseLobby: responseCheck.data})}, 100)
 
-
-
-
-            const response = await api.get('/users');
-            // delays continuous execution of an async operation for 1 second.
-            // This is just a fake async call, so that the spinner can be displayed
-            // feel free to remove it :)
-            //await new Promise(resolve => setTimeout(resolve, 1000));
-            this.countdownIntervall= setInterval(() =>{
-                this.setState({ count: this.state.count - 1})}, 1000);
-            this.setState({users: response.data})
-
-            //  this.responseInterval = setInterval(() =>{
-            //     const response = await api.get('/users');
-            //     this.setState({users: response.data});
-            // };
-
-            //this.setState({users: response.data})
-
-            // Get the returned users and update the state.
-            // this.usersInterval = setInterval(() =>{
-            //     this.setState({ users: getUsers().response.data })}, 5000)
-
-
-            // This is just some data for you to see what is available.
-            // Feel free to remove it.
-            // console.log('request to:', response.request.responseURL);
-            // console.log('status code:', response.status);
-            // console.log('status text:', response.statusText);
-            // console.log('requested data:', response.data);
-            //
-            // // See here to get more data.
-            // console.log(response);
         } catch (error) {
             alert(`Something went wrong while fetching the users: \n${handleError(error)}`);
         }
     }
 
-    render(){
-        const usersInLobby = this.state.users
-        //const numberOfUsers = usersInLobby.length
-        let usersReady = 0
 
-        // {this.state.count === 0 && numberOfUsers >= 3 ? (
-        //     this.props.history.push("/game")):(this.state.count !== 0 && numberOfUsers >=3 ? ()
+    render(){
+
+
+        const lobby = new LobbyModel(this.state.responseLobby)
 
 
         return (
 
+
             <Container>
-                <h1>Lobby</h1>
+                <h1 style={{fontSize: "40px", color: "rgba(170, 170, 170, 1)", margin: "5px"}}>LOBBY CODE: </h1>
+                <h2 style={{color: "white", fontWeight:"bold", fontSize: "60px", margin: "5px"}}>{lobby.lobbyId}</h2>
 
-
-                <h2>Countdown: </h2>
-                {this.state.count === 0 ? (
-                    this.props.history.push("/game")):(
-                <Countdown style={{color:"black"}}>{this.state.count}</Countdown>)}
+                <h2 style={{fontSize: "35px", color: "rgba(170, 170, 170, 1)", marginTop: "20px"}}>Countdown: </h2>
+                {((this.state.count + lobby.timeDifference) <= 0.0 && lobby.lobbyReady) || lobby.lobbyReady? (
+                    this.props.history.push("/board")
+                ):( this.state.count + lobby.timeDifference <= 0.0 ?( this.backToHome()):
+                    (<Countdown style={{position:"absolute", left: "46%", top:"30%", color:"white", fontSize: "100px", fontWeight:"bold"}}>{parseFloat(this.state.count + lobby.timeDifference).toFixed(0)}</Countdown>))}
                 {!this.state.users ? (
                     <Spinner />
                 ) : (
                     <div>
 
-                        <Users style={{position:"absolute", left: "10%", top:"30%" }}>
-                            Players in Lobby:
+                        <Users style={{padding:"10px", background: "rgba(100, 100, 100, 1)",borderRadius: "10%", position:"absolute", left: "10%", top:"30%" }}>
+                            <span style={{fontSize: "23px", fontWeight: "bold"}}> Players in Lobby:</span>
                             {this.state.users.map(user => {
                                 return (
                                     <PlayerContainer key={user.id}>
                                         <Players>
-                                            <UserName>{user.username}</UserName>
+                                            <UserName style={{fontSize: "19px"}}>{user.username}</UserName>
                                             {!user.isReady === true ? (
                                                 <NotReady>✘</NotReady>) : (<Ready>✔</Ready>) }
                                         </Players>
@@ -236,6 +198,7 @@ class Lobby extends React.Component {
                         <ButtonContainer>
                             <Button1
 
+                                id="edit"
                                 style={{position:"absolute", left: "80%", top: "80%"}}
                                 width="10%"
                                 onClick={() => {
@@ -248,6 +211,7 @@ class Lobby extends React.Component {
                         <ButtonContainer>
                             <Button1
 
+                                id="edit2"
                                 style={{position:"absolute", left:"65%", top:"80%", background:"rgba(130, 130, 130, 1)"}}
                                 width="10%"
                                 onClick={() =>{

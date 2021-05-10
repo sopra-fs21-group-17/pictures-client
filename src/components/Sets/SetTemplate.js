@@ -21,6 +21,10 @@ import {ThickRectangle, Triangle} from "./Items/BuildingBlocks";
 import {ItemsSet4} from "./SetItemLists/ItemsSet4";
 import {ItemsSet5} from "./SetItemLists/ItemsSet5";
 import { useHistory } from "react-router-dom";
+import {api, handleError} from "../../helpers/api";
+import async from "async";
+import User from "../shared/models/User";
+import PicturesModel from "../shared/models/PicturesModel";
 
 const TopContainer = styled.div`
   margin-top: 2em;
@@ -43,6 +47,17 @@ const BottomContainer = styled.div`
   max-width: 100%;
   height: 100%;
   max-height: 30vh;
+`;
+
+const ArrowContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+  font-size: 42px;
+  font-weight: 800;
+  cursor: pointer;
 `;
 
 const ImageBorderContainer = styled.div`
@@ -137,21 +152,32 @@ export const ItemContext = createContext({
     markAsSquareField: null,
 })
 
+
 export const SetTemplate = () => {
     const [itemList, setItemList] = useState([
 
     ]);
 
-    const [userSet, setUserSet] = useState([
-        {
-            set: 3,
-        },
-    ]);
+    const [pictureURL, setPictureURL ]= useState(
+        ""
+    )
 
-
+    const showArrows = () => {
+        if((localStorage.getItem("mySet")) === "STICKS" || (localStorage.getItem("mySet")) === "BLOCKS"){
+            return (
+                    <ArrowContainer>
+                        <div style={{margin: "5px"}} onClick={() => {
+                            Rotate("Clockwise");
+                        }}>↻ </div>
+                        <div style={{margin: "5px"}} onClick={() => {
+                            Rotate("Counterclockwise");                                }}> ↺</div>
+                    </ArrowContainer>
+                )
+        }
+    }
 
     const selectBoard = () => {
-        if(userSet[0].set === 1){
+        if((localStorage.getItem("mySet")) === "CUBES"){
             return (
                 <GridBoard itemlist={itemList}></GridBoard>
             );
@@ -162,14 +188,45 @@ export const SetTemplate = () => {
         }
     };
 
+    const getPictureForUser = async () =>{
+        try {
+            const response = await api.get('/picture/'+localStorage.getItem("id"));
+            const picture = new PicturesModel(response.data)
+            return picture
+        }
+        catch (error) {
+            alert(`Something went wrong while getting picture: \n${handleError(error)}`);
+        }
+    }
+
     useEffect(() => {
-        if(userSet[0].set === 1){
+        //setPictureURL(getPictureForUser())
+        setPictureURL(localStorage.getItem("myPicURL"))
+
+        // const response = async () =>{ await api.get('/picture/'+localStorage.getItem(id));}
+
+        // try {
+        //     const response = api.get('/users/'+localStorage.getItem("currentUsername"));
+        //
+        //     const requestBody = JSON.stringify({
+        //         username: this.state.username,
+        //         password: this.state.password
+        //     });
+        //
+        //     const picture = api.get('/picture', requestBody)
+        //
+        // } catch (error) {
+        //     alert(`Something went wrong while fetching the users: \n${handleError(error)}`);
+        // }
+
+
+        if((localStorage.getItem("mySet")) === "CUBES"){
             setItemList(ItemsSet1)
-        } else if (userSet[0].set === 2){
+        } else if ((localStorage.getItem("mySet")) === "BLOCKS"){
             setItemList(ItemsSet2)
-        }else if (userSet[0].set === 3){
+        }else if ((localStorage.getItem("mySet")) === "STICKS"){
             setItemList(ItemsSet3)
-        }else if (userSet[0].set === 4){
+        }else if ((localStorage.getItem("mySet")) === "ICONS"){
             setItemList(ItemsSet4)
         }else {
             setItemList(ItemsSet5)
@@ -177,7 +234,7 @@ export const SetTemplate = () => {
     }, [])
 
     const selectItems = () => {
-        if(userSet[0].set === 1){
+        if((localStorage.getItem("mySet")) === "CUBES"){
             return (
                 <Inventory>
                     {itemList
@@ -196,27 +253,7 @@ export const SetTemplate = () => {
                         ))}
                 </Inventory>
             );
-        } else if(userSet[0].set === 2){
-            return (
-                <Inventory>
-                    {itemList
-                        .filter((task, i) => task.location === 'inventory')
-                        .filter((task, i) => task.amount > 0)
-                        .map((task, i) => (
-                            <ItemContainer>
-                                <Item
-                                    key={task._id.toString()}
-                                    _id={task._id}
-                                    location={task.location}
-                                    color={task.color}
-                                    amount={task.amount}
-                                    style={task.style}
-                                />
-                            </ItemContainer>
-                        ))}
-                </Inventory>
-            );
-        } else if(userSet[0].set === 3){
+        } else {
             return (
                 <Inventory>
                     {itemList
@@ -238,17 +275,30 @@ export const SetTemplate = () => {
                 </Inventory>
             );
         }
+    }
 
+    const Rotate = (direction) => {
+        const selectedItem = itemList.filter((item) => item.selected === true);
 
+        if(selectedItem.length > 0){
+            if(direction === "Clockwise"){
+
+                selectedItem[0].rotation = (parseInt(selectedItem[0].rotation)+10).toString();
+            } else {
+                selectedItem[0].rotation = (parseInt(selectedItem[0].rotation)-10).toString();
+            }
+            setItemList(itemList.filter((item) => item.selected !== true).concat(selectedItem[0]));
+        }
     }
 
     const moveItem = (id, left, top) => {
 
-
         const updatedItem = itemList.filter((item, i) => item._id === id);
 
+        const lastSelectedItem = itemList.filter((item) => item.selected === true);
+
         const newItem = {
-            _id: id+10*id*updatedItem[0].amount,
+            _id: id+10*id*updatedItem[0].amount, //TODO fix random id (issue with sticks & stones when adding two returning first and adding another)
             location: 'board',
             top: 150,
             left: 150,
@@ -256,12 +306,21 @@ export const SetTemplate = () => {
             amount: updatedItem[0].amount-1,
             hideSourceOnDrag: true,
             style:updatedItem[0].style,
+
             background:updatedItem[0].background,
+            selected: true,
+            rotation: '0',
         };
+
+        if(lastSelectedItem.length > 0){
+            lastSelectedItem[0].selected = false;
+            setItemList(itemList.filter((item) => item._id !== lastSelectedItem[0]._id).concat(lastSelectedItem[0]));
+        }
 
         if(updatedItem[0].location !== 'inventory'){
             updatedItem[0].left = left;
             updatedItem[0].top = top;
+            updatedItem[0].selected = true;
             setItemList(itemList.filter((item) => item._id !== id).concat(updatedItem[0]));
         } else {
             updatedItem[0].amount = updatedItem[0].amount-1;
@@ -288,37 +347,69 @@ export const SetTemplate = () => {
 
     const markAsSquareField = (square,x) => {
         //gets the item that was moved
-        const item = itemList.filter((item, i) => item._id === square._id);
+        const selectedItem = itemList.filter((item, i) => item._id === square._id);
 
         //creates a new item
         const newSquare = {
-                _id: square._id+10*square._id*square.amount,
-                location: 'squarefield'+x,
-                color: item[0].color,
-                amount: item[0].amount-1,
-            };
+            _id: square._id+10*square._id*square.amount,
+            location: 'squarefield'+x,
+            color: selectedItem[0].color,
+            amount: selectedItem[0].amount-1,
+        };
 
         //only applies changes if item moved to a empty square or the inventory
         if(itemList.filter((item, i) => item.location === 'squarefield'+x).length === 0){
             if(square.location !== 'inventory'){
-                item[0].location = 'squarefield'+x;
-                setItemList(itemList.filter((item, i) => item._id !== square._id).concat(item[0]));
+                selectedItem[0].location = 'squarefield'+x;
+                setItemList(itemList.filter((item, i) => item._id !== square._id).concat(selectedItem[0]));
             } else {
-                item[0].amount = item[0].amount-1;
-                setItemList(((itemList.filter((item, i) => item._id < square._id).concat(item[0])).concat(itemList.filter((item, i) => item._id > square._id))).concat(newSquare));
+                selectedItem[0].amount = selectedItem[0].amount-1;
+                setItemList(((itemList.filter((item, i) => item._id < square._id).concat(selectedItem[0])).concat(itemList.filter((item, i) => item._id > square._id))).concat(newSquare));
             }
         }
     };
 
     const history = useHistory();
 
+
+
+    const removeSelected = () => {
+        const SelectedItem = itemList.filter((item) => item.selected === true);
+
+        if(SelectedItem.length > 0){
+            SelectedItem[0].selected = false;
+            setItemList(itemList.filter((item) => item._id !== SelectedItem[0]._id).concat(SelectedItem[0]));
+        }
+    }
+
     const ref = createRef()
     const [screenshot, takeScreenshot] = useScreenshot()
-    const   GetImage = () => {
-        takeScreenshot(ref.current);
-        console.log(screenshot);
-        localStorage.setItem('screenshot', screenshot);
-        history.push(`/GuessingScreen`);
+    const   GetImage = () => takeScreenshot(ref.current)
+    console.log(screenshot)
+    localStorage.setItem("screenshot",screenshot)
+
+    // neu hinzugefügt, da jetzt nur no grüner SUBMIT button benutzt
+    const putscreenshot = async () => {
+
+        // TODO screenshot function too slow, is null
+        // try {
+        //     const requestBody = JSON.stringify({
+        //         URL: localStorage.getItem("screenshot")
+        //     })
+        //
+        //     console.log("REQUEST BODY: ", localStorage.getItem("screenshot"));
+        //
+        //
+        //    // await api.put("/screenshot/" + localStorage.getItem("currentUsername"), requestBody);
+        //
+        //     //console.log("SCREENIE??", localStorage.getItem("screenshot"));
+        //
+        // } catch (error) {
+        //     alert(`Something went wrong while uploading the screenshot URL \n${handleError(error)}`);
+        // }
+
+        // change to next screen
+        history.push(`/GuessingScreen`)
     }
 
 
@@ -327,8 +418,8 @@ export const SetTemplate = () => {
             <ItemContext.Provider value={{ markAsInventory, moveItem, markAsSquareField }}>
                 <BaseContainer>
                     <TopContainer>
-                        <div ref={ref} >
-                            <BorderContainer>
+                        <div  >
+                            <BorderContainer ref={ref}>
                                 <BoardContainer>
                                     {selectBoard()}
                                 </BoardContainer>
@@ -336,10 +427,15 @@ export const SetTemplate = () => {
                         </div>
                         <div style={{padding: '5%', margin: '5%',  display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
                             <ImageBorderContainer>
-                                <ImageContainer src="https://source.unsplash.com/random" className="img-fluid" alt=""/>
+                                <ImageContainer src={pictureURL} className="img-fluid" alt=""/>
                             </ImageBorderContainer>
+                            {showArrows()}
                             <ButtonContainer>
-                                <Button onClick={GetImage}>Submit</Button>
+                                <Button onClick={() => {
+                                    removeSelected();
+                                    GetImage();
+                                    putscreenshot();
+                                }}>Submit</Button>
                             </ButtonContainer>
                         </div>
                     </TopContainer>

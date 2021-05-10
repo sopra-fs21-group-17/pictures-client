@@ -59,145 +59,187 @@ const PlayerContainer = styled.li`
   justify-content: center;
 `;
 
+const StyledImg = styled.img`
+    color: red;
+    width: 60%;
+`;
+
+const StyledTd = styled.td`
+`;
+
+const StyledTr = styled.tr`
+`;
+
+const StyledTable = styled.table`
+    align: left;
+    width: 50%;
+    margin: 10px;
+`;
+
 //TODO add Constraints for coordinate guessing like only able to input A-D and 1-4 : if possible in js use Regex
 class GuessingScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             userID: null,
-            players: null,
-            pictureURLs: null,
-            coordinate: [0,1,2,3],
-            userNames: ["adam", "eva", "fritzli", "voldemort"],
-            // userNames: [],
+            screenshots: [],
+            coordinateNames: [
+                "A1", "A2", "A3", "A4",
+                "B1", "B2", "B3", "B4",
+                "C1", "C2", "C3", "C4",
+                "D1", "D2", "D3", "D4"],
             guesses: {},
-            guess1: {"adam":null}, guess2: {"eva": null}, guess3: null, guess4: null,
+            guessesAsString: "",
         }
-        //this.getUsers();
-   //     this.setState({username: localStorage.getItem(id)})
-        };
+        this.getScreenshots();
+    };
 
-
-
-
-    async getUsers() {
+    // GET REQUEST "/screenshots"
+    async getScreenshots(){
         try {
-            const response = await api.get('/users');
-            // delays continuous execution of an async operation for 1 second.
-            // This is just a fake async call, so that the spinner can be displayed
-            // feel free to remove it :)
+            const response = await api.get('/screenshots/'+localStorage.getItem("lobbyId"));
             await new Promise(resolve => setTimeout(resolve, 1000));
 
-            // Get the returned users and update the state.
-            this.setState({ users: response.data });
+            // remove screenshot of current user
+            for(let e in response.data){
+                // response_array[i][0] = username
+                if(response.data[e][0] === this.state.username) {
+                    response.data.splice(e, 1);
+                }
+            }
 
-            // See here to get more data.
-            console.log(response);
+            // Get the returned screenshots and update the state.
+            this.setState({ screenshots: response.data });
         } catch (error) {
             alert(`Something went wrong while fetching the users: \n${handleError(error)}`);
         }
     }
-//PUT REQUEST
-    async sendGuesses(){
 
+    convertGuessesToString(dict){
+        let mergedGuesses = "";
+        for(const [username, coordinate] of Object.entries(dict)){
+            mergedGuesses += coordinate + username;
+            mergedGuesses += "-"; // guesses voneinander trennen
+        }
+
+        return mergedGuesses;
+    }
+
+    // PUT REQUEST
+    async sendUserGuesses(){
         try{
-       //     const guesses = [this.state.guess1, this.state.guess2, this.state.guess3, this.state.guess4]
+            let temp = this.convertGuessesToString(this.state.guesses);
             const requestBody = JSON.stringify({
-                username: this.state.username,   // todo change this to userID
-                guesses: this.state.guesses                  //todo change Coordinate strings to integer (maybe in BE)
+                username: localStorage.getItem("currentUsername"),
+                guesses: temp
             })
-            await api.put("/guess", requestBody);
+            const response = api.post("/guesses/"+localStorage.getItem("currentLobbyId"), requestBody);
+            localStorage.setItem("correctedGuesses", (await response).data);
         } catch(error) {
             alert(`Something went wrong while sending the guesses: \n${handleError(error)}`);
         }
-
     }
-
-    // handleInputChange(key, value) {
-    //  //   this.setState({ [key]:{ key: dictKey,//                              value: value }});
-    //  //   this.state.guesses.push(dictKey,value);
-    //     localStorage.setItem(key,value);
-    //     console.log(this.state.guesses);
-    // }
 
     saveGuessToDict(user, value) {
-
         this.setState({...this.state,
             guesses: {...this.state.guesses,[user]:value}})
-        localStorage.setItem(user,value);
-        console.log(this.state.guesses);
+        //localStorage.setItem(user,value);
+        //console.log(this.state.guesses);
     }
 
-    showScoreScreen() {
+    // get corrected guesses and points
+    async showScoreScreen() {
+        //localStorage.setItem("lobbyId", "test"); // für testzwecke
+        try{
+            const response = await api.get('/score/'+localStorage.getItem("lobbyId"));
+
+            // punkte auslesen
+            let thePoints = {};
+            for(const [username, attribute] of Object.entries(response.data)){
+                thePoints[username] = attribute["points"];
+            }
+            localStorage.setItem("thePoints", JSON.stringify(thePoints));
+
+        } catch(error) {
+            alert(`Something went wrong while recieving the guesses and points: \n${handleError(error)}`);
+        }
+
         this.props.history.push(`/scoreScreen`);
     }
 
+    createGuessingInfo(){
+        let result = [];
+        const parsedPlayers = JSON.parse(localStorage.getItem("players"));
+
+        for(const [key, val] of Object.entries(parsedPlayers)){
+            if(val.username !== localStorage.getItem('currentUsername')){
+                result.push([val.username, val.assignedCoordinates]);
+                // result["username"] = val.username;
+                // result["assignedCoordinates"] = val.assignedCoordinates;
+            }
+        }
+
+        return result;
+    }
+
     render() {
-        let num = 1
-        const guessInput = this.state.userNames.map(user =>{
-
-           return(
-               <tr>
-                   <td>SCREENSHOT {num++}</td>
-
-               <td>
-
-                   <InputField
-                placeholder="A1"
-                onChange={e => {
-                    this.saveGuessToDict( user,e.target.value);
-                }}
-               />  </td>
-               </tr>
-           )
-
-        })
+        const infos = this.createGuessingInfo();
+        const filledTableRows = infos.map( tuple =>{
+                return(
+                    <StyledTr>
+                        {/*<StyledTd width={"25%"}><StyledImg src={tuple["1"]}/></StyledTd>*/}
+                        <StyledTd width={"25%"}>{this.state.coordinateNames[tuple[1]]}</StyledTd>
+                        <StyledTd width={"25%"}>
+                            <InputField
+                                placeholder="A1"
+                                onChange={e => {
+                                    this.saveGuessToDict(tuple[0], e.target.value);
+                                }}
+                            />
+                        </StyledTd>
+                    </StyledTr>
+                )
+            }
+        )
 
         return (
             <Container>
-                <h1>GUESSING SCREEN</h1>
-                    <div>
-                        <h3 align={"left"}>Make your guesses</h3>
-                        <p align={"left"}>Select the coordinates corresponding to the pictures position:</p>
+                <div align={"center"}>
+                    <h2>Which picture were the other players trying to build?</h2>
+                    <h3>Make your guesses</h3>
+                    <StyledTable>
+                        <StyledTr>
+                            <StyledTd>What the other players built:</StyledTd>
+                            <StyledTd>Coordinates of original picture:</StyledTd>
+                        </StyledTr>
+                        {filledTableRows}
+                    </StyledTable>
 
-                        <table align={"left"}>
-                            <tr>
-                                <td>&nbsp;</td>
-                                <td>coordinates</td>
+                    <Button
+                        width="25%"
+                        onClick={() => {
+                            this.sendUserGuesses();
+                            this.createGuessingInfo();
+                        }}
+                    >
+                        My guesses are done!
+                    </Button>
 
-                            </tr>
-                            {guessInput}
-                        </table>
+                    <Button
+                        width="25%"
+                        onClick={() => {
+                            this.showScoreScreen();
+                        }}
+                    >
+                        DEV: "Guessing is done!"
+                    </Button>
+                </div>
 
-                        <p></p>
-                        <p align={"center-right"}>"ORIGINAL PICTURES"</p>
-                        <p></p>
+                <PictureGrid></PictureGrid>
 
-
-                        <PictureGrid></PictureGrid>
-
-                        <Button
-                            width="100%"
-                            onClick={() => {
-                                this.sendGuesses();
-
-                            }}
-                        >
-                            I'm done guessing!
-                        </Button>
-                        <Button
-                            width="100%"
-                            onClick={() => {
-                                this.showScoreScreen();
-                            }}
-                        >
-                            Guessing is done!
-                        </Button>
-                    </div>
             </Container>
         );
     }
-
 }
 
 export default withRouter(GuessingScreen);

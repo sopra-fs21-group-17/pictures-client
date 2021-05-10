@@ -14,33 +14,29 @@ background: grey;
 class PictureElement extends React.Component{
     constructor(props) {
         super(props);
+
         this.state ={
-            coordinate: this.props.coordinates,
-            pictureURL: this.props.pictureURLs
-        }
 
-    }
-    async sendGuess() {
-        try {
-            const requestBody = JSON.stringify({
-                coordinate: this.state.coordinate
-            });
-
-            await api.put("/guess",requestBody);
-
-        } catch (error) {
-            alert(`Something went wrong during guessing: \n${handleError(error)}`);
+            coordinate: this.props.coordinate,
+            pictureURL: this.props.pictureURL
         }
     }
+
+    renderPicture(){
+
+        return(
+
+            <img key={this.state.pictureURL} src={this.state.pictureURL} height={100} width={100}
+            />
+        )
+    }
+    renderCoordinates(){return(this.state.coordinate) }
+
 //TODO wait for functioning external api
     render(){
 
         return <GridElement>
-        {/*<img>*/}
-        {/* src={this.state.pictureLink}*/}
-        {/*</img>*/}
-
-            {this.state.coordinate}
+            {this.state.pictureURL != null ? this.renderPicture() : this.renderCoordinates()}
         </GridElement>
     }
 }

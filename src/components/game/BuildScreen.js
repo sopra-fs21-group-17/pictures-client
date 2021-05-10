@@ -4,17 +4,11 @@ import React, {useState} from 'react';
 import styled from 'styled-components';
 import { BaseContainer } from '../../helpers/layout';
 import { api, handleError } from '../../helpers/api';
-import { Spinner } from '../../views/design/Spinner';
 import { Button } from '../../views/design/Button';
 import { withRouter } from 'react-router-dom';
-
-import testPic from '../../test_pictures/doggo1.jpg';
-
-import img from "../Sets/wood_texture_background.jpg";
-import {Square} from "../Sets/Items/Square";
-import {Inventory} from "../Sets/Inventory";
-
-import {SetTemplate} from "../Sets/SetTemplate";
+import SetTemplate from "../Sets/SetTemplate";
+import LobbyModel from "../shared/models/LobbyModel";
+import BuildRoom from "../shared/models/BuildRoom";
 
 const Container = styled(BaseContainer)`
   color: black;
@@ -33,48 +27,46 @@ const PlayerContainer = styled.li`
   align-items: center;
   justify-content: center;
 `;
+const Countdown = styled.h1`
+  margin-top = 10px;
+  margin-bottom = 20px;
+  font-size = 100px;
+`;
 
 class BuildScreen extends React.Component {
     constructor() {
         super();
         this.state = {
             users: null,
-            
+            responseRoom: null,
+            countMin: 5.0,
+            count: 0.0,
         };
     }
+
     async putscreenshot() {
         try {
-
-            await api.put("/screenshot", localStorage.getItem("screenshot"));
-
-
+            await api.put("/screenshot/"+localStorage.getItem("currentUsername"), localStorage.getItem("screenshot"));
         } catch (error) {
             alert(`Something went wrong  \n${handleError(error)}`);
         }
     }
 
-
-
     async componentDidMount() {
         try {
             const response = await api.get('/users');
-            // delays continuous execution of an async operation for 1 second.
-            // This is just a fake async call, so that the spinner can be displayed
-            // feel free to remove it :)
-            await new Promise(resolve => setTimeout(resolve, 1000));
 
             // Get the returned users and update the state.
             this.setState({ users: response.data });
 
-            // This is just some data for you to see what is available.
-            // Feel free to remove it.
-            console.log('request to:', response.request.responseURL);
-            console.log('status code:', response.status);
-            console.log('status text:', response.statusText);
-            console.log('requested data:', response.data);
+            this.countInterval = setInterval(async () =>{
+                await api.put('/buildRooms/count/'+localStorage.getItem('currentLobbyId'))
+            }, 100)
+            this.checkInterval = setInterval(async () =>{
+                const responseCheck = await api.get('/buildRooms/'+localStorage.getItem('currentLobbyId'));
+                this.setState({responseRoom: responseCheck.data})}, 100)
 
-            // See here to get more data.
-            console.log(response);
+
         } catch (error) {
             alert(`Something went wrong while fetching the users: \n${handleError(error)}`);
         }
@@ -82,23 +74,41 @@ class BuildScreen extends React.Component {
 
     render() {
 
+        const buildRoom = new BuildRoom(this.state.responseRoom)
+        const difference = Math.round(buildRoom.timeDifference)
+         if(difference< 0.00 && difference>=-59.00){
+             this.state.count = 59
+             this.state.countMin = 4
+         } else if (difference<-59.00 && difference>=-119.00){
+             this.state.count = 119.00
+             this.state.countMin = 3
+         }else if (difference<-119.00 && difference>=-179.00){
+             this.state.count = 179.00
+             this.state.countMin = 2
+         }else if (difference< -179.00 && difference>=-239.00){
+             this.state.count = 239.00
+             this.state.countMin = 1
+         }else if (difference< -239.00){
+             this.state.count = 299.00
+             this.state.countMin = 0
+         }
+
         return (
             <Container>
-                {!this.state.users ? (
-                    <Spinner />
-                ) : (
-                    <div>
-                        <SetTemplate/>
-                        <Button
-                            width="100%"
-                            onClick={() => {
-                                this.userFinishedBuilding();
-                            }}
-                        >
-                            I'm done building!
-                        </Button>
-                    </div>
-                )}
+                {this.state.countMin <= 0 && (this.state.count + buildRoom.timeDifference) <= 0 ? (this.userFinishedBuilding()):(
+                <Countdown>Countdown: {this.state.countMin}:{Math.round(this.state.count + buildRoom.timeDifference)}</Countdown>)}
+
+                <div>
+                    <SetTemplate pictureURL={localStorage.getItem("myPicURL")}/>
+                    {/*<Button*/}
+                    {/*    width="100%"*/}
+                    {/*    onClick={() => {*/}
+                    {/*        this.userFinishedBuilding();*/}
+                    {/*    }}*/}
+                    {/*>*/}
+                    {/*    I'm done building!*/}
+                    {/*</Button>*/}
+                </div>
             </Container>
         );
     }
