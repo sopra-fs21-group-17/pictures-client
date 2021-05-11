@@ -100,7 +100,7 @@ class PictureGrid extends React.Component{
 
     async getPictures(){
         try {
-            const response = await api.get("/pictures");
+            const response = await api.get("/pictures/"+localStorage.getItem("lobbyId"));
             this.setState({pictureURLs: response.data});
 
         }
@@ -110,35 +110,35 @@ class PictureGrid extends React.Component{
     }
 
     // TODO auskommentiert zum testen
-    // async componentDidMount() {
-    //     await this.getPictures()
-    // debugger
-    // }
+    async componentDidMount() {
+        await this.getPictures()
+
+    }
 
 
 
     render(){
 
         let pictureElements = new Array();
-        // let index = 0;
-        // if(this.state.pictureURLs.length != 0) {
-        //
-        //
-        //     const pictures = this.state.pictureURLs;
-        //
-        //     pictures.forEach(picture => {
-        //         let pic = new PicturesModel(picture);
-        //
-        //         debugger
-        //         pictureElements.push(<PictureElement pictureURL={pic.pictureLink}> </PictureElement>)
-        //     })
-        // }
+        let index = 0;
+        if(this.state.pictureURLs.length != 0) {
 
-        let i = 0;
-        this.state.picsURLs.forEach(picture => {
-            pictureElements.push(<PictureElement pictureURL={this.state.picsURLs[i]}> </PictureElement>);
-            i++;
-        })
+
+            const pictures = this.state.pictureURLs;
+
+            pictures.forEach(picture => {
+                let pic = new PicturesModel(picture);
+
+
+                pictureElements.push(<PictureElement pictureURL={pic.pictureLink}> </PictureElement>)
+            })
+        }
+
+        // let i = 0;
+        // this.state.picsURLs.forEach(picture => {
+        //     pictureElements.push(<PictureElement pictureURL={this.state.picsURLs[i]}> </PictureElement>);
+        //     i++;
+        // })
 
 
 
