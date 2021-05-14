@@ -1,10 +1,9 @@
-import { useDrop} from "react-dnd";
+import { useDrop } from "react-dnd";
 import styled from "styled-components";
-import {ItemTypes} from "../utils/Items";
-import React, {useCallback, useContext, useState} from "react";
-import {ItemContext} from "../SetTemplate";
-import update from 'immutability-helper';
-import {Item} from "../Items/Item";
+import { ItemTypes } from "../utils/Items";
+import React, { useContext } from "react";
+import { ItemContext } from "../SetTemplate";
+import { Item } from "../Items/Item";
 
 const BoardContainer = styled.div`
   width: 100%;
@@ -31,14 +30,17 @@ export const FreeBoard = ({ itemlist }) => {
             },
         }), [moveItem]);
 
+    const getLength = Math.round(window.innerHeight / 100)*51.5
+
         return (
             <BoardContainer
+                id="Board"
                 ref={drop}>
-                {itemlist
+                    <canvas id="canvas" width={getLength} height={getLength}/>
+                    {itemlist
                     .filter((task, i) => task.location === 'board')
                     .map((key) => {
                     return (
-
 
                             <Item
                                 key={key._id}

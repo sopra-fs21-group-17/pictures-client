@@ -6,8 +6,6 @@ import Player from '../../views/Player';
 import { Spinner } from '../../views/design/Spinner';
 import { Button } from '../../views/design/Button';
 import { withRouter } from 'react-router-dom';
-import Header from "../../views/Header";
-import Lobby from "../shared/models/LobbyModel";
 import LobbyModel from "../shared/models/LobbyModel";
 
 const Container = styled(BaseContainer)`

@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from "styled-components";
-import {api, handleError} from "../../helpers/api";
 
 // add put request for guesses so that it always just updates guesses as long as the same user is chosen
 

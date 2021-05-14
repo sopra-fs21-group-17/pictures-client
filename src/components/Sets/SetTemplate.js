@@ -1,29 +1,22 @@
-import React, {createContext, createRef, useEffect, useRef, useState} from "react";
+import React, { createContext, createRef, useEffect, useState } from "react";
 import styled from "styled-components";
-import {DndProvider, useDrag, useDrop} from 'react-dnd';
-import {HTML5Backend} from "react-dnd-html5-backend";
-import {BaseContainer} from "../../helpers/layout";
-import {Square} from "./Items/Square";
-import {GridBoard} from "./Boards/GridBoard";
-import {ItemTypes} from "./utils/Items";
-import {Inventory} from "./Inventory";
-import {SquareField} from "./Boards/SquareField";
-import {FreeBoard} from "./Boards/FreeBoard";
-import {ItemsSet1} from "./SetItemLists/ItemsSet1";
-import {ItemsSet2} from "./SetItemLists/ItemsSet2";
-import {withRouter} from "react-router-dom";
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { BaseContainer } from "../../helpers/layout";
+import { Square } from "./Items/Square";
+import { Item } from "./Items/Item";
+import { GridBoard } from "./Boards/GridBoard";
+import { FreeBoard } from "./Boards/FreeBoard";
+import { Inventory } from "./Inventory";
+import { ItemsSet1 } from "./SetItemLists/ItemsSet1";
+import { ItemsSet2 } from "./SetItemLists/ItemsSet2";
+import { ItemsSet3 } from "./SetItemLists/ItemsSet3";
+import { ItemsSet4 } from "./SetItemLists/ItemsSet4";
+import { ItemsSet5 } from "./SetItemLists/ItemsSet5";
+import { withRouter, useHistory } from "react-router-dom";
 import { useScreenshot } from 'use-react-screenshot'
-import {OptionsType} from "html-to-image";
-import {ItemsSet3} from "./SetItemLists/ItemsSet3";
-import {Item} from "./Items/Item";
 import img from "./wood_texture_background.jpg"
-import {ThickRectangle, Triangle} from "./Items/BuildingBlocks";
-import {ItemsSet4} from "./SetItemLists/ItemsSet4";
-import {ItemsSet5} from "./SetItemLists/ItemsSet5";
-import { useHistory } from "react-router-dom";
-import {api, handleError} from "../../helpers/api";
-import async from "async";
-import User from "../shared/models/User";
+import { api, handleError } from "../../helpers/api";
 import PicturesModel from "../shared/models/PicturesModel";
 
 const TopContainer = styled.div`

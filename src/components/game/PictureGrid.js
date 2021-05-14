@@ -1,10 +1,8 @@
-import {api, handleError} from "../../helpers/api";
+import { api, handleError } from "../../helpers/api";
 import PictureElement from "./PictureElement";
 import React from "react";
 import styled from "styled-components";
-import {withRouter} from "react-router-dom";
-import {Button} from "../../views/design/Button";
-import PicturesModel from "../shared/models/PicturesModel";
+import { withRouter } from "react-router-dom";
 
 const GridContainer = styled.div`
   

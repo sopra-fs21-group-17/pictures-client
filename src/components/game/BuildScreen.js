@@ -1,13 +1,11 @@
 // temporary file to simulate BuildScreen for development
 
-import React, {useState} from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { BaseContainer } from '../../helpers/layout';
 import { api, handleError } from '../../helpers/api';
-import { Button } from '../../views/design/Button';
 import { withRouter } from 'react-router-dom';
 import SetTemplate from "../Sets/SetTemplate";
-import LobbyModel from "../shared/models/LobbyModel";
 import BuildRoom from "../shared/models/BuildRoom";
 
 const Container = styled(BaseContainer)`
@@ -15,18 +13,6 @@ const Container = styled(BaseContainer)`
   text-align: center;
 `;
 
-
-const Users = styled.ul`
-  list-style: none;
-  padding-left: 0;
-`;
-
-const PlayerContainer = styled.li`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-`;
 const Countdown = styled.h1`
   margin-top = 10px;
   margin-bottom = 20px;
@@ -77,20 +63,30 @@ class BuildScreen extends React.Component {
         const buildRoom = new BuildRoom(this.state.responseRoom)
         const difference = Math.round(buildRoom.timeDifference)
          if(difference< 0.00 && difference>=-59.00){
-             this.state.count = 59
-             this.state.countMin = 4
+             this.setState({
+                 count: 59,
+                 countMin: 4
+             })
          } else if (difference<-59.00 && difference>=-119.00){
-             this.state.count = 119.00
-             this.state.countMin = 3
+             this.setState({
+                 count: 119.00,
+                 countMin: 3
+             })
          }else if (difference<-119.00 && difference>=-179.00){
-             this.state.count = 179.00
-             this.state.countMin = 2
+             this.setState({
+                 count: 179.00,
+                 countMin: 2
+             })
          }else if (difference< -179.00 && difference>=-239.00){
-             this.state.count = 239.00
-             this.state.countMin = 1
+             this.setState({
+                 count: 239.00,
+                 countMin: 1
+             })
          }else if (difference< -239.00){
-             this.state.count = 299.00
-             this.state.countMin = 0
+             this.setState({
+                 count: 299.00,
+                 countMin: 0
+             })
          }
 
         return (

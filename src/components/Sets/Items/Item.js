@@ -1,8 +1,7 @@
 import styled from "styled-components";
-import {useDrag} from "react-dnd";
-import {ItemTypes} from '../utils/Items';
+import { useDrag } from "react-dnd";
+import { ItemTypes } from '../utils/Items';
 import {
-    Bridge,
     Bridgecontainer,
     BridgeRectangle,
     Circle,
@@ -12,11 +11,12 @@ import {
     Stick,
     Stone,
     ThinRectangle,
-    Triangle, Trianglecontainer
+    Triangle,
+    Trianglecontainer
 } from "./BuildingBlocks";
 import React from 'react';
-import {Card,Icon} from "./Cards";
-import img from ".././wood_texture_background2.jpg"
+import { Card, Icon } from "./Cards";
+import { Rope } from "./Rope"
 
 const ItemContainer = styled.div`
 
@@ -149,14 +149,24 @@ export const Item = ({_id, location, left, top, color, amount, hideSourceOnDrag,
     else if (style === 'card') {
         return (
             <ItemContainer>
-
                 <Card ref={drag} style={{location, left, top, amount}} role="Box">
-
                     <Icon style={{backgroundImage: icon}}> </Icon>
                 </Card>
             </ItemContainer>
 
         );
+    }
+    else if (style === 'longString') {
+        return (
+                 <Rope/>
+        )
+    }
+    else if (style === 'blabla') {
+        return (
+            <canvas className="canvas">
+                {/*<Rope/>*/}
+            </canvas>
+        )
     }
     else {
         return (

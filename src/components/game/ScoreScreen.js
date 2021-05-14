@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { BaseContainer } from '../../helpers/layout';
-import { api, handleError } from '../../helpers/api';
+import { handleError } from '../../helpers/api';
 import { Button } from '../../views/design/Button';
 import { withRouter } from 'react-router-dom';
 
@@ -46,7 +46,7 @@ class ScoreScreen extends React.Component {
         for(let i = 0; i < correctedGuesses.length; i++){
             for(let j = 0; j < 1; j++){ // first letters is y/n for correct/incorrect guess
                 //tempCoordinates += correctedGuesses.charAt(i+j);
-                if(correctedGuesses.charAt(i+j) == "y"){
+                if(correctedGuesses.charAt(i+j) === "y"){
                     tempCoordinates = "✔";
                 }
                 else{
