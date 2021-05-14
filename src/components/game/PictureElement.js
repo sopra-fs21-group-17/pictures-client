@@ -8,9 +8,24 @@ import {api, handleError} from "../../helpers/api";
 //TODO make state to ensure guessing is only possible in guessing phase
 
 const GridElement = styled.div`
-background: grey;
- height: auto;
-  min-width: 150px`;
+position: relative;
+background: white;
+min-height: 100px;
+min-width: 100px`;
+
+
+
+const ImageContainer = styled.img`
+  top: 50%
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  max-height:200px;
+  max-width: 200px;
+  min-height: 150px;
+  min-width: 150px;
+  
+`;
 
 
 class PictureElement extends React.Component{
@@ -28,7 +43,7 @@ class PictureElement extends React.Component{
 
         return(
 
-            <img class="picture" key={this.state.pictureURL} src={this.state.pictureURL} height={100} width={100}
+            <ImageContainer class="picture" key={this.state.pictureURL} src={this.state.pictureURL}
             />
         )
     }

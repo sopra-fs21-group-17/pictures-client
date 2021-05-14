@@ -1,4 +1,5 @@
 .pic-fit{
     height: fit-content;
-
+    object-fit: cover;
+    background-position: center;
 }

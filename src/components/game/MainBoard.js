@@ -138,7 +138,7 @@ class MainBoard extends React.Component{
                 8,9,10,11,
                 12,13,14,15],
         };
-        this.initGame();
+
     }
 
     //API REQUESTS//
@@ -180,7 +180,9 @@ class MainBoard extends React.Component{
             alert(`Something went wrong getting the Players: \n${handleError(error)}`);
         }
     }
-
+    async componentWillMount(){
+        await this.initGame();
+    }
     //DISPLAY//
 
     render(){

@@ -138,35 +138,6 @@ class Lobby extends React.Component {
         this.props.history.push("/home")
     }
 
-
-    async initGame(){
-        try {
-            const response = await api.get("/board/"+localStorage.getItem("lobbyId"));
-            this.setState({players: response.data});
-            this.setState({requested: true});
-
-            const stringyfiedPlayers = JSON.stringify(response.data);
-            localStorage.setItem("players", stringyfiedPlayers);
-
-            // update players assigned coord. & set to display it to them
-            for(const [key, val] of Object.entries(this.state.players)){
-                if(val.username === localStorage.getItem('currentUsername')){
-                    this.setState({
-                        mySet: val.assignedSet,
-                        myCoordinates: this.state.coordinateNames[val.assignedCoordinates]
-                    });
-                    localStorage.setItem("myPicURL", this.state.picsURLs[val.assignedCoordinates])
-                    break;
-                }
-            }
-
-            localStorage.setItem("mySet", this.state.mySet);
-        }
-        catch (error) {
-            alert(`Something went wrong getting the Players: \n${handleError(error)}`);
-        }
-    }
-
     async componentDidMount(){
 
         try {
@@ -198,7 +169,6 @@ class Lobby extends React.Component {
 
                 <h2>Countdown: </h2>
                 {((this.state.count + lobby.timeDifference) <= 0.0 && lobby.lobbyReady) || lobby.lobbyReady? (
-                    this.initGame(),
                     this.props.history.push("/board")
                 ):( this.state.count + lobby.timeDifference <= 0.0 ?( this.backToHome()):
                     (<Countdown style={{color:"black"}}>{parseFloat(this.state.count + lobby.timeDifference).toFixed(0)}</Countdown>))}

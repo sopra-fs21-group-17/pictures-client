@@ -91,7 +91,7 @@ class GuessingScreen extends React.Component {
             guesses: {},
             guessesAsString: "",
         }
-        this.getScreenshots();
+      //  this.getScreenshots();
     };
 
     // GET REQUEST "/screenshots"
@@ -180,6 +180,10 @@ class GuessingScreen extends React.Component {
         }
 
         return result;
+    }
+    // TODO call screenshot getter here with await
+    async componentWillMount(){
+       await this.getScreenshots()
     }
 
     render() {
