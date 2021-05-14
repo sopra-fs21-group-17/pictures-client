@@ -92,7 +92,7 @@ class PictureGrid extends React.Component{
     }
 
     // TODO auskommentiert zum testen
-    async componentDidMount() {
+    async componentWillMount() {
         await this.getPictures()
 
     }

@@ -34,28 +34,82 @@ class ScoreScreen extends React.Component {
         super(props);
         this.state = {
             users: null,
-            players: {}
+            players: {},
+            rounds: 0
         };
+
     }
 
-    convertCorrectedGuessesToMap(correctedGuesses){
+    async componentWillMount() {
+        try {
+            const response = await api.get("/rounds/" + localStorage.getItem("lobbyId"))
+            this.setState({rounds: response.data})
+        } catch (error) {
+            alert(`Something went wrong getting the current round: \n${handleError(error)}`);
+        }
+    }
+
+    async nextRound() {
+        try {
+            await api.put(`/board/` + localStorage.getItem("lobbyId"))
+            this.props.history.push(`/board`);
+        } catch (error) {
+            alert(`Something went wrong during the login: \n${handleError(error)}`);
+        }
+    }
+
+    async playAgain(){
+        //TODO frage was da passiere sell --> id lobby gschickt werde --> denne eifach im backend alli Repos leere aber lobby laa
+        this.props.history.push('/lobbies/' + localStorage.getItem("lobbyId"));
+
+    }
+
+    async exitGame(){
+        //TODO zrugg is Home alles leere --> BE user us de lobby entferne alueg
+        this.props.history.push(`/dashboard/home`);
+    }
+
+    gameHasFinished() {
+        return (
+            <Button
+                width="25%"
+                onClick={() => {
+                    this.exitGame();
+                }}
+            >
+                Exit Game
+
+            </Button>,
+                <Button
+                    width="25%"
+                    onClick={() => {
+                        this.playAgain();
+                    }}
+                >
+                    new Round
+
+                </Button>
+        )
+    }
+
+
+    convertCorrectedGuessesToMap(correctedGuesses) {
         let tempUsername = "";
         let tempCoordinates = "";
         let result = [];
 
-        for(let i = 0; i < correctedGuesses.length; i++){
-            for(let j = 0; j < 1; j++){ // first letters is y/n for correct/incorrect guess
+        for (let i = 0; i < correctedGuesses.length; i++) {
+            for (let j = 0; j < 1; j++) { // first letters is y/n for correct/incorrect guess
                 //tempCoordinates += correctedGuesses.charAt(i+j);
-                if(correctedGuesses.charAt(i+j) == "y"){
+                if (correctedGuesses.charAt(i + j) == "y") {
                     tempCoordinates = "✔";
-                }
-                else{
+                } else {
                     tempCoordinates = "✘";
                 }
             }
             i++; // skip coordinates, goto username
 
-            while(i < correctedGuesses.length-1 && correctedGuesses.charAt(i) !== '-'){
+            while (i < correctedGuesses.length - 1 && correctedGuesses.charAt(i) !== '-') {
                 tempUsername += correctedGuesses.charAt(i);
                 i++;
             }
@@ -66,9 +120,9 @@ class ScoreScreen extends React.Component {
         return result;
     }
 
-    convertToArray(data){
+    convertToArray(data) {
         let result = [];
-        for(const [username, attribute] of Object.entries(data)){
+        for (const [username, attribute] of Object.entries(data)) {
             let tuple = [username, attribute];
             result.push(tuple);
         }
@@ -78,8 +132,8 @@ class ScoreScreen extends React.Component {
 
     render() {
         const temp = this.convertCorrectedGuessesToMap(localStorage.getItem("correctedGuesses"));
-        const filledTableGuesses = temp.map( tuple =>{
-                return(
+        const filledTableGuesses = temp.map(tuple => {
+                return (
                     <td>
                         <tr>{tuple[0]}</tr>
                         <tr>{tuple[1]}</tr>
@@ -89,8 +143,8 @@ class ScoreScreen extends React.Component {
         )
 
         const temp2 = this.convertToArray(JSON.parse((localStorage.getItem("thePoints"))));
-        const filledTablePoints = temp2.map( tuple =>{
-                return(
+        const filledTablePoints = temp2.map(tuple => {
+                return (
                     <td>
                         <tr>{tuple[0]}</tr>
                         <tr>{tuple[1]}</tr>
@@ -114,26 +168,17 @@ class ScoreScreen extends React.Component {
                 </table>
 
                 <ButtonContainer>
-                    <Button
+                    {this.state.rounds == 5 }?{this.gameHasFinished()}:{<Button
                         width="25%"
                         onClick={() => {
                             this.nextRound();
                         }}
                     >
                         Ok, next round!
-                    </Button>
+                    </Button>}
                 </ButtonContainer>
             </Container>
         );
     }
-
-    async nextRound() {
-        try {
-            this.props.history.push(`/board`);
-        } catch (error) {
-            alert(`Something went wrong during the login: \n${handleError(error)}`);
-        }
-    }
 }
-
 export default withRouter(ScoreScreen);
