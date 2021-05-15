@@ -163,7 +163,8 @@ export const SetTemplate = () => {
                             Rotate("Clockwise");
                         }}>↻ </div>
                         <div style={{margin: "5px"}} onClick={() => {
-                            Rotate("Counterclockwise");                                }}> ↺</div>
+                            Rotate("Counterclockwise");
+                        }}> ↺</div>
                     </ArrowContainer>
                 )
         }
@@ -246,7 +247,9 @@ export const SetTemplate = () => {
                         ))}
                 </Inventory>
             );
-        } else {
+        } else if ((localStorage.getItem("mySet")) === "STRINGS") {
+            return null
+        }else {
             return (
                 <Inventory>
                     {itemList
