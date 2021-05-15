@@ -13,6 +13,7 @@
     "react-router-dom": "^5.2.0",
     "react-screen-capture": "^1.0.0",
     "react-scripts": "^4.0.2",
+    "react-window": "^1.8.6",
     "socket.io": "^4.0.1",
     "styled-components": "^5.2.1",
     "use-react-screenshot": "^1.0.2"
