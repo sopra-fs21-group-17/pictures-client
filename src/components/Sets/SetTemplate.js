@@ -378,13 +378,20 @@ export const SetTemplate = () => {
         }
     }
 
+
     const ref = createRef()
     const [screenshot, takeScreenshot] = useScreenshot()
-    const   GetImage = () => takeScreenshot(ref.current)
-    console.log(screenshot)
-    localStorage.setItem("screenshot",screenshot)
+    const GetImage = () =>{
+        takeScreenshot(ref.current)}
+        console.log(screenshot)
+        localStorage.setItem("screenshot",screenshot)
 
-    // neu hinzugefügt, da jetzt nur no grüner SUBMIT button benutzt
+
+
+
+    // localStorage.setItem("screenshot",screenshot)
+
+    // neu hinzugefügt, da jetzt nur noch grüner SUBMIT button benutzt wird
     const putscreenshot = async () => {
 
         // TODO screenshot function too slow, is null
@@ -396,15 +403,15 @@ export const SetTemplate = () => {
         //     console.log("REQUEST BODY: ", localStorage.getItem("screenshot"));
         //
         //
-        //    // await api.put("/screenshot/" + localStorage.getItem("currentUsername"), requestBody);
+        //    await api.put("/screenshot/" + localStorage.getItem("currentUsername"), requestBody);
         //
-        //     //console.log("SCREENIE??", localStorage.getItem("screenshot"));
+        //     //
         //
         // } catch (error) {
         //     alert(`Something went wrong while uploading the screenshot URL \n${handleError(error)}`);
         // }
 
-        // change to next screen
+        /** change to next screen*/
         history.push(`/GuessingScreen`)
     }
 
@@ -430,7 +437,8 @@ export const SetTemplate = () => {
                                 <Button onClick={() => {
                                     removeSelected();
                                     GetImage();
-                                    putscreenshot();
+                                    setTimeout(function(){ putscreenshot(); }, 200);
+
                                 }}>Submit</Button>
                             </ButtonContainer>
                         </div>
