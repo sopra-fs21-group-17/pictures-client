@@ -18,6 +18,7 @@ import { useScreenshot } from 'use-react-screenshot'
 import img from "./wood_texture_background.jpg"
 import { api, handleError } from "../../helpers/api";
 import PicturesModel from "../shared/models/PicturesModel";
+import {CustomDragLayer} from "./Items/CustomDragLayer";
 
 const TopContainer = styled.div`
   margin-top: 2em;
@@ -112,6 +113,7 @@ const BoardContainer = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
+  position: relative;
   background: #c4c4c4;
   justify-content: center;
   align-items: center;
@@ -425,6 +427,7 @@ export const SetTemplate = () => {
                             <BorderContainer ref={ref}>
                                 <BoardContainer>
                                     {selectBoard()}
+                                    <CustomDragLayer/>
                                 </BoardContainer>
                             </BorderContainer>
                         </div>

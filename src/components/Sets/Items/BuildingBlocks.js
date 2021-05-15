@@ -143,7 +143,7 @@ export const Bridge = styled.div`
 
 export const Stone =styled.div`
     position: absolute;
-    transform: rotate(30deg);
+    //transform: rotate(30deg);
     justifyContent: center;
     align-items: center;
     width: 5vw;
@@ -161,7 +161,7 @@ export  const Stick =styled.div`
     min-height: 50px;
     width: 1.3vw;
     height: 9vw;
-    transform: rotate(30deg);
+    //transform: rotate(30deg);
     border: 2px solid black;
     cursor: move;
     display: flex;

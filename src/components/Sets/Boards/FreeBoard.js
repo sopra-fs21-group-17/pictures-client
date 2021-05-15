@@ -30,7 +30,7 @@ export const FreeBoard = ({ itemlist }) => {
             },
         }), [moveItem]);
 
-    const getLength = Math.round(window.innerHeight / 100)*51.5
+    const getLength = Math.round(window.innerHeight / 100)*52
 
         return (
             <BoardContainer
