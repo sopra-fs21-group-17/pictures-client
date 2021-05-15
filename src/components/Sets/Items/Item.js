@@ -161,6 +161,13 @@ export const Item = ({_id, location, left, top, color, amount, hideSourceOnDrag,
                  <Rope/>
         )
     }
+    else if (style === 'blabla') {
+        return (
+            <canvas className="canvas">
+                {/*<Rope/>*/}
+            </canvas>
+        )
+    }
     else {
         return (
             <ItemContainer>

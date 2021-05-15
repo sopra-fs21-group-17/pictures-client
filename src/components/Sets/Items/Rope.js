@@ -1,6 +1,5 @@
 export const Rope = () => {
 
-    //change these values to change the behaviour of the rope
     let GRAVITY = 0.0;
     let BOUNCE = 0.9;
     let FRICTION = 0.5;
@@ -13,8 +12,6 @@ export const Rope = () => {
 
     let oldpoint = null;
 
-    //creating all the points of the rope and setting their initial position
-    //changing the max value of i in the for loop changes the length of the rope
     for (let i = 0; i < 70; i++) {
         let point = {
             x: 100 + 10 * i,
@@ -40,7 +37,6 @@ export const Rope = () => {
 
     canvas.addEventListener('mousemove', function (evt) {
 
-        //gets the mouse position
         function getMousePos(canvas, evt) {
             let rect = canvas.getBoundingClientRect();
             return {
@@ -49,10 +45,7 @@ export const Rope = () => {
             };
         }
 
-        //sets the mouse position
         mousePos = getMousePos(canvas, evt);
-
-        //moves the position of the point selected when mousecontrol is true
         if (mouseControl) {
             point.x = mousePos.x;
             point.y = mousePos.y;
@@ -60,32 +53,20 @@ export const Rope = () => {
     });
 
     canvas.addEventListener('click', function (evt) {
-        if(mouseControl){
-            mouseControl = !mouseControl;
+        mouseControl = !mouseControl;
+        if(distance(points[0], mousePos) < distance(points[points.length-1], mousePos)){
+            point = points[0];
         } else {
-            //selects the point closest to the mouse position
-            let shortestDistance = 1000;
-            for(let i = 0; i < points.length; i++){
-                if(distance(points[i], mousePos) < shortestDistance){
-                    shortestDistance = distance(points[i], mousePos);
-                    point = points[i];
-                }
-            }
-            //enables mousecontrol only if the mouse position is close enough to the point
-            if(shortestDistance < 20){
-                mouseControl = !mouseControl;
-            }
+            point = points[points.length-1]
         }
     });
 
-    //calculates the distance between two points
     function distance(a, b) {
         let dx = a.x - b.x;
         let dy = a.y - b.y;
         return Math.sqrt(dx * dx + dy * dy);
     }
 
-    //updates the position of the lines when the rope is dragged
     function updateSticks() {
         for (let i = 0; i < sticks.length; i++) {
             let s = sticks[i],
@@ -115,7 +96,6 @@ export const Rope = () => {
         }
     }
 
-    //updates the positions of the points when the rope is draqgged
     function movePoint(point) {
         let vx = point.x - point.oldx;
         let vy = point.y - point.oldy;
@@ -126,12 +106,10 @@ export const Rope = () => {
         point.y = point.oldy + vy * FRICTION;
     }
 
-    //adds gravitational force
     function gravitatePoint(point) {
         point.y = point.y + GRAVITY;
     }
 
-    //moves all nonfixed points when the rope is dragged
     function animatePoints(points) {
         for (let i = 0; i < points.length; i++) {
             let point = points[i];
@@ -143,7 +121,6 @@ export const Rope = () => {
         }
     }
 
-    //moves points when rope is dragged
     function correctPoint(point) {
         let diffX = (point.x - point.oldx);
         let diffY = (point.y - point.oldy);
@@ -166,28 +143,26 @@ export const Rope = () => {
         }
     }
 
-    //draws the rope on the canvas
     function drawPoints(context, points) {
         let i;
         context.beginPath();
 
         for (i = 1; i < points.length; i++) {
             context.beginPath();
-            context.strokeStyle = "#000000";
+            context.strokeStyle = "#00000";
             context.moveTo(points[i - 1].x, points[i - 1].y);
             context.lineWidth = 5;
             context.lineTo(points[i].x, points[i].y);
             context.stroke();
         }
-     for (i=0; i<points.length; i++) {
-       context.fillStyle="#898989";
-       context.beginPath();
-       context.arc(points[i].x,points[i].y, 2, 0, Math.PI*2);
-       context.fill();
-     }
+//      for (i=0; i<points.length; i++) {
+//        context.fillStyle="#ff0000";
+//        context.beginPath();
+//        context.arc(points[i].x,points[i].y, 2, 0, Math.PI*2);
+//        context.fill();
+//      }
     }
 
-    //draws the rope on the canvas
     function update() {
         animatePoints(points);
         for (let i = 0; i < 50; i++) {
