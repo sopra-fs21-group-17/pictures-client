@@ -13,10 +13,10 @@ const Container = styled(BaseContainer)`
   text-align: center;
 `;
 
-const Countdown = styled.div`
+const Countdown = styled.h1`
   margin-top = 10px;
   margin-bottom = 20px;
-  
+  font-size = 100px;
 `;
 
 class BuildScreen extends React.Component {
@@ -92,8 +92,7 @@ class BuildScreen extends React.Component {
         return (
             <Container>
                 {this.state.countMin <= 0 && (this.state.count + buildRoom.timeDifference) <= 0 ? (this.userFinishedBuilding()):(
-                    <Countdown style={{fontSize: "50px"}}>Time left:<br></br>
-                    <span style={{fontWeight: "bold", fontFamily: "\"Open Sans\", sans-serif;", color: "white"}}>{this.state.countMin}:{Math.round(this.state.count + buildRoom.timeDifference)}</span></Countdown>)}
+                <Countdown>Countdown: {this.state.countMin}:{Math.round(this.state.count + buildRoom.timeDifference)}</Countdown>)}
 
                 <div>
                     <SetTemplate pictureURL={localStorage.getItem("myPicURL")}/>
