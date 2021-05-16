@@ -149,7 +149,6 @@ class GuessingScreen extends React.Component {
 
     // get corrected guesses and points
     async showScoreScreen() {
-        //localStorage.setItem("lobbyId", "test"); // für testzwecke
         try{
             const response = await api.get('/score/'+localStorage.getItem("lobbyId"));
 
