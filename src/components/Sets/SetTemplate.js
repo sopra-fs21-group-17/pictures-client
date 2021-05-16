@@ -140,6 +140,16 @@ const ItemContainer = styled.div`
   margin-right: 1vw;
   background: inherit;
 `;
+const ItemRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;  
+  height: 100%;
+  width: max;
+  
+  
+`;
+
 
 export const ItemContext = createContext({
     moveItem: null,
@@ -156,6 +166,9 @@ export const SetTemplate = () => {
     const [pictureURL, setPictureURL ]= useState(
         ""
     )
+    const [currentRightIndex, setCurrentRightIndex] = useState(5)
+    const [currentLeftIndex, setCurrentLeftIndex] = useState(0)
+
 
     const showArrows = () => {
         if((localStorage.getItem("mySet")) === "STICKS" || (localStorage.getItem("mySet")) === "BLOCKS"){
@@ -171,6 +184,25 @@ export const SetTemplate = () => {
                 )
         }
     }
+    // const showScrollBar = () =>{
+    //     if((localStorage.getItem("mySet")) === "ICONS"){
+    //         return(
+    //
+    //             <Inventory>
+    //                 <ButtonContainer>
+    //                     <button onClick={() => scroll(-20)}>▶</button>
+    //                     <button onClick={() => scroll(20)}>◀</button>
+    //                 </ButtonContainer>
+    //             </Inventory>
+    //
+    //
+    //             //     </Col>
+    //             // </Row>
+    //
+    //         )
+    //     }
+    // }
+
 
     const selectBoard = () => {
         if((localStorage.getItem("mySet")) === "CUBES"){
@@ -229,6 +261,17 @@ export const SetTemplate = () => {
         }
     }, [])
 
+
+    function toLeft(){
+        setCurrentLeftIndex(currentLeftIndex -1);
+        setCurrentRightIndex(currentRightIndex - 1)
+    }
+    function toRight(){
+        setCurrentLeftIndex(currentLeftIndex +1);
+        setCurrentRightIndex(currentRightIndex + 1)
+    }
+
+
     const selectItems = () => {
         if((localStorage.getItem("mySet")) === "CUBES"){
             return (
@@ -251,6 +294,68 @@ export const SetTemplate = () => {
             );
         } else if ((localStorage.getItem("mySet")) === "STRINGS") {
             return null
+        }else if ((localStorage.getItem("mySet") === "ICONS")){
+        return (
+            <Inventory>
+
+                <Button
+
+                    disabled={currentLeftIndex <= 0}
+                    hidden = {currentLeftIndex === 0 || itemList.filter((task, i) => task.location === 'inventory')
+                        .filter((task, i) => task.amount > 0).length <= 6}
+                    style={{position: "absolute", left: "3.5%"}}
+                    onClick={() =>{
+                        if (currentLeftIndex <= 0){setCurrentLeftIndex(0)
+                        }else{
+                            setCurrentLeftIndex(currentLeftIndex  - 1);
+                            setCurrentRightIndex(currentRightIndex - 1)}}}
+
+                >
+                    ◀
+                </Button>
+
+                {itemList
+                    .filter((task, i) => task.location === 'inventory')
+                    .filter((task, i) => task.amount > 0)
+                    .slice(currentLeftIndex, currentRightIndex)
+                    .map((task, i) => (
+
+                        <ItemContainer>
+                            <Item
+                                key={task._id.toString()}
+                                _id={task._id}
+                                location={task.location}
+                                color={task.color}
+                                amount={task.amount}
+                                style={task.style}
+                                background={task.background}
+                            />
+                        </ItemContainer>
+                    ))}
+
+                <Button
+
+                    disabled={(currentRightIndex) >= itemList
+                        .filter((task, i) => task.location === 'inventory')
+                        .filter((task, i) => task.amount > 0).length}
+                    display ={(itemList
+                        .filter((task, i) => task.location === 'inventory')
+                        .filter((task, i) => task.amount > 0).length <= 6)}
+                    onClick={() => {if (currentRightIndex >= itemList.filter((task, i) => task.location === 'inventory')
+                        .filter((task, i) => task.amount > 0).length){setCurrentRightIndex( itemList.filter((task, i) => task.location === 'inventory')
+                        .filter((task, i) => task.amount > 0).length)}else{
+                        setCurrentLeftIndex(currentLeftIndex  + 1);
+                        setCurrentRightIndex(currentRightIndex + 1)}}
+                    }
+                    style={{position: "absolute", left: "90%"}}
+                >
+                    ▶
+                </Button>
+
+            </Inventory>
+
+        )
+
         }else {
             return (
                 <Inventory>
