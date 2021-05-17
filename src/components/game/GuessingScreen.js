@@ -110,6 +110,7 @@ class GuessingScreen extends React.Component {
 
             // Get the returned screenshots and update the state.
             this.setState({ screenshots: response.data });
+            localStorage.setItem( "screenshots TEST:", response.data );
         } catch (error) {
             alert(`Something went wrong while fetching the users: \n${handleError(error)}`);
         }
@@ -170,11 +171,22 @@ class GuessingScreen extends React.Component {
         let result = [];
         const parsedPlayers = JSON.parse(localStorage.getItem("players"));
 
-        for(const [key, val] of Object.entries(parsedPlayers)){
-            if(val.username !== localStorage.getItem('currentUsername')){
-                result.push([val.username, val.assignedCoordinates]);
-                // result["username"] = val.username;
-                // result["assignedCoordinates"] = val.assignedCoordinates;
+        // for(const [key, val] of Object.entries(parsedPlayers)){
+        //     if(val.username !== localStorage.getItem('currentUsername')){
+        //         //result.push([val.username, val.assignedCoordinates]);
+        //         result.push([val.username, val.assignedCoordinates]);
+        //         // result["username"] = val.username;
+        //         // result["assignedCoordinates"] = val.assignedCoordinates;
+        //     }
+        // }
+        // remove screenshot of current user
+        for(let e in this.state.screenshots){
+            // response_array[i][0] = username
+            if(this.state.screenshots[e][0] !== this.state.username) {
+                // array[["username","URL"], ["username2","URL2"], ...]
+                result.push([this.state.screenshots[e][0], this.state.screenshots[e][1]]);
+                // TODO for dev+testing also show assigned coordinates
+                result.push([this.state.screenshots[e][0], this.state.screenshots[e][1]]);
             }
         }
 
@@ -187,7 +199,9 @@ class GuessingScreen extends React.Component {
                 return(
                     <StyledTr>
                         {/*<StyledTd width={"25%"}><StyledImg src={tuple["1"]}/></StyledTd>*/}
-                        <StyledTd width={"25%"}>{this.state.coordinateNames[tuple[1]]}</StyledTd>
+                        {/*<StyledTd width={"25%"}>{this.state.coordinateNames[tuple[1]]}</StyledTd>*/}
+                        <StyledTd width={"25%"}>{tuple[0]}</StyledTd>
+                        <StyledTd width={"25%"}>{<img src={tuple[1]}/>}</StyledTd>
                         <StyledTd width={"25%"}>
                             <InputField
                                 placeholder="A1"

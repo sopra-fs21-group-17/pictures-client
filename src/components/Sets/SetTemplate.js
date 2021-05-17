@@ -327,29 +327,34 @@ export const SetTemplate = () => {
 
     const ref = createRef()
     const [screenshot, takeScreenshot] = useScreenshot()
-    const   GetImage = () => takeScreenshot(ref.current)
+    const GetImage = () =>{
+        takeScreenshot(ref.current)}
+    console.log(screenshot)
+    localStorage.setItem("screenshot",screenshot)
+
+
+
     console.log(screenshot)
     localStorage.setItem("screenshot",screenshot)
 
     // neu hinzugefügt, da jetzt nur no grüner SUBMIT button benutzt
     const putscreenshot = async () => {
 
-        // TODO screenshot function too slow, is null
-        // try {
-        //     const requestBody = JSON.stringify({
-        //         URL: localStorage.getItem("screenshot")
-        //     })
-        //
-        //     console.log("REQUEST BODY: ", localStorage.getItem("screenshot"));
-        //
-        //
-        //    // await api.put("/screenshot/" + localStorage.getItem("currentUsername"), requestBody);
-        //
-        //     //console.log("SCREENIE??", localStorage.getItem("screenshot"));
-        //
-        // } catch (error) {
-        //     alert(`Something went wrong while uploading the screenshot URL \n${handleError(error)}`);
-        // }
+        try {
+            const requestBody = JSON.stringify(
+                //URL: localStorage.getItem("screenshot")
+                localStorage.getItem("screenshot")
+            )
+
+            //console.log("REQUEST BODY: ", localStorage.getItem("screenshot"));
+
+            await api.put("/screenshot/" + localStorage.getItem("currentUsername"), requestBody);
+
+            //console.log("SCREENIE??", localStorage.getItem("screenshot"));
+
+        } catch (error) {
+            alert(`Something went wrong while uploading the screenshot URL \n${handleError(error)}`);
+        }
 
         // change to next screen
         history.push(`/GuessingScreen`)
@@ -375,7 +380,7 @@ export const SetTemplate = () => {
                             <ButtonContainer>
                                 <Button onClick={() => {
                                     GetImage();
-                                    putscreenshot();
+                                    setTimeout(function(){ putscreenshot(); }, 200);
                                 }}>Submit</Button>
                             </ButtonContainer>
                         </div>
