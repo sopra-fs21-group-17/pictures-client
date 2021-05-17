@@ -42,7 +42,7 @@ class ScoreScreen extends React.Component {
 
     async componentWillMount() {
         try {
-            const response = await api.get("/rounds/" + localStorage.getItem("lobbyId"))
+            const response = await api.get("/rounds/" + localStorage.getItem("currentLobbyId"))
             this.setState({rounds: response.data})
         } catch (error) {
             alert(`Something went wrong getting the current round: \n${handleError(error)}`);
@@ -51,7 +51,7 @@ class ScoreScreen extends React.Component {
 
     async nextRound() {
         try {
-            await api.put(`/board/` + localStorage.getItem("lobbyId"))
+            await api.put(`/board/` + localStorage.getItem("currentLobbyId"))
             this.props.history.push(`/board`);
         } catch (error) {
             alert(`Something went wrong during the login: \n${handleError(error)}`);

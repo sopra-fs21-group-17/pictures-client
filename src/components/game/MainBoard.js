@@ -154,7 +154,7 @@ class MainBoard extends React.Component{
 
     async initGame(){
         try {
-            const response = await api.get("/board/"+localStorage.getItem("lobbyId"));
+            const response = await api.get("/board/"+localStorage.getItem("currentLobbyId"));
             this.setState({players: response.data});
             this.setState({requested: true});
 

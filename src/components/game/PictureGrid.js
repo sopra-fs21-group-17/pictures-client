@@ -81,7 +81,7 @@ class PictureGrid extends React.Component{
 
     async getPictures(){
         try {
-            const response = await api.get("/pictures/"+localStorage.getItem("lobbyId"));
+            const response = await api.get("/pictures/"+localStorage.getItem("currentLobbyId"));
             this.setState({pictureURLs: response.data});
 
         }

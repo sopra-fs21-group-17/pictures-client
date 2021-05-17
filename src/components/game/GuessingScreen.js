@@ -95,7 +95,7 @@ class GuessingScreen extends React.Component {
     // GET REQUEST "/screenshots"
     async getScreenshots(){
         try {
-            const response = await api.get('/screenshots/'+localStorage.getItem("lobbyId"));
+            const response = await api.get('/screenshots/'+localStorage.getItem("currentLobbyId"));
             await new Promise(resolve => setTimeout(resolve, 1000));
 
             // remove screenshot of current user
@@ -149,7 +149,7 @@ class GuessingScreen extends React.Component {
     async showScoreScreen() {
         //localStorage.setItem("lobbyId", "test"); // für testzwecke
         try{
-            const response = await api.get('/score/'+localStorage.getItem("lobbyId"));
+            const response = await api.get('/score/'+localStorage.getItem("currentLobbyId"));
 
             // punkte auslesen
             let thePoints = {};

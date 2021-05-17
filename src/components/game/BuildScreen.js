@@ -63,30 +63,20 @@ class BuildScreen extends React.Component {
         const buildRoom = new BuildRoom(this.state.responseRoom)
         const difference = Math.round(buildRoom.timeDifference)
          if(difference< 0.00 && difference>=-59.00){
-             this.setState({
-                 count: 59,
-                 countMin: 4
-             })
+             this.state.count = 59
+             this.state.countMin = 4
          } else if (difference<-59.00 && difference>=-119.00){
-             this.setState({
-                 count: 119.00,
-                 countMin: 3
-             })
+             this.state.count = 119.00
+             this.state.countMin = 3
          }else if (difference<-119.00 && difference>=-179.00){
-             this.setState({
-                 count: 179.00,
-                 countMin: 2
-             })
+             this.state.count = 179.00
+             this.state.countMin = 2
          }else if (difference< -179.00 && difference>=-239.00){
-             this.setState({
-                 count: 239.00,
-                 countMin: 1
-             })
+             this.state.count = 239.00
+             this.state.countMin = 1
          }else if (difference< -239.00){
-             this.setState({
-                 count: 299.00,
-                 countMin: 0
-             })
+             this.state.count = 299.00
+             this.state.countMin = 0
          }
 
         return (
