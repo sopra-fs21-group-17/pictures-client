@@ -1,15 +1,18 @@
 import {useDragLayer} from "react-dnd";
 import {ItemDragPreview} from "./ItemDragPreview";
 import {ItemTypes} from "../utils/Items";
+import {useEffect, useState} from "react";
 
 const layerStyles = {
-    position: "absolute",
+    position: "fixed",
     pointerEvents: "none",
     zIndex: 100,
     left: 0,
     top: 0,
     width: "100%",
     height: "100%",
+    //backgroundColor: "red"
+    //transform: "translate(-125px, 100px)"
 };
 
 function getItemStyles(initialOffset, currentOffset, clientOffset, initialClientOffset) {
@@ -19,11 +22,10 @@ function getItemStyles(initialOffset, currentOffset, clientOffset, initialClient
         };
     }
     let { x, y } = currentOffset;
-    const transform = `translate(${x-(window.innerWidth/2.8)}px, ${y-(window.innerHeight/100)}px)`;
+    const transform = `translate(${x-(window.outerWidth/20)}px, ${y+(window.outerHeight/20)}px)`;
     return {
         transform,
         WebkitTransform: transform,
-
     };
 }
 

@@ -211,7 +211,7 @@ export const SetTemplate = () => {
             );
         } else {
             return (
-                <FreeBoard itemlist={itemList}></FreeBoard>
+                <FreeBoard itemlist={itemList} ></FreeBoard>
             );
         }
     };
@@ -401,7 +401,7 @@ export const SetTemplate = () => {
         const lastSelectedItem = itemList.filter((item) => item.selected === true);
 
         const newItem = {
-            _id: id+10*id*updatedItem[0].amount, //TODO fix random id (issue with sticks & stones when adding two returning first and adding another)
+            _id: id+10*id*updatedItem[0].amount, //TODO fix random id (issue with items when adding two returning first and adding another)
             location: 'board',
             top: 150,
             left: 150,
@@ -423,6 +423,18 @@ export const SetTemplate = () => {
         if(updatedItem[0].location !== 'inventory'){
             updatedItem[0].left = left;
             updatedItem[0].top = top;
+            // if(left < 0){
+            //     updatedItem[0].left = 0;
+            // }
+            // if(left > ((window.innerHeight/100)*50)){
+            //     updatedItem[0].left = ((window.innerHeight/100)*50);
+            // }
+            // if(top < 0){
+            //     updatedItem[0].top = 0;
+            // }
+            // if(top > ((window.innerHeight/100)*50)){
+            //     updatedItem[0].top = ((window.innerHeight/100)*50);
+            // }
             updatedItem[0].selected = true;
             setItemList(itemList.filter((item) => item._id !== id).concat(updatedItem[0]));
         } else {
@@ -530,7 +542,7 @@ export const SetTemplate = () => {
                     <TopContainer>
                         <div  >
                             <BorderContainer ref={ref}>
-                                <BoardContainer>
+                                <BoardContainer >
                                     {selectBoard()}
                                     <CustomDragLayer/>
                                 </BoardContainer>

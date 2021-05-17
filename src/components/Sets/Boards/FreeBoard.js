@@ -19,12 +19,19 @@ export const FreeBoard = ({ itemlist }) => {
 
     const { moveItem } = useContext(ItemContext)
 
+
+
+
+
     const [ , drop] = useDrop(() => ({
             accept: ItemTypes.ITEM,
             drop(item, monitor) {
                 const delta = monitor.getDifferenceFromInitialOffset();
-                const left = Math.round(item.left + delta.x);
-                const top = Math.round(item.top + delta.y);
+                let left = Math.round(item.left + delta.x);
+                let top = Math.round(item.top + delta.y);
+                if(!(left > 0)){
+
+                }
                 moveItem(item._id, left, top,);
                 return undefined;
             },

@@ -20,7 +20,6 @@ import { Rope } from "./Rope"
 import {getEmptyImage} from "react-dnd-html5-backend";
 
 const ItemContainer = styled.div`
-
   background: inherit;
   display: flex;
   flex-direction: column;

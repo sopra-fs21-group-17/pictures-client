@@ -5,7 +5,6 @@ export const Rope = () => {
     let BOUNCE = 0.9;
     let FRICTION = 0.5;
     let canvas = document.getElementById("canvas");
-    console.log(canvas);
     let mouseControl = false;
 
     let points = [],
