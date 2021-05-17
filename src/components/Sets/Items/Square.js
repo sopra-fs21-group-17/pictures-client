@@ -29,9 +29,9 @@ const SquareContainer = styled.div`
 export const Square = props => {
 
     const [{isDragging}, drag] = useDrag({
-        type: ItemTypes.ITEM,
+        type: ItemTypes.SQUARE,
         item: {
-        type: ItemTypes.ITEM,
+        type: ItemTypes.SQUARE,
         _id: props._id,
         location: props.location,
         amount: props.amount},

@@ -1,8 +1,7 @@
 import styled from "styled-components";
-import {useDrag} from "react-dnd";
-import {ItemTypes} from '../utils/Items';
+import { useDrag } from "react-dnd";
+import { ItemTypes } from '../utils/Items';
 import {
-    Bridge,
     Bridgecontainer,
     BridgeRectangle,
     Circle,
@@ -12,12 +11,15 @@ import {
     Stick,
     Stone,
     ThinRectangle,
-    Triangle
+    Triangle,
+    Trianglecontainer
 } from "./BuildingBlocks";
-import React from 'react';
+import React, {useEffect} from 'react';
+import { Card, Icon } from "./Cards";
+import { Rope } from "./Rope"
+import {getEmptyImage} from "react-dnd-html5-backend";
 
 const ItemContainer = styled.div`
-  
   background: inherit;
   display: flex;
   flex-direction: column;
@@ -42,15 +44,32 @@ const stickstyle = {
     flexDirection: 'column',
     justifyContent: 'center',
 }
-export const Item = ({_id, location, left, top, color, amount, hideSourceOnDrag, style}) => {
 
-    const [{isDragging}, drag] = useDrag(() => ({
+export const Item = ({_id, location, left, top, color, amount, hideSourceOnDrag, style, selected, rotation, background: icon}) => {
+
+    //remove left top
+    function getStyles(left, top, isDragging) {
+        const transform = `translate3d(${left}px, ${top}px, 0`;
+        return {
+            position: 'absolute',
+            transform,
+            WebkitTransform: transform,
+            opacity: isDragging ? 0 : 1,
+            height: isDragging ? 0 : '',
+        };
+    }
+
+    const [{isDragging}, drag, preview] = useDrag(() => ({
         type: ItemTypes.ITEM,
-        item: {_id, location, left, top, color, amount, style},
+        item: {_id, location, left, top, color, amount, style, selected, rotation, background: icon},
         collect: (monitor) => ({
             isDragging: monitor.isDragging(),
         }),
-    }), [_id, location, left, top, color, amount, style]);
+    }), [_id, location, left, top, color, amount, style, selected, rotation, icon]);
+
+    useEffect(() => {
+        preview(getEmptyImage());
+    }, []);
 
     function showAmount() {
         if (location === 'inventory') {
@@ -59,13 +78,18 @@ export const Item = ({_id, location, left, top, color, amount, hideSourceOnDrag,
     }
 
     if (isDragging && hideSourceOnDrag) {
-        return <div ref={drag}/>;
+        return (
+            <div ref={drag} style={getStyles(left, top, isDragging)} role="DraggableItem"> //remove left top
+                {/*<Item style={style}/>*/}
+            </div>
+
+        );
     }
 
     if (style === 'stick') {
         return (
             <ItemContainer>
-                <Stick ref={drag} style={{location, left, top, amount}} role="Box">
+                <Stick ref={drag} style={selected === true ? {border: '3px solid limegreen', transform: 'rotate('+rotation+'deg)', location, left, top, amount} : {transform: 'rotate('+rotation+'deg)', location, left, top, amount}} role={preview ? "ItemPreview" : "Item"}>
                     {showAmount()}
                 </Stick>
             </ItemContainer>
@@ -75,7 +99,7 @@ export const Item = ({_id, location, left, top, color, amount, hideSourceOnDrag,
 
         return (
             <ItemContainer>
-                <Stone ref={drag} style={{location, left, top, amount, style}} role="Box">
+                <Stone ref={drag} style={selected === true ? {border: '3px solid limegreen', transform: 'rotate('+rotation+'deg)', location, left, top, amount} : {transform: 'rotate('+rotation+'deg)', location, left, top, amount}} role={preview ? "ItemPreview" : "Item"}>
                     {showAmount()}
                 </Stone>
             </ItemContainer>
@@ -84,8 +108,16 @@ export const Item = ({_id, location, left, top, color, amount, hideSourceOnDrag,
     } else if (style === 'triangle') {
         return (
             <ItemContainer>
-                <Triangle ref={drag} style={{location, left, top, amount}} role="Box">
-                </Triangle>
+
+                <Trianglecontainer ref={drag} style={selected === true ? {border: '3px solid limegreen', transform: 'rotate('+rotation+'deg)',
+                    location, left, top, amount} : {transform: 'rotate('+rotation+'deg)', location, left, top, amount}} role="Box">
+                    <Triangle/>
+                </Trianglecontainer>
+         {/*<Triangle ref={drag} style={{location, left, top, amount}} role="Box">*/}
+         {/*</Triangle>*/}
+
+
+
             </ItemContainer>
 
         );
@@ -93,7 +125,7 @@ export const Item = ({_id, location, left, top, color, amount, hideSourceOnDrag,
         return (
             <ItemContainer>
 
-                <Dice ref={drag} style={{location, left, top, amount}} role="Box">
+                <Dice ref={drag} style={selected === true ? {border: '3px solid limegreen', transform: 'rotate('+rotation+'deg)', location, left, top, amount} : {transform: 'rotate('+rotation+'deg)', location, left, top, amount}}  role="Box">
                 </Dice>
 
 
@@ -103,7 +135,7 @@ export const Item = ({_id, location, left, top, color, amount, hideSourceOnDrag,
         return (
             <ItemContainer>
 
-                <Circle ref={drag} style={{location, left, top, amount}} role="Box">
+                <Circle ref={drag} style={selected === true ? {border: '3px solid limegreen', transform: 'rotate('+rotation+'deg)', location, left, top, amount} : {transform: 'rotate('+rotation+'deg)', location, left, top, amount}} role="Box">
                 </Circle>
             </ItemContainer>
 
@@ -111,7 +143,7 @@ export const Item = ({_id, location, left, top, color, amount, hideSourceOnDrag,
     } else if (style === 'rectangle') {
         return (
             <ItemContainer>
-                <Rectangle ref={drag} style={{location, left, top, amount}} role="Box">
+                <Rectangle ref={drag} style={selected === true ? {border: '3px solid limegreen', transform: 'rotate('+rotation+'deg)', location, left, top, amount} : {transform: 'rotate('+rotation+'deg)', location, left, top, amount}} role="Box">
                 </Rectangle>
             </ItemContainer>
         );
@@ -119,24 +151,40 @@ export const Item = ({_id, location, left, top, color, amount, hideSourceOnDrag,
     if (style === 'thinrectangle') {
         return (
             <ItemContainer>
-                <ThinRectangle ref={drag} style={{location, left, top, amount}} role="Box">
+                <ThinRectangle ref={drag} style={selected === true ? {border: '3px solid limegreen', transform: 'rotate('+rotation+'deg)', location, left, top, amount} : {transform: 'rotate('+rotation+'deg)', location, left, top, amount}} role="Box">
                 </ThinRectangle>
             </ItemContainer>
         );
     } else if (style === 'bridge') {
         return (
             <ItemContainer>
-                <Bridgecontainer ref={drag} style={{location, left, top, amount}} role="Box">
+                <Bridgecontainer ref={drag} style={selected === true ? {border: '3px solid limegreen', transform: 'rotate('+rotation+'deg)', location, left, top, amount} : {transform: 'rotate('+rotation+'deg)', location, left, top, amount}} role="Box">
                     <Halfcircle/>
                     <BridgeRectangle/>
                 </Bridgecontainer>
             </ItemContainer>
 
         );
-    } else {
+    }
+    else if (style === 'card') {
         return (
             <ItemContainer>
-                <div ref={drag} style={{...stickstyle, location, left, top, amount}} role="Box">
+                <Card ref={drag} style={{location, left, top, amount}} role="Box">
+                    <Icon style={{backgroundImage: icon}}> </Icon>
+                </Card>
+            </ItemContainer>
+
+        );
+    }
+    else if (style === 'longString') {
+        return (
+                 <Rope/>
+        )
+    }
+    else {
+        return (
+            <ItemContainer>
+                <div ref={drag} style={{...stickstyle, transform: 'rotate('+rotation+'deg)',  location, left, top, amount}} role="Box">
                     {showAmount()}
                 </div>
             </ItemContainer>

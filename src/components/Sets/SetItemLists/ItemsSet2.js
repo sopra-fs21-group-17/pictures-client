@@ -8,6 +8,8 @@ export const ItemsSet2 = [
         amount: 1,
         hideSourceOnDrag: false,
         style: 'triangle',
+        selected: false,
+        rotation: '0',
     },
     {
         _id: 2,

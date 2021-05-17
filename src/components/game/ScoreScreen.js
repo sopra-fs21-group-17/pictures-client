@@ -101,7 +101,7 @@ class ScoreScreen extends React.Component {
         for (let i = 0; i < correctedGuesses.length; i++) {
             for (let j = 0; j < 1; j++) { // first letters is y/n for correct/incorrect guess
                 //tempCoordinates += correctedGuesses.charAt(i+j);
-                if (correctedGuesses.charAt(i + j) == "y") {
+                if(correctedGuesses.charAt(i+j) === "y"){
                     tempCoordinates = "✔";
                 } else {
                     tempCoordinates = "✘";

@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import { Redirect, Route } from "react-router-dom";
-import Game from "../../game/Game";
 import Home from "../../home/Home";
 
 const Container = styled.div`

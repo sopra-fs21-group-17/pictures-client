@@ -6,10 +6,9 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import styled from "styled-components";
-import {BaseContainer} from "../../helpers/layout";
-import PictureElement from "./PictureElement";
-import {api, handleError} from "../../helpers/api";
-import {Button} from "../../views/design/Button";
+import { BaseContainer } from "../../helpers/layout";
+import { api, handleError } from "../../helpers/api";
+import { Button } from "../../views/design/Button";
 import PictureGrid from "./PictureGrid"
 
 const Container = styled(BaseContainer)`
@@ -208,7 +207,13 @@ class MainBoard extends React.Component{
         </Container>);
     }
 
-    showBuildScreen() {
+    async showBuildScreen() {
+        const requestBody = JSON.stringify({
+            roomId: localStorage.getItem('currentRoomNumber'),
+        });
+
+        const response = await api.post('/buildRooms', requestBody)
+
         this.props.history.push(`/buildScreen`);
     }
 }

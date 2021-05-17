@@ -6,8 +6,6 @@ import Player from '../../views/Player';
 import { Spinner } from '../../views/design/Spinner';
 import { Button } from '../../views/design/Button';
 import { withRouter } from 'react-router-dom';
-import Header from "../../views/Header";
-import Lobby from "../shared/models/LobbyModel";
 import LobbyModel from "../shared/models/LobbyModel";
 
 const Container = styled(BaseContainer)`
@@ -62,6 +60,19 @@ class Home extends React.Component {
     logout() {
         localStorage.removeItem('token')
         localStorage.removeItem('currentUsername');
+        localStorage.removeItem('id');
+        localStorage.removeItem('currentRoomNumber');
+        localStorage.removeItem('currentLobbyId');
+        localStorage.removeItem('lobbyId');
+        localStorage.removeItem('mySet');
+        localStorage.removeItem('players');
+        localStorage.removeItem('screenshot');
+        localStorage.removeItem('correctedGuesses')
+        localStorage.removeItem('thePoints')
+        localStorage.removeItem('screenshot')
+
+
+
         this.props.history.push('/login');
     }
     randomRoomNumber(length){
@@ -92,7 +103,7 @@ class Home extends React.Component {
 
             //Store the lobbyId into the local storage.
             localStorage.setItem('currentLobbyId', lobby.lobbyId);
-            localStorage.setItem('lobbyId', lobby.lobbyId);
+
 
             this.props.history.push('/lobbies/' + lobby.lobbyId);
        // }
@@ -112,12 +123,11 @@ class Home extends React.Component {
             localStorage.setItem('currentLobbyId', this.state.lobbyIdInput)
 
             //adds the currentUser to the lobby
-            const checkLobby = await api.put('/lobbies/' + localStorage.getItem('currentLobbyId') + '/users');
+            await api.put('/lobbies/' + localStorage.getItem('currentLobbyId') + '/users');
 
-            const userResp = await api.put('/lobbies/users/' + localStorage.getItem('currentLobbyId'), userReqBody);
+            await api.put('/lobbies/users/' + localStorage.getItem('currentLobbyId'), userReqBody);
 
 
-            localStorage.setItem('lobbyId', localStorage.getItem('currentLobbyId'));
             localStorage.setItem('currentRoomNumber', localStorage.getItem('currentLobbyId'));
 
             this.props.history.push('/lobbies/' + localStorage.getItem('currentLobbyId'));

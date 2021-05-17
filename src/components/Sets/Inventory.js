@@ -1,9 +1,8 @@
-import { useDrop} from "react-dnd";
+import { useDrop } from "react-dnd";
 import styled from "styled-components";
-import {ItemTypes} from "./utils/Items";
-import React, {useContext} from "react";
-import {ItemContext} from "./SetTemplate";
-import {Bridgecontainer, BridgeRectangle, Halfcircle, Stone} from "./Items/BuildingBlocks";
+import { ItemTypes } from "./utils/Items";
+import React, { useContext } from "react";
+import { ItemContext } from "./SetTemplate";
 
 const InventoryContainer = styled.div`
   display: flex;
@@ -30,7 +29,7 @@ export const Inventory = props => {
     const { markAsInventory } = useContext(ItemContext)
 
     const[{isOver}, drop] = useDrop({
-        accept: ItemTypes.ITEM,
+        accept: [ItemTypes.ITEM, ItemTypes.SQUARE],
         drop: (item, monitor) => markAsInventory(item._id),
         collect: monitor => ({
             isOver: !!monitor.isOver(),

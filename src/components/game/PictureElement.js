@@ -3,6 +3,7 @@ import styled from "styled-components";
 import "./picture.css";
 import {api, handleError} from "../../helpers/api";
 
+
 // add put request for guesses so that it always just updates guesses as long as the same user is chosen
 
 //TODO make state to ensure guessing is only possible in guessing phase

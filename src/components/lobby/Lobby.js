@@ -2,17 +2,14 @@ import React from 'react';
 import styled from 'styled-components';
 import { BaseContainer } from '../../helpers/layout';
 import { api, handleError } from '../../helpers/api';
-import Player from '../../views/Player';
 import { Spinner } from '../../views/design/Spinner';
-import { Button } from '../../views/design/Button';
 import { withRouter } from 'react-router-dom';
-import Registration from "../registration/Registration";
 import LobbyModel from "../shared/models/LobbyModel";
-import User from "../shared/models/User";
 
 const Container = styled(BaseContainer)`
   color: white;
   text-align: center;
+  
 `;
 
 const Players = styled.div`
@@ -95,10 +92,10 @@ const Button1 = styled.button`
   transition: all 0.0s ease;
 `;
 
-const Countdown = styled.h1`
+const Countdown = styled.div`
   margin-top = 10px;
   margin-bottom = 20px;
-  font-size = 100px;
+  font-size = large;
 `;
 
 
@@ -109,7 +106,7 @@ class Lobby extends React.Component {
         this.state = {
             users: null,
             responseLobby: null,
-            count: 40.0,
+            count: 100.0,
         };
     }
 
@@ -164,26 +161,29 @@ class Lobby extends React.Component {
 
 
         return (
-            <Container>
-                <h1>Lobby</h1>
 
-                <h2>Countdown: </h2>
+
+            <Container>
+                <h1 style={{fontSize: "40px", color: "rgba(170, 170, 170, 1)", margin: "5px"}}>LOBBY CODE: </h1>
+                <h2 style={{color: "white", fontWeight:"bold", fontSize: "60px", margin: "5px"}}>{lobby.lobbyId}</h2>
+
+                <h2 style={{fontSize: "35px", color: "rgba(170, 170, 170, 1)", marginTop: "20px"}}>Countdown: </h2>
                 {((this.state.count + lobby.timeDifference) <= 0.0 && lobby.lobbyReady) || lobby.lobbyReady? (
                     this.props.history.push("/board")
                 ):( this.state.count + lobby.timeDifference <= 0.0 ?( this.backToHome()):
-                    (<Countdown style={{color:"black"}}>{parseFloat(this.state.count + lobby.timeDifference).toFixed(0)}</Countdown>))}
+                    (<Countdown style={{position:"absolute", left: "46%", top:"30%", color:"white", fontSize: "100px", fontWeight:"bold"}}>{parseFloat(this.state.count + lobby.timeDifference).toFixed(0)}</Countdown>))}
                 {!this.state.users ? (
                     <Spinner />
                 ) : (
                     <div>
 
-                        <Users style={{position:"absolute", left: "10%", top:"30%" }}>
-                            Players in Lobby:
+                        <Users style={{padding:"10px", background: "rgba(100, 100, 100, 1)",borderRadius: "10%", position:"absolute", left: "10%", top:"30%" }}>
+                            <span style={{fontSize: "23px", fontWeight: "bold"}}> Players in Lobby:</span>
                             {this.state.users.map(user => {
                                 return (
                                     <PlayerContainer key={user.id}>
                                         <Players>
-                                            <UserName>{user.username}</UserName>
+                                            <UserName style={{fontSize: "19px"}}>{user.username}</UserName>
                                             {!user.isReady === true ? (
                                                 <NotReady>✘</NotReady>) : (<Ready>✔</Ready>) }
                                         </Players>

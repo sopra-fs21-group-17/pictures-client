@@ -1,10 +1,9 @@
-import { useDrop} from "react-dnd";
+import { useDrop } from "react-dnd";
 import styled from "styled-components";
-import {ItemTypes} from "../utils/Items";
-import React, {useCallback, useContext, useState} from "react";
-import {ItemContext} from "../SetTemplate";
-import update from 'immutability-helper';
-import {Item} from "../Items/Item";
+import { ItemTypes } from "../utils/Items";
+import React, { useContext } from "react";
+import { ItemContext } from "../SetTemplate";
+import { Item } from "../Items/Item";
 
 const BoardContainer = styled.div`
   width: 100%;
@@ -20,35 +19,50 @@ export const FreeBoard = ({ itemlist }) => {
 
     const { moveItem } = useContext(ItemContext)
 
+
+
+
+
     const [ , drop] = useDrop(() => ({
             accept: ItemTypes.ITEM,
             drop(item, monitor) {
                 const delta = monitor.getDifferenceFromInitialOffset();
-                const left = Math.round(item.left + delta.x);
-                const top = Math.round(item.top + delta.y);
-                moveItem(item._id, left, top);
+                let left = Math.round(item.left + delta.x);
+                let top = Math.round(item.top + delta.y);
+                if(!(left > 0)){
+
+                }
+                moveItem(item._id, left, top,);
                 return undefined;
             },
         }), [moveItem]);
 
+    const getLength = Math.round(window.innerHeight / 100)*52
+
         return (
             <BoardContainer
+                id="Board"
                 ref={drop}>
-                {itemlist
+                    <canvas id="canvas" width={getLength} height={getLength}/>
+                    {itemlist
                     .filter((task, i) => task.location === 'board')
                     .map((key) => {
                     return (
-                        <Item
-                            key={key._id}
-                            _id={key._id}
-                            location={key.location}
-                            left={key.left}
-                            top={key.top}
-                            color={key.color}
-                            amount={key.amount}
-                            hideSourceOnDrag={key.hideSourceOnDrag}
-                            style={key.style}
-                        />
+
+                            <Item
+                                key={key._id}
+                                _id={key._id}
+                                location={key.location}
+                                left={key.left}
+                                top={key.top}
+                                color={key.color}
+                                amount={key.amount}
+                                hideSourceOnDrag={key.hideSourceOnDrag}
+                                style={key.style}
+                                selected={key.selected}
+                                rotation={key.rotation}
+                                background={key.background}
+                            />
 
                     );
                 })}
