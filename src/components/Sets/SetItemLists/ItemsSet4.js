@@ -16,6 +16,7 @@ import football_icon from "../Icon_pictures/football.png";
 import heart_icon from "../Icon_pictures/heart.png";
 import shark_icon from "../Icon_pictures/Shark_Icon.png";
 import snail_icon from "../Icon_pictures/snail.png";
+import smiley_icon from "../Icon_pictures/Smiley.png";
 
 
 
@@ -159,6 +160,18 @@ export const ItemsSet4 = [
         style: 'card',
         background: `url(${snowflake_icon})`,
     },
+    {
+        _id: 12,
+        location: 'inventory',
+        top: 0,
+        left: 0,
+        color: 'limegreen',
+        amount: 1,
+        hideSourceOnDrag: false,
+        style: 'card',
+        background: `url(${smiley_icon})`,
+    },
+
     {
         _id: 13,
         location: 'inventory',

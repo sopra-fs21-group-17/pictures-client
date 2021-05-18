@@ -96,7 +96,7 @@ class Home extends React.Component {
             //creates the new lobby in the backend if lobby with lobbyId don't exists
             const response = await api.post('/lobbies', requestBody)
             //adds the currentUser to the lobby
-            const userResp = await api.put('/lobbies/users/'+localStorage.getItem('currentRoomNumber'), userReqBody)
+            await api.put('/lobbies/users/'+localStorage.getItem('currentRoomNumber'), userReqBody)
 
             // get the returned lobby and updates a new object
             const lobby = new LobbyModel(response.data);

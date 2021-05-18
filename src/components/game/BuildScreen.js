@@ -84,7 +84,7 @@ class BuildScreen extends React.Component {
                 {this.state.countMin <= 0 && (this.state.count + buildRoom.timeDifference) <= 0 ? (this.userFinishedBuilding()):(
                     <Countdown style={{fontSize: "50px"}}>Time Left: <br></br>
                         <span style={{fontWeight: "bold", fontFamily: "\"Open Sans\", sans-serif;", color: "white"}}>
-                            {this.state.countMin}:{Math.round(this.state.count + buildRoom.timeDifference)}
+                            {('0'+ this.state.countMin).slice(-2)}:{('0'+Math.round(this.state.count + buildRoom.timeDifference)).slice(-2)}
                         </span>
                     </Countdown>)}
                 <div>

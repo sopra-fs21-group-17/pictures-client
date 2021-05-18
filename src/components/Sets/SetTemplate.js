@@ -102,6 +102,30 @@ const Button = styled.div`
   transition: all 0.3s ease;
   float: right;
 `;
+const ButtonScroll = styled.div`
+  &:hover {
+    transform: translateY(-2px);
+  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-right: 4px;
+  padding-left:2px;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 65px;
+  text-align: center;
+  color: white;
+  width: 70px;
+  height: 65px;
+  border: none;
+  border-radius: 5px;
+  cursor: ${props => (props.disabled ? "default" : "pointer")};
+  opacity: ${props => (props.disabled ? 0.4 : 1)};
+  background: #303036;;
+  transition: all 0.3s ease;
+  float: right;
+`;
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -270,6 +294,27 @@ export const SetTemplate = () => {
         setCurrentLeftIndex(currentLeftIndex +1);
         setCurrentRightIndex(currentRightIndex + 1)
     }
+    function showIcons(){
+        setCurrentLeftIndex(currentLeftIndex -1);
+        {itemList
+            .filter((task, i) => task.location === 'inventory')
+            .filter((task, i) => task.amount > 0)
+            .slice(currentLeftIndex, currentRightIndex)
+            .map((task, i) => (
+
+                <ItemContainer>
+                    <Item
+                        key={task._id.toString()}
+                        _id={task._id}
+                        location={task.location}
+                        color={task.color}
+                        amount={task.amount}
+                        style={task.style}
+                        background={task.background}
+                    />
+                </ItemContainer>
+            ))}
+    }
 
 
     const selectItems = () => {
@@ -298,7 +343,7 @@ export const SetTemplate = () => {
         return (
             <Inventory>
 
-                <Button
+                <ButtonScroll
 
                     disabled={currentLeftIndex <= 0}
                     hidden = {currentLeftIndex === 0 || itemList.filter((task, i) => task.location === 'inventory')
@@ -312,28 +357,34 @@ export const SetTemplate = () => {
 
                 >
                     ◀
-                </Button>
+                </ButtonScroll>
 
                 {itemList
                     .filter((task, i) => task.location === 'inventory')
                     .filter((task, i) => task.amount > 0)
                     .slice(currentLeftIndex, currentRightIndex)
-                    .map((task, i) => (
+                    .length < 5 && currentLeftIndex !== 0 ? (showIcons()):(
+                        itemList
+                            .filter((task, i) => task.location === 'inventory')
+                            .filter((task, i) => task.amount > 0)
+                            .slice(currentLeftIndex, currentRightIndex)
+                            .map((task, i) => (
 
-                        <ItemContainer>
-                            <Item
-                                key={task._id.toString()}
-                                _id={task._id}
-                                location={task.location}
-                                color={task.color}
-                                amount={task.amount}
-                                style={task.style}
-                                background={task.background}
-                            />
-                        </ItemContainer>
-                    ))}
+                                <ItemContainer>
+                                    <Item
+                                      key={task._id.toString()}
+                                      _id={task._id}
+                                      location={task.location}
+                                      color={task.color}
+                                      amount={task.amount}
+                                      style={task.style}
+                                      background={task.background}
+                                    />
+                                </ItemContainer>
+                        )))}
 
-                <Button
+
+                <ButtonScroll
 
                     disabled={(currentRightIndex) >= itemList
                         .filter((task, i) => task.location === 'inventory')
@@ -350,7 +401,7 @@ export const SetTemplate = () => {
                     style={{position: "absolute", left: "90%"}}
                 >
                     ▶
-                </Button>
+                </ButtonScroll>
 
             </Inventory>
 

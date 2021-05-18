@@ -106,7 +106,7 @@ class Lobby extends React.Component {
         this.state = {
             users: null,
             responseLobby: null,
-            count: 100.0,
+            count: 90.0,
         };
     }
 
@@ -171,7 +171,7 @@ class Lobby extends React.Component {
                 {((this.state.count + lobby.timeDifference) <= 0.0 && lobby.lobbyReady) || lobby.lobbyReady? (
                     this.props.history.push("/board")
                 ):( this.state.count + lobby.timeDifference <= 0.0 ?( this.backToHome()):
-                    (<Countdown style={{position:"absolute", left: "46%", top:"30%", color:"white", fontSize: "100px", fontWeight:"bold"}}>{parseFloat(this.state.count + lobby.timeDifference).toFixed(0)}</Countdown>))}
+                    (<Countdown style={{position:"absolute", left: "46%", top:"30%", color:"white", fontSize: "100px", fontWeight:"bold"}}>{('0' + parseFloat(this.state.count + lobby.timeDifference).toFixed(0)).slice(-2)}</Countdown>))}
                 {!this.state.users ? (
                     <Spinner />
                 ) : (
