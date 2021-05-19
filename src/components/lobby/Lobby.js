@@ -5,6 +5,8 @@ import { api, handleError } from '../../helpers/api';
 import { Spinner } from '../../views/design/Spinner';
 import { withRouter } from 'react-router-dom';
 import LobbyModel from "../shared/models/LobbyModel";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import {Button} from "../../views/design/Button";
 
 const Container = styled(BaseContainer)`
   color: white;
@@ -93,7 +95,7 @@ const Button1 = styled.button`
 `;
 
 const Countdown = styled.div`
-  margin-top = 10px;
+  margin-top = 5px;
   margin-bottom = 20px;
   font-size = large;
 `;
@@ -108,6 +110,7 @@ class Lobby extends React.Component {
             loggedUser: null,
             responseLobby: null,
             count: 10000.0,
+            copied: false,
         };
     }
 
@@ -126,14 +129,22 @@ class Lobby extends React.Component {
         }
     }
 
-     backToHome() {
+     async backToHome() {
         try {
-            //await api.put('/lobby/' + localStorage.getItem('currentUsername') +"/"+ localStorage.getItem('currentRoomNumber'));
+            await api.put('/lobby/' + localStorage.getItem('currentUsername') +"/"+ localStorage.getItem('currentRoomNumber'));
         } catch (error) {
             alert(`Something went wrong while calling "backTOHome()": \n${handleError(error)}`);
         }
         localStorage.removeItem('lobbyId');
         this.props.history.push("/home")
+    }
+    copied(){
+        this.setState({copied: true}, () =>{
+            setTimeout(() =>{
+                this.setState({copied: false})
+            },2000)
+            }
+        )
     }
 
     async componentDidMount(){
@@ -169,19 +180,33 @@ class Lobby extends React.Component {
 
             <Container>
                 <h1 style={{fontSize: "40px", color: "rgba(170, 170, 170, 1)", margin: "5px"}}>LOBBY CODE: </h1>
-                <h2 style={{color: "white", fontWeight:"bold", fontSize: "60px", margin: "5px"}}>{lobby.lobbyId}</h2>
-
-                <h2 style={{fontSize: "35px", color: "rgba(170, 170, 170, 1)", marginTop: "20px"}}>Countdown: </h2>
+                <h2 style={{color: "white", fontWeight:"bold", fontSize: "60px", margin: "5px", justifyContent: "center"}}>
+                    {lobby.lobbyId}
+                </h2>
+                <CopyToClipboard text={lobby.lobbyId}>
+                    <ButtonContainer>
+                        <Button style={{background: "rgba(130, 130, 130, 1)"}}
+                                onClick={() => {
+                                    this.copied()}}
+                        >Copy Lobby Code
+                        </Button>
+                    </ButtonContainer>
+                </CopyToClipboard>
+                <h6 hidden={this.state.copied === false}
+                    style={{margin:"1.5px", position: "fixed", left:"760px", top:"170px"}}
+                >Copied!</h6>
                 {((this.state.count + lobby.timeDifference) <= 0.0 && lobby.lobbyReady) || lobby.lobbyReady? (
                     this.props.history.push("/board")
                 ):( this.state.count + lobby.timeDifference <= 0.0 ?( this.backToHome()):
-                    (<Countdown style={{position:"absolute", left: "46%", top:"30%", color:"white", fontSize: "100px", fontWeight:"bold"}}>{('0' + parseFloat(this.state.count + lobby.timeDifference).toFixed(0)).slice(-2)}</Countdown>))}
+                    (<Countdown style={{position:"relative", left: "0%", top:"-5px", color:"white", justifyContent:"center", fontSize: "100px", fontWeight:"bold"}}>
+                        <span style={{fontSize: "35px", color: "rgba(170, 170, 170, 1)", marginTop: "0px"}}>Countdown: </span><br></br>
+                        {('0' + parseFloat(this.state.count + lobby.timeDifference).toFixed(0)).slice(-2)}</Countdown>))}
                 {!this.state.users ? (
                     <Spinner />
                 ) : (
-                    <div>
+                    <div >
 
-                        <Users style={{padding:"10px", background: "rgba(100, 100, 100, 1)",borderRadius: "10%", position:"absolute", left: "10%", top:"30%" }}>
+                        <Users style={{padding:"10px", background: "rgba(100, 100, 100, 1)",borderRadius: "10%", position:"fixed", left: "3%", top:"30%", width:"220px" }}>
                             <span style={{fontSize: "23px", fontWeight: "bold"}}> Players in Lobby:</span>
                             {this.state.users.map(user => {
                                 return (
@@ -198,9 +223,19 @@ class Lobby extends React.Component {
                         <ButtonContainer>
                             <Button1
 
+                                id="edit2"
+                                hidden ={this.state.loggedUser.username === localStorage.getItem('currentUsername') && this.state.loggedUser.isReady === true}
+                                style={{ position:"relative", left:"25%", top: "150px", background:"rgba(130, 130, 130, 1)"}}
+                                width="10%"
+                                onClick={() =>{
+                                    this.backToHome()
+                                    this.props.history.push("/")
+                                }}> Leave</Button1>
+                            <Button1
+
                                 id="edit"
                                 hidden ={this.state.loggedUser.username === localStorage.getItem('currentUsername') && this.state.loggedUser.isReady === true}
-                                style={{position:"absolute", left: "80%", top: "80%"}}
+                                style={{position: "relative", left: "30%", top: "150px"}}
                                 width="10%"
                                 onClick={() => {
                                     this.ready();
@@ -208,17 +243,7 @@ class Lobby extends React.Component {
                             >
                                 Ready
                             </Button1>
-                        </ButtonContainer>
-                        <ButtonContainer>
-                            <Button1
 
-                                id="edit2"
-                                hidden ={this.state.loggedUser.username === localStorage.getItem('currentUsername') && this.state.loggedUser.isReady === true}
-                                style={{position:"absolute", left:"65%", top:"80%", background:"rgba(130, 130, 130, 1)"}}
-                                width="10%"
-                                onClick={() =>{
-                                    this.props.history.push("/")
-                                }}> Leave</Button1>
                         </ButtonContainer>
 
                     </div>
