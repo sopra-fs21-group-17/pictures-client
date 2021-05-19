@@ -156,9 +156,11 @@ export const ItemContext = createContext({
     markAsInventory: null,
     markAsSquareField: null,
 })
-
-
+let maxamount;
+let currentamount=0;
 export const SetTemplate = () => {
+
+
     const [itemList, setItemList] = useState([
 
     ]);
@@ -250,12 +252,14 @@ export const SetTemplate = () => {
 
         if((localStorage.getItem("mySet")) === "CUBES"){
             setItemList(ItemsSet1)
+
         } else if ((localStorage.getItem("mySet")) === "BLOCKS"){
             setItemList(ItemsSet2)
         }else if ((localStorage.getItem("mySet")) === "STICKS"){
             setItemList(ItemsSet3)
         }else if ((localStorage.getItem("mySet")) === "ICONS"){
             setItemList(ItemsSet4)
+            maxamount=5;
         }else {
             setItemList(ItemsSet5)
         }
@@ -396,7 +400,20 @@ export const SetTemplate = () => {
 
     const moveItem = (id, left, top) => {
 
+
         const updatedItem = itemList.filter((item, i) => item._id === id);
+
+
+        if(updatedItem[0].location==='inventory'&& maxamount!=null){
+            console.log(currentamount)
+            currentamount=currentamount+1;
+            if (currentamount>maxamount){
+
+                // e.message  'zuviele Icons benutzt'
+                alert("Only a maximum of 5 iconcards are allowed!");
+                currentamount=currentamount-1;
+                return;
+        }}
 
         const lastSelectedItem = itemList.filter((item) => item.selected === true);
 
@@ -444,6 +461,7 @@ export const SetTemplate = () => {
     };
 
     const markAsInventory = _id => {
+        currentamount=currentamount-1;
         //gets the item which was moved
         const movedItem = itemList.filter((item, i) => item._id === _id);
 
@@ -502,7 +520,7 @@ export const SetTemplate = () => {
     const [screenshot, takeScreenshot] = useScreenshot()
     const GetImage = () =>{
         takeScreenshot(ref.current)}
-        console.log(screenshot)
+
         localStorage.setItem("screenshot",screenshot)
 
 
