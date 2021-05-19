@@ -1,4 +1,5 @@
 import { useDrop } from "react-dnd";
+import {useEffect, useRef} from "react";
 import styled from "styled-components";
 import { ItemTypes } from "../utils/Items";
 import React, { useContext } from "react";
@@ -18,9 +19,11 @@ const BoardContainer = styled.div`
 export const FreeBoard = ({ itemlist }) => {
 
     const { moveItem } = useContext(ItemContext)
+    let ref;
 
-
-
+    useEffect(() => {
+        ref = document.getElementById("BoardContainer").getBoundingClientRect();
+    })
 
 
     const [ , drop] = useDrop(() => ({
@@ -29,9 +32,25 @@ export const FreeBoard = ({ itemlist }) => {
                 const delta = monitor.getDifferenceFromInitialOffset();
                 let left = Math.round(item.left + delta.x);
                 let top = Math.round(item.top + delta.y);
-                if(!(left > 0)){
-
+                if(item.location === "inventory"){
+                    left = monitor.getClientOffset().x - ref.x;
+                    top = monitor.getClientOffset().y - ref.y;
                 }
+                console.log(ref);
+
+                if(left < (ref.width * 0.1)){
+                    left = (ref.width * 0.1);
+                }
+                if(left > (ref.width * 0.9)){
+                    left = (ref.width * 0.9);
+                }
+                if(top < (ref.height * 0.1)){
+                    top = (ref.height * 0.1);
+                }
+                if(top > (ref.height * 0.9)){
+                    top = (ref.height * 0.9);
+                }
+
                 moveItem(item._id, left, top,);
                 return undefined;
             },
