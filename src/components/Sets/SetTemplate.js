@@ -235,7 +235,7 @@ export const SetTemplate = () => {
             );
         } else {
             return (
-                <FreeBoard itemlist={itemList} ></FreeBoard>
+                <FreeBoard itemlist={itemList}></FreeBoard>
             );
         }
     };
@@ -454,8 +454,8 @@ export const SetTemplate = () => {
         const newItem = {
             _id: id+10*id*updatedItem[0].amount, //TODO fix random id (issue with items when adding two returning first and adding another)
             location: 'board',
-            top: 150,
-            left: 150,
+            top: top,
+            left: left,
             color: updatedItem[0].color,
             amount: updatedItem[0].amount-1,
             hideSourceOnDrag: true,
@@ -474,18 +474,6 @@ export const SetTemplate = () => {
         if(updatedItem[0].location !== 'inventory'){
             updatedItem[0].left = left;
             updatedItem[0].top = top;
-            // if(left < 0){
-            //     updatedItem[0].left = 0;
-            // }
-            // if(left > ((window.innerHeight/100)*50)){
-            //     updatedItem[0].left = ((window.innerHeight/100)*50);
-            // }
-            // if(top < 0){
-            //     updatedItem[0].top = 0;
-            // }
-            // if(top > ((window.innerHeight/100)*50)){
-            //     updatedItem[0].top = ((window.innerHeight/100)*50);
-            // }
             updatedItem[0].selected = true;
             setItemList(itemList.filter((item) => item._id !== id).concat(updatedItem[0]));
         } else {
@@ -553,7 +541,7 @@ export const SetTemplate = () => {
     const [screenshot, takeScreenshot] = useScreenshot()
     const GetImage = () =>{
         takeScreenshot(ref.current)}
-        console.log(screenshot)
+        //console.log(screenshot)
         localStorage.setItem("screenshot",screenshot)
 
 
@@ -593,7 +581,7 @@ export const SetTemplate = () => {
                     <TopContainer>
                         <div  >
                             <BorderContainer ref={ref}>
-                                <BoardContainer >
+                                <BoardContainer id="BoardContainer">
                                     {selectBoard()}
                                     <CustomDragLayer/>
                                 </BoardContainer>

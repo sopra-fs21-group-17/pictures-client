@@ -10,7 +10,7 @@ import BuildRoom from "../shared/models/BuildRoom";
 
 const Container = styled(BaseContainer)`
   color: black;
-  text-align: center;
+  //text-align: center;
 `;
 
 const Countdown = styled.div`
@@ -81,13 +81,15 @@ class BuildScreen extends React.Component {
 
         return (
             <Container>
-                {this.state.countMin <= 0 && (this.state.count + buildRoom.timeDifference) <= 0 ? (this.userFinishedBuilding()):(
-                    <Countdown style={{fontSize: "50px"}}>Time Left: <br></br>
-                        <span style={{fontWeight: "bold", fontFamily: "\"Open Sans\", sans-serif;", color: "white"}}>
+                <div style={{color: "black", textAlign: "center"}}>
+                    {this.state.countMin <= 0 && (this.state.count + buildRoom.timeDifference) <= 0 ? (this.userFinishedBuilding()):(
+                        <Countdown style={{fontSize: "50px"}}>Time Left: <br></br>
+                            <span style={{fontWeight: "bold", fontFamily: "\"Open Sans\", sans-serif;", color: "white"}}>
                             {('0'+ this.state.countMin).slice(-2)}:{('0'+Math.round(this.state.count + buildRoom.timeDifference)).slice(-2)}
                         </span>
-                    </Countdown>)}
-                <div>
+                        </Countdown>)}
+                </div>
+                <div >
                     <SetTemplate pictureURL={localStorage.getItem("myPicURL")}/>
                     {/*<Button*/}
                     {/*    width="100%"*/}

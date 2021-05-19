@@ -46,8 +46,7 @@ const stickstyle = {
 }
 
 export const Item = ({_id, location, left, top, color, amount, hideSourceOnDrag, style, selected, rotation, background: icon}) => {
-
-    //remove left top
+    
     function getStyles(left, top, isDragging) {
         const transform = `translate3d(${left}px, ${top}px, 0`;
         return {
