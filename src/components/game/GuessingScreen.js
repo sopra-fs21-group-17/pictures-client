@@ -7,6 +7,7 @@ import { api, handleError } from '../../helpers/api';
 import { Button } from '../../views/design/Button';
 import { withRouter } from 'react-router-dom';
 import PictureGrid from "./PictureGrid";
+import BuildRoom from "../shared/models/BuildRoom";
 
 
 const InputField = styled.input`
@@ -88,6 +89,8 @@ class GuessingScreen extends React.Component {
                 "D1", "D2", "D3", "D4"],
             guesses: {},
             guessesAsString: "",
+            responseRoom: null,
+            count: 60.0,
         }
       //  this.getScreenshots();
     };
@@ -179,12 +182,35 @@ class GuessingScreen extends React.Component {
 
         return result;
     }
+    timeOver(){
+        this.sendUserGuesses()
+        this.createGuessingInfo();
+        this.showScoreScreen()
+    }
+    async componentDidMount(){
+        try{
+
+            this.countIntervalGuess = setInterval(async () => {
+                await api.put('/guessing/count/'+localStorage.getItem('currentLobbyId'))
+            }, 100)
+            this.getRoomInterval = setInterval(async () =>{
+                const responseCheck = await api.get('/buildRooms/'+localStorage.getItem('currentLobbyId'));
+                this.setState({responseRoom: responseCheck.data})}, 500)
+        }catch (error) {
+            alert(`Something went wrong while fetching the users: \n${handleError(error)}`);
+
+        }
+    }
     // TODO call screenshot getter here with await
     async componentWillMount(){
-       await this.getScreenshots()
+        //await api.put('/guessing/time/'+localStorage.getItem('currentLobbyId'));
+        await this.getScreenshots()
     }
 
+
+
     render() {
+        const buildRoom = new BuildRoom(this.state.responseRoom)
         const infos = this.createGuessingInfo();
         const filledTableRows = infos.map( tuple =>{
                 return(
@@ -209,6 +235,8 @@ class GuessingScreen extends React.Component {
                 <div align={"center"}>
                     <h2>Which picture were the other players trying to build?</h2>
                     <h3>Make your guesses</h3>
+                    {(this.state.count + buildRoom.timeDifferenceGuessing) <= 0 ?(this.timeOver()):(<h2>Time left: {('0'+Math.round(this.state.count + buildRoom.timeDifferenceGuessing)).slice(-2)}</h2>
+                    )}
                     <StyledTable>
                         <StyledTr>
                             <StyledTd>What the other players built:</StyledTd>

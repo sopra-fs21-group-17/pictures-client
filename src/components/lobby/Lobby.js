@@ -105,8 +105,9 @@ class Lobby extends React.Component {
         super();
         this.state = {
             users: null,
+            loggedUser: null,
             responseLobby: null,
-            count: 90.0,
+            count: 10000.0,
         };
     }
 
@@ -138,6 +139,9 @@ class Lobby extends React.Component {
     async componentDidMount(){
 
         try {
+            const response = await api.get('/users/'+localStorage.getItem('currentUsername'));
+            this.setState({ loggedUser: response.data });
+
             this.usersInterval = setInterval(async () =>{
                  const response = await api.get('/lobbies/users/'+localStorage.getItem('currentLobbyId'));
                  this.setState({users: response.data})}, 100)
@@ -195,6 +199,7 @@ class Lobby extends React.Component {
                             <Button1
 
                                 id="edit"
+                                hidden ={this.state.loggedUser.username === localStorage.getItem('currentUsername') && this.state.loggedUser.isReady === true}
                                 style={{position:"absolute", left: "80%", top: "80%"}}
                                 width="10%"
                                 onClick={() => {
@@ -208,6 +213,7 @@ class Lobby extends React.Component {
                             <Button1
 
                                 id="edit2"
+                                hidden ={this.state.loggedUser.username === localStorage.getItem('currentUsername') && this.state.loggedUser.isReady === true}
                                 style={{position:"absolute", left:"65%", top:"80%", background:"rgba(130, 130, 130, 1)"}}
                                 width="10%"
                                 onClick={() =>{

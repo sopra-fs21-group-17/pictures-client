@@ -212,7 +212,7 @@ class MainBoard extends React.Component{
             roomId: localStorage.getItem('currentRoomNumber'),
         });
 
-        const response = await api.post('/buildRooms', requestBody)
+        await api.post('/buildRooms', requestBody);
 
         this.props.history.push(`/buildScreen`);
     }

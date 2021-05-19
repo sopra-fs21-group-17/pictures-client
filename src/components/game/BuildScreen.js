@@ -103,8 +103,10 @@ class BuildScreen extends React.Component {
     }
 
 
-    userFinishedBuilding() {
+    async userFinishedBuilding() {
         this.putscreenshot()
+        await api.put('/guessing/time/'+localStorage.getItem('currentLobbyId'));
+
         this.props.history.push(`/GuessingScreen`);
     }
 }

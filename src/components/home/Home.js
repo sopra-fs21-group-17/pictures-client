@@ -11,6 +11,7 @@ import LobbyModel from "../shared/models/LobbyModel";
 const Container = styled(BaseContainer)`
   color: white;
   text-align: center;
+  
 `;
 
 const Users = styled.ul`
