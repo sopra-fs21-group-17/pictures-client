@@ -76,13 +76,14 @@ const StyledTable = styled.table`
     margin: 10px;
 `;
 
-//TODO add Constraints for coordinate guessing like only able to input A-D and 1-4 : if possible in js use Regex
+
+
 class GuessingScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             userID: null,
-            screenshots: [],
+            scsURLsAndUserNames: [],
             coordinateNames: [
                 "A1", "A2", "A3", "A4",
                 "B1", "B2", "B3", "B4",
@@ -100,17 +101,18 @@ class GuessingScreen extends React.Component {
             const response = await api.get('/screenshots/'+localStorage.getItem("lobbyId"));
             await new Promise(resolve => setTimeout(resolve, 1000));
 
-            // remove screenshot of current user
+            // extract all names+urls from response except the one of the current user
+            let namesAndScsURLs = [] // format: [["username","URL"],["username2"],[URL2]]
             for(let e in response.data){
                 // response_array[i][0] = username
-                if(response.data[e][0] === this.state.username) {
-                    response.data.splice(e, 1);
+                if(response.data[e][0] !== localStorage.getItem('currentUsername')) {
+                    namesAndScsURLs.push([response.data[e][0], response.data[e][1]])
                 }
             }
 
             // Get the returned screenshots and update the state.
-            this.setState({ screenshots: response.data });
-            localStorage.setItem( "screenshots TEST:", response.data );
+            this.setState({ scsURLsAndUserNames: namesAndScsURLs });
+            //localStorage.setItem( "screenshots TEST:", response.data );
         } catch (error) {
             alert(`Something went wrong while fetching the users: \n${handleError(error)}`);
         }
@@ -144,8 +146,6 @@ class GuessingScreen extends React.Component {
     saveGuessToDict(user, value) {
         this.setState({...this.state,
             guesses: {...this.state.guesses,[user]:value}})
-        //localStorage.setItem(user,value);
-        //console.log(this.state.guesses);
     }
 
     // get corrected guesses and points
@@ -167,41 +167,14 @@ class GuessingScreen extends React.Component {
         this.props.history.push(`/scoreScreen`);
     }
 
-    createGuessingInfo(){
-        let result = [];
-        const parsedPlayers = JSON.parse(localStorage.getItem("players"));
-
-        // for(const [key, val] of Object.entries(parsedPlayers)){
-        //     if(val.username !== localStorage.getItem('currentUsername')){
-        //         //result.push([val.username, val.assignedCoordinates]);
-        //         result.push([val.username, val.assignedCoordinates]);
-        //         // result["username"] = val.username;
-        //         // result["assignedCoordinates"] = val.assignedCoordinates;
-        //     }
-        // }
-        // remove screenshot of current user
-        for(let e in this.state.screenshots){
-            // response_array[i][0] = username
-            if(this.state.screenshots[e][0] !== this.state.username) {
-                // array[["username","URL"], ["username2","URL2"], ...]
-                result.push([this.state.screenshots[e][0], this.state.screenshots[e][1]]);
-                // TODO for dev+testing also show assigned coordinates
-                result.push([this.state.screenshots[e][0], this.state.screenshots[e][1]]);
-            }
-        }
-
-        return result;
-    }
 
     render() {
-        const infos = this.createGuessingInfo();
-        const filledTableRows = infos.map( tuple =>{
+        const filledTableRows = this.state.scsURLsAndUserNames.map( tuple =>{
                 return(
                     <StyledTr>
-                        {/*<StyledTd width={"25%"}><StyledImg src={tuple["1"]}/></StyledTd>*/}
-                        {/*<StyledTd width={"25%"}>{this.state.coordinateNames[tuple[1]]}</StyledTd>*/}
+                        {/*for dev use, after remove tuple[0] which displays username...*/}
                         <StyledTd width={"25%"}>{tuple[0]}</StyledTd>
-                        <StyledTd width={"25%"}>{<img src={tuple[1]}/>}</StyledTd>
+                        <StyledTd width={"25%"}>{<StyledImg src={tuple[1]}/>}</StyledTd>
                         <StyledTd width={"25%"}>
                             <InputField
                                 placeholder="A1"
@@ -232,7 +205,6 @@ class GuessingScreen extends React.Component {
                         width="25%"
                         onClick={() => {
                             this.sendUserGuesses();
-                            this.createGuessingInfo();
                         }}
                     >
                         My guesses are done!
@@ -253,6 +225,7 @@ class GuessingScreen extends React.Component {
             </Container>
         );
     }
+
 }
 
 export default withRouter(GuessingScreen);
