@@ -138,6 +138,7 @@ class ScoreScreen extends React.Component {
 
 
     convertCorrectedGuessesToMap(correctedGuesses) {
+
         let tempUsername = "";
         let tempCoordinates = "";
         let result = [];
@@ -165,6 +166,7 @@ class ScoreScreen extends React.Component {
     }
 
     convertToArray(data) {
+
         let result = [];
         for (const [username, attribute] of Object.entries(data)) {
             let tuple = [username, attribute];
@@ -175,6 +177,7 @@ class ScoreScreen extends React.Component {
     }
 
     render() {
+
         const temp = this.convertCorrectedGuessesToMap(localStorage.getItem("correctedGuesses"));
         const filledTableGuesses = temp.map(tuple => {
                 return (
@@ -213,17 +216,22 @@ class ScoreScreen extends React.Component {
 
                 <ButtonContainer>
                     {
-                        this.state.rounds <= this.state.max_rounds ? (<Button
+                        this.state.rounds <= this.state.max_rounds ? (this.state.buttonPressed == false? (<Button
                         width="25%"
+
                         onClick={() =>
                             ( this.nextRound(),
-                            this.setState({buttonPressed:true}))
+                            this.setState({buttonPressed:true})
+
+                            )
 
 
                         }
                     >
                         Ok, next round!
-                    </Button>):this.gameHasFinished()
+                        </Button>):<Button
+                        width="25%"
+                        disabled={true}>Ok, next round!</Button>):this.gameHasFinished()
                     }
                     <Button
                         width="25%"
@@ -236,6 +244,7 @@ class ScoreScreen extends React.Component {
                     </Button>
 
                 </ButtonContainer>
+                {this.state.buttonPressed ==  true? <h2>...waiting for the other players to finish</h2>:<h2></h2>}
             </Container>
         );
     }

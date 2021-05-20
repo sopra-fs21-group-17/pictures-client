@@ -95,6 +95,7 @@ class GuessingScreen extends React.Component {
       //  this.getScreenshots();
     };
 
+
     // GET REQUEST "/screenshots"
     async getScreenshots(){
         try {
