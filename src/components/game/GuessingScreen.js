@@ -75,13 +75,14 @@ const StyledTable = styled.table`
     margin: 10px;
 `;
 
-//TODO add Constraints for coordinate guessing like only able to input A-D and 1-4 : if possible in js use Regex
+
+
 class GuessingScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             userID: null,
-            screenshots: [],
+            scsURLsAndUserNames: [],
             coordinateNames: [
                 "A1", "A2", "A3", "A4",
                 "B1", "B2", "B3", "B4",
@@ -92,7 +93,7 @@ class GuessingScreen extends React.Component {
             responseRoom: null,
             count: 60.0,
         }
-      //  this.getScreenshots();
+        this.getScreenshots();
     };
 
 
@@ -102,16 +103,19 @@ class GuessingScreen extends React.Component {
             const response = await api.get('/screenshots/'+localStorage.getItem("currentLobbyId"));
             await new Promise(resolve => setTimeout(resolve, 1000));
 
-            // remove screenshot of current user
+            // extract all names+urls from response except the one of the current user
+            let namesAndScsURLs = [] // format: [["username","URL"],["username2"],[URL2]]
             for(let e in response.data){
                 // response_array[i][0] = username
-                if(response.data[e][0] === this.state.username) {
-                    response.data.splice(e, 1);
+                if(response.data[e][0] !== localStorage.getItem('currentUsername')) {
+                    namesAndScsURLs.push([response.data[e][0], response.data[e][1]])
+                    console.log("NMEEEAA: ", response.data[e][1])
                 }
             }
 
             // Get the returned screenshots and update the state.
-            this.setState({ screenshots: response.data });
+            this.setState({ scsURLsAndUserNames: namesAndScsURLs });
+
         } catch (error) {
             alert(`Something went wrong while fetching the users: \n${handleError(error)}`);
         }
@@ -154,13 +158,10 @@ class GuessingScreen extends React.Component {
     saveGuessToDict(user, value) {
         this.setState({...this.state,
             guesses: {...this.state.guesses,[user]:value}})
-        //localStorage.setItem(user,value);
-        //console.log(this.state.guesses);
     }
 
     // get corrected guesses and points
     async showScoreScreen() {
-        //localStorage.setItem("lobbyId", "test"); // für testzwecke
         try{
             const response = await api.get('/score/'+localStorage.getItem("currentLobbyId"));
 
@@ -178,59 +179,15 @@ class GuessingScreen extends React.Component {
         this.props.history.push(`/scoreScreen`);
     }
 
-    createGuessingInfo(){
-        let result = [];
-        const parsedPlayers = JSON.parse(localStorage.getItem("players"));
-
-        for(const [key, val] of Object.entries(parsedPlayers)){
-            if(val.username !== localStorage.getItem('currentUsername')){
-                result.push([val.username, val.assignedCoordinates]);
-                // result["username"] = val.username;
-                // result["assignedCoordinates"] = val.assignedCoordinates;
-            }
-        }
-
-        return result;
-    }
-    timeOver(){
-        this.sendUserGuesses()
-        this.createGuessingInfo();
-        this.showScoreScreen()
-    }
-    async componentDidMount(){
-        try{
-
-            this.countIntervalGuess = setInterval(async () => {
-                await api.put('/guessing/count/'+localStorage.getItem('currentLobbyId'))
-            }, 100)
-            this.getRoomInterval = setInterval(async () =>{
-                const responseCheck = await api.get('/buildRooms/'+localStorage.getItem('currentLobbyId'));
-                this.setState({responseRoom: responseCheck.data})}, 500)
-        }catch (error) {
-            alert(`Something went wrong while fetching the users: \n${handleError(error)}`);
-
-        }
-    }
-    // TODO call screenshot getter here with await
-    async componentWillMount(){
-        //await api.put('/guessing/time/'+localStorage.getItem('currentLobbyId'));
-        await this.getScreenshots()
-    }
-    // used for roundHandling in Score screen but needs to happen sooner
-    async componentDidMount(){
-        await this.resetRoundHandle()
-    }
-
-
 
     render() {
         const buildRoom = new BuildRoom(this.state.responseRoom)
-        const infos = this.createGuessingInfo();
-        const filledTableRows = infos.map( tuple =>{
+        const filledTableRows = this.state.scsURLsAndUserNames.map( tuple =>{
                 return(
                     <StyledTr>
-                        {/*<StyledTd width={"25%"}><StyledImg src={tuple["1"]}/></StyledTd>*/}
-                        <StyledTd width={"25%"}>{this.state.coordinateNames[tuple[1]]}</StyledTd>
+                        {/*for dev use, after remove tuple[0] which displays username...*/}
+                        <StyledTd width={"25%"}>{tuple[0]}</StyledTd>
+                        <StyledTd width={"25%"}>{<StyledImg src={tuple[1]}/>}</StyledTd>
                         <StyledTd width={"25%"}>
                             <InputField
                                 placeholder="A1"
@@ -263,7 +220,6 @@ class GuessingScreen extends React.Component {
                         width="25%"
                         onClick={() => {
                             this.sendUserGuesses();
-                            this.createGuessingInfo();
                         }}
                     >
                         My guesses are done!
@@ -284,6 +240,7 @@ class GuessingScreen extends React.Component {
             </Container>
         );
     }
+
 }
 
 export default withRouter(GuessingScreen);
