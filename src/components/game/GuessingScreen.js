@@ -141,6 +141,15 @@ class GuessingScreen extends React.Component {
         }
     }
 
+    //needed for endRound handling
+    async resetRoundHandle(){
+        try{
+            await api.put("/rounds/"+localStorage.getItem("currentLobbyId"))
+        } catch (error) {
+            alert(`Something went wrong resetting the round handle: \n${handleError(error)}`)
+        }
+    }
+
     saveGuessToDict(user, value) {
         this.setState({...this.state,
             guesses: {...this.state.guesses,[user]:value}})
@@ -162,7 +171,7 @@ class GuessingScreen extends React.Component {
             localStorage.setItem("thePoints", JSON.stringify(thePoints));
 
         } catch(error) {
-            alert(`Something went wrong while recieving the guesses and points: \n${handleError(error)}`);
+            alert(`Something went wrong while receiving the guesses and points: \n${handleError(error)}`);
         }
 
         this.props.history.push(`/scoreScreen`);
@@ -205,6 +214,10 @@ class GuessingScreen extends React.Component {
     async componentWillMount(){
         //await api.put('/guessing/time/'+localStorage.getItem('currentLobbyId'));
         await this.getScreenshots()
+    }
+    // used for roundHandling in Score screen but needs to happen sooner
+    async componentDidMount(){
+        await this.resetRoundHandle()
     }
 
 
