@@ -38,10 +38,10 @@ class ScoreScreen extends React.Component {
         this.state = {
             users: null,
             players: {},
+
+
             max_rounds:5,
             rounds: 0,
-         //   no_of_players: 0,
-         //   finished_players: 0
             playersFinished: false,
             buttonPressed: false
 
@@ -110,13 +110,14 @@ class ScoreScreen extends React.Component {
 
     async playAgain(){
         //TODO frage was da passiere sell --> id lobby gschickt werde --> denne eifach im backend alli betroffene Repos leere aber lobby laa?
-        this.props.history.push('/lobbies/' + localStorage.getItem("lobbyId"));
+        this.props.history.push('/lobbies/' + localStorage.getItem("currentLobbyId"));
 
     }
 
     async exitGame(){
-        //TODO zrugg is Home alles leere --> BE user us de lobby entferne alueg
-        localStorage.removeItem('lobbyId');
+        //TODO zrugg is Home alles leere --> BE user us de lobby entferne alueg 
+
+        localStorage.removeItem('currentLobbyId');
         this.props.history.push("/home")
     }
 
@@ -129,7 +130,7 @@ class ScoreScreen extends React.Component {
                         this.playAgain();
                     }}
                 >
-                    new Game
+                    play again
 
                 </Button>
         )
@@ -212,7 +213,7 @@ class ScoreScreen extends React.Component {
 
                 <ButtonContainer>
                     {
-                        this.state.rounds >= this.state.max_rounds ? this.gameHasFinished():(<Button
+                        this.state.rounds <= this.state.max_rounds ? (<Button
                         width="25%"
                         onClick={() =>
                             ( this.nextRound(),
@@ -222,7 +223,7 @@ class ScoreScreen extends React.Component {
                         }
                     >
                         Ok, next round!
-                    </Button>)
+                    </Button>):this.gameHasFinished()
                     }
                     <Button
                         width="25%"
