@@ -47,13 +47,9 @@ const Grid = styled.div`
   grid-column-end: span 4;
 `;
 
-
+// TODO make table out of this??
 const GridCoordinate = styled.div`
- height: 25px;
-  width: 25px;
-  color: black;
-  background: pink;
-  border-radius: 50px;
+  color: white;
   margin: 15px;
 `;
 
