@@ -43,7 +43,8 @@ class ScoreScreen extends React.Component {
     async componentWillMount() {
         try {
             const response = await api.get("/rounds/" + localStorage.getItem("currentLobbyId"))
-            this.setState({rounds: response.data.round})
+            this.setState({rounds: response.data.rounds})
+            console.log(response.data.rounds)
         } catch (error) {
             alert(`Something went wrong getting the current round: \n${handleError(error)}`);
         }
@@ -161,7 +162,7 @@ class ScoreScreen extends React.Component {
 
                 <ButtonContainer>
                     {
-                        this.state.rounds === 5 ? this.gameHasFinished():(<Button
+                        this.state.rounds >= 5 ? this.gameHasFinished():(<Button
                         width="25%"
                         onClick={() => {
                             this.nextRound();
