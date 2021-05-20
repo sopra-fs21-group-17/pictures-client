@@ -19,7 +19,6 @@ const GridContainer = styled.div`
   'B G G G G'
   'C G G G G'
   'D G G G G';
- 
 `;
 
 const Grid = styled.div`
@@ -35,7 +34,6 @@ const Grid = styled.div`
   padding-top: 15px;
   padding-bottom: 15px;
   border-radius: 5px;
-  
   
   background: linear-gradient(rgb(27, 124, 186), rgb(2, 46, 101));
   transition: opacity 0.5s ease, transform 0.5s ease;
@@ -54,8 +52,8 @@ const GridCoordinate = styled.div`
 `;
 
 const GridVoid = styled.div`
-background: transparent;
- height: auto;
+  background: transparent;
+  height: auto;
   width: auto;
   grid-row-start: 1;
   grid-column-start: 1;

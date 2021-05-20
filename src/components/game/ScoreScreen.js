@@ -5,6 +5,10 @@ import { api, handleError } from '../../helpers/api';
 import { Button } from '../../views/design/Button';
 import { withRouter } from 'react-router-dom';
 
+const Button1 = styled(Button)`
+  background: green  
+  `;
+
 const Container = styled(BaseContainer)`
   color: white;
   text-align: center;
@@ -264,9 +268,9 @@ class ScoreScreen extends React.Component {
                         }
                     >
                         Ok, next round!
-                        </Button>):<Button
+                        </Button>):<Button1
                         width="25%"
-                        disabled={true}>Ok, next round!</Button>):this.gameHasFinished()
+                        disabled={true}>Ok, next round!</Button1>):this.gameHasFinished()
                     }
                     <Button
                         width="25%"

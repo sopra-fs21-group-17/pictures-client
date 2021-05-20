@@ -10,6 +10,10 @@ import PictureGrid from "./PictureGrid";
 import BuildRoom from "../shared/models/BuildRoom";
 
 
+const Button1 = styled(Button)`
+  background: green  
+  `;
+
 const InputField = styled.input`
   &::placeholder {
     color: #000;
@@ -41,7 +45,7 @@ const Container = styled(BaseContainer)`
 `;
 
 const StyledImg = styled.img`
-    width: 60%;
+    width: 80%;
     border: 1px solid #fff;
     border-collapse: collapse;
 `;
@@ -61,7 +65,6 @@ const StyledTable = styled.table`
     background: #F8F8FF;
     color: #000;
     align: right;
-    width: 50%;
     margin: auto;
     border: 1px solid #000;
     border-collapse: collapse;
@@ -195,12 +198,12 @@ class GuessingScreen extends React.Component {
             <Container>
             <div>
                 <h1>Which picture were the other players trying to build?</h1>
-                <h2>Make your guesses</h2>
-                {(this.state.count + buildRoom.timeDifferenceGuessing) <= 0 ?(this.timeOver()):(<h2>Time left: {('0'+Math.round(this.state.count + buildRoom.timeDifferenceGuessing)).slice(-2)}</h2>
-                )}
                 <PictureGrid/>
             </div>
                 <div>
+                    <h2>Make your guesses:</h2>
+                    {(this.state.count + buildRoom.timeDifferenceGuessing) <= 0 ?(this.timeOver()):(<h2>Time left: {('0'+Math.round(this.state.count + buildRoom.timeDifferenceGuessing)).slice(-2)}</h2>
+                )}
                     <StyledTable>
                         <StyledTr>
                             <StyledTd>for testing: username</StyledTd>
@@ -209,14 +212,14 @@ class GuessingScreen extends React.Component {
                         </StyledTr>
                         {filledTableRows}
                     </StyledTable>
-                    <Button
+                    <Button1
                         width="25%"
                         onClick={() => {
                             this.sendUserGuesses();
                         }}
                     >
                         My guesses are done!
-                    </Button>
+                    </Button1>
                     <Button
                         width="25%"
                         onClick={() => {
