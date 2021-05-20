@@ -93,7 +93,7 @@ class GuessingScreen extends React.Component {
             responseRoom: null,
             count: 60.0,
         }
-      //  this.getScreenshots();
+        this.getScreenshots();
     };
 
     // GET REQUEST "/screenshots"
@@ -108,12 +108,13 @@ class GuessingScreen extends React.Component {
                 // response_array[i][0] = username
                 if(response.data[e][0] !== localStorage.getItem('currentUsername')) {
                     namesAndScsURLs.push([response.data[e][0], response.data[e][1]])
+                    console.log("NMEEEAA: ", response.data[e][1])
                 }
             }
 
             // Get the returned screenshots and update the state.
             this.setState({ scsURLsAndUserNames: namesAndScsURLs });
-            //localStorage.setItem( "screenshots TEST:", response.data );
+
         } catch (error) {
             alert(`Something went wrong while fetching the users: \n${handleError(error)}`);
         }
@@ -179,6 +180,7 @@ class GuessingScreen extends React.Component {
 
 
     render() {
+        const buildRoom = new BuildRoom(this.state.responseRoom)
         const filledTableRows = this.state.scsURLsAndUserNames.map( tuple =>{
                 return(
                     <StyledTr>
