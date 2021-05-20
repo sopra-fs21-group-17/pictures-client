@@ -43,7 +43,7 @@ class ScoreScreen extends React.Component {
     async componentWillMount() {
         try {
             const response = await api.get("/rounds/" + localStorage.getItem("currentLobbyId"))
-            this.setState({rounds: response.data})
+            this.setState({rounds: response.data.round})
         } catch (error) {
             alert(`Something went wrong getting the current round: \n${handleError(error)}`);
         }
@@ -71,22 +71,14 @@ class ScoreScreen extends React.Component {
 
     gameHasFinished() {
         return (
-            <Button
-                width="25%"
-                onClick={() => {
-                    this.exitGame();
-                }}
-            >
-                Exit Game
 
-            </Button>,
                 <Button
                     width="25%"
                     onClick={() => {
                         this.playAgain();
                     }}
                 >
-                    new Round
+                    new Game
 
                 </Button>
         )
@@ -168,14 +160,26 @@ class ScoreScreen extends React.Component {
                 </table>
 
                 <ButtonContainer>
-                    {this.state.rounds == 5 }?{this.gameHasFinished()}:{<Button
+                    {
+                        this.state.rounds === 5 ? this.gameHasFinished():(<Button
                         width="25%"
                         onClick={() => {
                             this.nextRound();
                         }}
                     >
                         Ok, next round!
-                    </Button>}
+                    </Button>)
+                    }
+                    <Button
+                        width="25%"
+                        onClick={() => {
+                            this.exitGame();
+                        }}
+                    >
+                        Exit Game
+
+                    </Button>
+
                 </ButtonContainer>
             </Container>
         );
