@@ -1,5 +1,5 @@
 import { useDrop } from "react-dnd";
-import {useEffect, useRef} from "react";
+import { useEffect } from "react";
 import styled from "styled-components";
 import { ItemTypes } from "../utils/Items";
 import React, { useContext } from "react";
@@ -36,19 +36,19 @@ export const FreeBoard = ({ itemlist }) => {
                     left = monitor.getClientOffset().x - ref.x;
                     top = monitor.getClientOffset().y - ref.y;
                 }
-                console.log(ref);
+                console.log();
 
                 if(left < (ref.width * 0.1)){
                     left = (ref.width * 0.1);
                 }
-                if(left > (ref.width * 0.9)){
-                    left = (ref.width * 0.9);
+                if(left + (window.innerWidth*0.05) > (ref.width * 0.9)){
+                    left = ((ref.width * 0.9)-window.innerWidth*0.05);
                 }
                 if(top < (ref.height * 0.1)){
                     top = (ref.height * 0.1);
                 }
-                if(top > (ref.height * 0.9)){
-                    top = (ref.height * 0.9);
+                if(top + (window.innerWidth*0.05) > (ref.height * 0.9)){
+                    top = ((ref.height * 0.9)-window.innerWidth*0.05);
                 }
 
                 moveItem(item._id, left, top,);
@@ -64,7 +64,7 @@ export const FreeBoard = ({ itemlist }) => {
                 ref={drop}>
                     <canvas id="canvas" width={getLength} height={getLength}/>
                     {itemlist
-                    .filter((task, i) => task.location === 'board')
+                    .filter(item => item.location === 'board')
                     .map((key) => {
                     return (
 

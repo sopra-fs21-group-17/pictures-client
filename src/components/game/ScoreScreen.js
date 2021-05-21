@@ -5,6 +5,10 @@ import { api, handleError } from '../../helpers/api';
 import { Button } from '../../views/design/Button';
 import { withRouter } from 'react-router-dom';
 
+const Button1 = styled(Button)`
+  background: green  
+  `;
+
 const Container = styled(BaseContainer)`
   color: white;
   text-align: center;
@@ -28,7 +32,26 @@ const ButtonContainer = styled.div`
   margin-top: 20px;
 `;
 
+const StyledTd = styled.td`
+    padding: 15px;
+    border: 4px solid #000;
+    border-collapse: collapse;
+`;
 
+const StyledTr = styled.tr`
+    border: 1px solid #000;
+    border-collapse: collapse;
+`;
+
+const StyledTable = styled.table`
+    background: #F8F8FF;
+    color: #000;
+    align: right;
+    width: 50%;
+    margin: auto;
+    border: 1px solid #000;
+    border-collapse: collapse;
+`;
 
 
 class ScoreScreen extends React.Component {
@@ -176,43 +199,61 @@ class ScoreScreen extends React.Component {
         return result;
     }
 
+    // create an array containing usernames and their points
+    createPointsArray() {
+        let result = []
+        const temp = this.convertToArray(JSON.parse((localStorage.getItem("players"))));
+
+        for(let e in temp){
+            result.push([temp[e][1]["username"], temp[e][1]["points"]])
+        }
+
+        return result;
+    }
+
     render() {
 
         const temp = this.convertCorrectedGuessesToMap(localStorage.getItem("correctedGuesses"));
-        const filledTableGuesses = temp.map(tuple => {
+        const guessesNames = temp.map(tuple => {
                 return (
-                    <td>
-                        <tr>{tuple[0]}</tr>
-                        <tr>{tuple[1]}</tr>
-                    </td>
+                    <StyledTd>{tuple[0]}</StyledTd>
+                )
+            }
+        )
+        const guessesCorrected = temp.map(tuple => {
+                return (
+                    <StyledTd>{tuple[1]}</StyledTd>
                 )
             }
         )
 
-        const temp2 = this.convertToArray(JSON.parse((localStorage.getItem("thePoints"))));
-        const filledTablePoints = temp2.map(tuple => {
-                return (
-                    <td>
-                        <tr>{tuple[0]}</tr>
-                        <tr>{tuple[1]}</tr>
-                    </td>
-                )
-            }
-        )
+        const temp2 = this.createPointsArray()
+        const playerNames = temp2.map(tuple =>{
+            return(
+                <StyledTd>{tuple[0]}</StyledTd>
+            )
+        })
+        const playerPoints = temp2.map(tuple =>{
+            return(
+                <StyledTd>{tuple[1]}</StyledTd>
+            )
+        })
 
         return (
             <Container>
                 <h2>SCORE OVERVIEW</h2>
 
                 <p>Points overview:</p>
-                <table align={"center"}>
-                    {filledTablePoints}
-                </table>
+                <StyledTable align={"center"}>
+                    <StyledTr>{playerNames}</StyledTr>
+                    <StyledTr>{playerPoints}</StyledTr>
+                </StyledTable>
 
                 <p>Your guesses:</p>
-                <table align={"center"}>
-                    {filledTableGuesses}
-                </table>
+                <StyledTable align={"center"}>
+                    <StyledTr>{guessesNames}</StyledTr>
+                    <StyledTr>{guessesCorrected}</StyledTr>
+                </StyledTable>
 
                 <ButtonContainer>
                     {
@@ -224,14 +265,12 @@ class ScoreScreen extends React.Component {
                             this.setState({buttonPressed:true})
 
                             )
-
-
                         }
                     >
                         Ok, next round!
-                        </Button>):<Button
+                        </Button>):<Button1
                         width="25%"
-                        disabled={true}>Ok, next round!</Button>):this.gameHasFinished()
+                        disabled={true}>Ok, next round!</Button1>):this.gameHasFinished()
                     }
                     <Button
                         width="25%"
@@ -240,7 +279,6 @@ class ScoreScreen extends React.Component {
                         }}
                     >
                         Exit Game
-
                     </Button>
 
                 </ButtonContainer>
@@ -248,5 +286,6 @@ class ScoreScreen extends React.Component {
             </Container>
         );
     }
+
 }
 export default withRouter(ScoreScreen);

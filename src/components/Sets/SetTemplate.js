@@ -297,20 +297,20 @@ export const SetTemplate = () => {
     function showIcons(){
         setCurrentLeftIndex(currentLeftIndex -1);
         {itemList
-            .filter((task, i) => task.location === 'inventory')
-            .filter((task, i) => task.amount > 0)
+            .filter(item => item.location === 'inventory')
+            .filter(item => item.amount > 0)
             .slice(currentLeftIndex, currentRightIndex)
-            .map((task, i) => (
+            .map(item => (
 
                 <ItemContainer>
                     <Item
-                        key={task._id.toString()}
-                        _id={task._id}
-                        location={task.location}
-                        color={task.color}
-                        amount={task.amount}
-                        style={task.style}
-                        background={task.background}
+                        key={item._id.toString()}
+                        _id={item._id}
+                        location={item.location}
+                        color={item.color}
+                        amount={item.amount}
+                        style={item.style}
+                        background={item.background}
                     />
                 </ItemContainer>
             ))}
@@ -322,16 +322,16 @@ export const SetTemplate = () => {
             return (
                 <Inventory>
                     {itemList
-                        .filter((task, i) => task.location === 'inventory')
-                        .filter((task, i) => task.amount > 0)
-                        .map((task, i) => (
+                        .filter(item => item.location === 'inventory')
+                        .filter(item => item.amount > 0)
+                        .map(item => (
                             <ItemContainer>
                                 <Square
-                                    key={task._id.toString()}
-                                    _id={task._id}
-                                    location={task.location}
-                                    color={task.color}
-                                    amount={task.amount}
+                                    key={item._id.toString()}
+                                    _id={item._id}
+                                    location={item.location}
+                                    color={item.color}
+                                    amount={item.amount}
                                 />
                             </ItemContainer>
                         ))}
@@ -346,8 +346,8 @@ export const SetTemplate = () => {
                 <ButtonScroll
 
                     disabled={currentLeftIndex <= 0}
-                    hidden = {currentLeftIndex === 0 || itemList.filter((task, i) => task.location === 'inventory')
-                        .filter((task, i) => task.amount > 0).length <= 6}
+                    hidden = {currentLeftIndex === 0 || itemList.filter(item => item.location === 'inventory')
+                        .filter(item => item.amount > 0).length <= 6}
                     style={{position: "absolute", left: "3.5%"}}
                     onClick={() =>{
                         if (currentLeftIndex <= 0){setCurrentLeftIndex(0)
@@ -360,25 +360,25 @@ export const SetTemplate = () => {
                 </ButtonScroll>
 
                 {itemList
-                    .filter((task, i) => task.location === 'inventory')
-                    .filter((task, i) => task.amount > 0)
+                    .filter(item => item.location === 'inventory')
+                    .filter(item => item.amount > 0)
                     .slice(currentLeftIndex, currentRightIndex)
                     .length < 5 && currentLeftIndex !== 0 ? (showIcons()):(
                         itemList
-                            .filter((task, i) => task.location === 'inventory')
-                            .filter((task, i) => task.amount > 0)
+                            .filter(item => item.location === 'inventory')
+                            .filter(item => item.amount > 0)
                             .slice(currentLeftIndex, currentRightIndex)
-                            .map((task, i) => (
+                            .map(item => (
 
                                 <ItemContainer>
                                     <Item
-                                      key={task._id.toString()}
-                                      _id={task._id}
-                                      location={task.location}
-                                      color={task.color}
-                                      amount={task.amount}
-                                      style={task.style}
-                                      background={task.background}
+                                      key={item._id.toString()}
+                                      _id={item._id}
+                                      location={item.location}
+                                      color={item.color}
+                                      amount={item.amount}
+                                      style={item.style}
+                                      background={item.background}
                                     />
                                 </ItemContainer>
                         )))}
@@ -387,14 +387,14 @@ export const SetTemplate = () => {
                 <ButtonScroll
 
                     disabled={(currentRightIndex) >= itemList
-                        .filter((task, i) => task.location === 'inventory')
-                        .filter((task, i) => task.amount > 0).length}
+                        .filter(item => item.location === 'inventory')
+                        .filter(item => item.amount > 0).length}
                     display ={(itemList
-                        .filter((task, i) => task.location === 'inventory')
-                        .filter((task, i) => task.amount > 0).length <= 6)}
-                    onClick={() => {if (currentRightIndex >= itemList.filter((task, i) => task.location === 'inventory')
-                        .filter((task, i) => task.amount > 0).length){setCurrentRightIndex( itemList.filter((task, i) => task.location === 'inventory')
-                        .filter((task, i) => task.amount > 0).length)}else{
+                        .filter(item => item.location === 'inventory')
+                        .filter(item => item.amount > 0).length <= 6)}
+                    onClick={() => {if (currentRightIndex >= itemList.filter(item => item.location === 'inventory')
+                        .filter(item => item.amount > 0).length){setCurrentRightIndex( itemList.filter(item => item.location === 'inventory')
+                        .filter(item => item.amount > 0).length)}else{
                         setCurrentLeftIndex(currentLeftIndex  + 1);
                         setCurrentRightIndex(currentRightIndex + 1)}}
                     }
@@ -411,18 +411,18 @@ export const SetTemplate = () => {
             return (
                 <Inventory>
                     {itemList
-                        .filter((task, i) => task.location === 'inventory')
-                        .filter((task, i) => task.amount > 0)
-                        .map((task, i) => (
+                        .filter(item => item.location === 'inventory')
+                        .filter(item => item.amount > 0)
+                        .map(item => (
                             <ItemContainer>
                                 <Item
-                                    key={task._id.toString()}
-                                    _id={task._id}
-                                    location={task.location}
-                                    color={task.color}
-                                    amount={task.amount}
-                                    style={task.style}
-                                    background={task.background}
+                                    key={item._id.toString()}
+                                    _id={item._id}
+                                    location={item.location}
+                                    color={item.color}
+                                    amount={item.amount}
+                                    style={item.style}
+                                    background={item.background}
                                 />
                             </ItemContainer>
                         ))}
@@ -447,7 +447,7 @@ export const SetTemplate = () => {
 
     const moveItem = (id, left, top) => {
 
-        const updatedItem = itemList.filter((item, i) => item._id === id);
+        const updatedItem = itemList.filter(item => item._id === id);
 
         const lastSelectedItem = itemList.filter((item) => item.selected === true);
 
@@ -478,30 +478,30 @@ export const SetTemplate = () => {
             setItemList(itemList.filter((item) => item._id !== id).concat(updatedItem[0]));
         } else {
             updatedItem[0].amount = updatedItem[0].amount-1;
-            setItemList(((itemList.filter((item, i) => item._id < id).concat(updatedItem[0])).concat(itemList.filter((item, i) => item._id > id))).concat(newItem));
+            setItemList(((itemList.filter(item => item._id < id).concat(updatedItem[0])).concat(itemList.filter(item => item._id > id))).concat(newItem));
         }
     };
 
     const markAsInventory = _id => {
         //gets the item which was moved
-        const movedItem = itemList.filter((item, i) => item._id === _id);
+        const movedItem = itemList.filter(item => item._id === _id);
 
         //gets the corresponding item in the inventory
-        const inventoryItem = (itemList.filter((item, i) => item.color === movedItem[0].color).filter((item, i) => item._id <= 20));
+        const inventoryItem = (itemList.filter(item => item.color === movedItem[0].color).filter(item => item._id <= 20));
 
         //creates new list without the item which was moved
-        const newList = itemList.filter((item, i) => item._id !== _id)
+        const newList = itemList.filter(item => item._id !== _id)
 
         //only apply changes when item is moved from board to inventory
         if(movedItem[0].location !== 'inventory'){
             inventoryItem[0].amount += 1;
-            setItemList((newList.filter((item, i) => item._id < inventoryItem[0]._id).concat(inventoryItem[0])).concat(newList.filter((item, i) => item._id > inventoryItem[0]._id)));
+            setItemList((newList.filter(item => item._id < inventoryItem[0]._id).concat(inventoryItem[0])).concat(newList.filter(item => item._id > inventoryItem[0]._id)));
         }
     };
 
     const markAsSquareField = (square,x) => {
         //gets the item that was moved
-        const selectedItem = itemList.filter((item, i) => item._id === square._id);
+        const selectedItem = itemList.filter(item => item._id === square._id);
 
         //creates a new item
         const newSquare = {
@@ -512,13 +512,13 @@ export const SetTemplate = () => {
         };
 
         //only applies changes if item moved to a empty square or the inventory
-        if(itemList.filter((item, i) => item.location === 'squarefield'+x).length === 0){
+        if(itemList.filter(item => item.location === 'squarefield'+x).length === 0){
             if(square.location !== 'inventory'){
                 selectedItem[0].location = 'squarefield'+x;
-                setItemList(itemList.filter((item, i) => item._id !== square._id).concat(selectedItem[0]));
+                setItemList(itemList.filter(item => item._id !== square._id).concat(selectedItem[0]));
             } else {
                 selectedItem[0].amount = selectedItem[0].amount-1;
-                setItemList(((itemList.filter((item, i) => item._id < square._id).concat(selectedItem[0])).concat(itemList.filter((item, i) => item._id > square._id))).concat(newSquare));
+                setItemList(((itemList.filter(item => item._id < square._id).concat(selectedItem[0])).concat(itemList.filter(item => item._id > square._id))).concat(newSquare));
             }
         }
     };

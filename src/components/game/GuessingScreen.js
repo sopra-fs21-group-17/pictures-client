@@ -10,9 +10,13 @@ import PictureGrid from "./PictureGrid";
 import BuildRoom from "../shared/models/BuildRoom";
 
 
+const Button1 = styled(Button)`
+  background: green  
+  `;
+
 const InputField = styled.input`
   &::placeholder {
-    color: rgba(255, 255, 255, 1.0);
+    color: #000;
   }
   height: 35px;
   width: 50px;
@@ -21,7 +25,7 @@ const InputField = styled.input`
   border: none;
   border-radius: 20px;
   margin-bottom: 20px;
-  background: rgba(255, 255, 255, 0.2);
+  background: #C0C0C0;
   color: white;
 `;
 
@@ -32,47 +36,38 @@ const Label = styled.label`
 `;
 
 const Container = styled(BaseContainer)`
+  display: flex;
   color: white;
   text-align: center;
-`;
-
-const UserBar = styled.div`
-display: flex;
-flex-direction: row;
-width: 20%;
-height: 600px;
-background: pink;
-margin: 15px;
-border-radius: 5px;
-`;
-
-const Users = styled.ul`
-  list-style: none;
-  padding-left: 0;
-`;
-
-const PlayerContainer = styled.li`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  flex-direction: row;
+  min-width: 900px;
+  margin: 5px;
 `;
 
 const StyledImg = styled.img`
-    color: red;
-    width: 60%;
+    width: 80%;
+    border: 1px solid #fff;
+    border-collapse: collapse;
 `;
 
 const StyledTd = styled.td`
+    padding: 15px;
+    border: 1px solid #000;
+    border-collapse: collapse;
 `;
 
 const StyledTr = styled.tr`
+    border: 1px solid #000;
+    border-collapse: collapse;
 `;
 
 const StyledTable = styled.table`
-    align: left;
-    width: 50%;
-    margin: 10px;
+    background: #F8F8FF;
+    color: #000;
+    align: right;
+    margin: auto;
+    border: 1px solid #000;
+    border-collapse: collapse;
 `;
 
 
@@ -109,7 +104,6 @@ class GuessingScreen extends React.Component {
                 // response_array[i][0] = username
                 if(response.data[e][0] !== localStorage.getItem('currentUsername')) {
                     namesAndScsURLs.push([response.data[e][0], response.data[e][1]])
-                    console.log("NMEEEAA: ", response.data[e][1])
                 }
             }
 
@@ -206,28 +200,30 @@ class GuessingScreen extends React.Component {
 
         return (
             <Container>
-                <div align={"center"}>
-                    <h2>Which picture were the other players trying to build?</h2>
-                    <h3>Make your guesses</h3>
+            <div>
+                <h1>Which picture were the other players trying to build?</h1>
+                <PictureGrid/>
+            </div>
+                <div>
+                    <h2>Make your guesses:</h2>
                     {(this.state.count + buildRoom.timeDifferenceGuessing) <= 0 ?(this.timeOver()):(<h2>Time left: {('0'+Math.round(this.state.count + buildRoom.timeDifferenceGuessing)).slice(-2)}</h2>
-                    )}
+                )}
                     <StyledTable>
                         <StyledTr>
+                            <StyledTd>for testing: username</StyledTd>
                             <StyledTd>What the other players built:</StyledTd>
                             <StyledTd>Coordinates of original picture:</StyledTd>
                         </StyledTr>
                         {filledTableRows}
                     </StyledTable>
-
-                    <Button
+                    <Button1
                         width="25%"
                         onClick={() => {
                             this.sendUserGuesses();
                         }}
                     >
                         My guesses are done!
-                    </Button>
-
+                    </Button1>
                     <Button
                         width="25%"
                         onClick={() => {
@@ -237,9 +233,6 @@ class GuessingScreen extends React.Component {
                         DEV: "Guessing is done!"
                     </Button>
                 </div>
-
-                <PictureGrid></PictureGrid>
-
             </Container>
         );
     }

@@ -19,7 +19,6 @@ const GridContainer = styled.div`
   'B G G G G'
   'C G G G G'
   'D G G G G';
- 
 `;
 
 const Grid = styled.div`
@@ -36,7 +35,6 @@ const Grid = styled.div`
   padding-bottom: 15px;
   border-radius: 5px;
   
-  
   background: linear-gradient(rgb(27, 124, 186), rgb(2, 46, 101));
   transition: opacity 0.5s ease, transform 0.5s ease;
   grid-template-columns: repeat(4,1fr);
@@ -47,19 +45,15 @@ const Grid = styled.div`
   grid-column-end: span 4;
 `;
 
-
+// TODO make table out of this??
 const GridCoordinate = styled.div`
- height: 25px;
-  width: 25px;
-  color: black;
-  background: pink;
-  border-radius: 50px;
+  color: white;
   margin: 15px;
 `;
 
 const GridVoid = styled.div`
-background: transparent;
- height: auto;
+  background: transparent;
+  height: auto;
   width: auto;
   grid-row-start: 1;
   grid-column-start: 1;

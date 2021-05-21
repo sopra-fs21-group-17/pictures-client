@@ -1,7 +1,3 @@
-// TODO define game states
-// TODO add getRequest for after guessing for ending guesses
-// TODO will need to be styled
-// TODO map urls to components
 
 import React from 'react';
 import { withRouter } from 'react-router-dom';
@@ -18,6 +14,10 @@ const Container = styled(BaseContainer)`
   flex-direction: row;
   min-width: 900px;
   
+  `;
+
+const Button1 = styled(Button)`
+  background: green  
   `;
 
 const GridContainer = styled.div`
@@ -186,24 +186,29 @@ class MainBoard extends React.Component{
 
     render(){
         return(<Container>
-            <PictureGrid/>
+            <div>
+                <h1>Take a look at your assigned coordinates</h1>
+                <PictureGrid/>
+            </div>
+            <div>
             <table>
                 <td>
                     <tr>Build the picture located at</tr>
                     <tr>{this.state.myCoordinates}</tr>
                     <tr>
                         <ButtonContainer>
-                            <Button
+                            <Button1
                                 onClick={() => {
                                     this.showBuildScreen();
                                 }}
                             >
-                                take me to build screen
-                            </Button>
+                                got it !
+                            </Button1>
                         </ButtonContainer>
                     </tr>
                 </td>
             </table>
+            </div>
         </Container>);
     }
 
