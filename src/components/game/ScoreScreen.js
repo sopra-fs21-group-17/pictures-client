@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { BaseContainer } from '../../helpers/layout';
 import { api, handleError } from '../../helpers/api';
@@ -137,14 +137,21 @@ class ScoreScreen extends React.Component {
 
     }
 
-    async exitGame(){
-        //TODO zrugg is Home alles leere --> BE user us de lobby entferne alueg 
+    async exitGame() {
+        try {
+            //TODO zrugg is Home alles leere --> BE user us de lobby entferne alueg
+            await api.delete("/players/" + localStorage.getItem("id") + "/" + localStorage.getItem("currentLobbyId"));
 
-        localStorage.removeItem('currentLobbyId');
-        this.props.history.push("/home")
+            this.setState({buttonPressed: true, playersFinished: true})
+            localStorage.removeItem('currentLobbyId');
+            this.props.history.push("/home")
+        } catch (error) {
+            alert(`Something went wrong during the preparation of next Round: \n${handleError(error)}`);
+        }
     }
 
-    gameHasFinished() {
+
+    gameHasFinished(){
         return (
 
                 <Button
