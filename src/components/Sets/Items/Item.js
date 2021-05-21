@@ -68,7 +68,7 @@ export const Item = ({_id, location, left, top, color, amount, hideSourceOnDrag,
 
     useEffect(() => {
         preview(getEmptyImage());
-    }, []);
+    }, [preview]);
 
     function showAmount() {
         if (location === 'inventory') {
@@ -78,7 +78,7 @@ export const Item = ({_id, location, left, top, color, amount, hideSourceOnDrag,
 
     if (isDragging && hideSourceOnDrag) {
         return (
-            <div ref={drag} style={getStyles(left, top, isDragging)} role="DraggableItem"> //remove left top
+            <div ref={drag} style={getStyles(left, top, isDragging)} >
                 {/*<Item style={style}/>*/}
             </div>
 
@@ -183,7 +183,7 @@ export const Item = ({_id, location, left, top, color, amount, hideSourceOnDrag,
     else {
         return (
             <ItemContainer>
-                <div ref={drag} style={{...stickstyle, transform: 'rotate('+rotation+'deg)',  location, left, top, amount}} role="Box">
+                <div ref={drag} style={{...stickstyle, transform: 'rotate('+rotation+'deg)',  location, left, top, amount}} >
                     {showAmount()}
                 </div>
             </ItemContainer>

@@ -29,14 +29,14 @@ export const GridBoard = ({ itemlist }) => {
         return (<div key={i} style={squareStyle}>
             <SquareField x={x}   >
                 {itemlist
-                    .filter((task, i) => task.location === 'squarefield'+x)
-                    .map((task, i) => (
+                    .filter(item => item.location === 'squarefield'+x)
+                    .map(item => (
                         <Square
-                            key={task._id.toString()}
-                            _id={task._id}
-                            locatioin={task.location}
-                            color={task.color}
-                            amount={task.amount}
+                            key={item._id.toString()}
+                            _id={item._id}
+                            locatioin={item.location}
+                            color={item.color}
+                            amount={item.amount}
                         />
                     ))}
 

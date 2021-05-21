@@ -9,11 +9,11 @@ import SetTemplate from "../Sets/SetTemplate";
 import BuildRoom from "../shared/models/BuildRoom";
 
 const Container = styled(BaseContainer)`
-  display: flex;
-  color: white;
-  text-align: center;
-  flex-direction: row;
-  min-width: 900px;
+  // display: flex;
+  // color: white;
+  // text-align: center;
+  // flex-direction: row;
+  // min-width: 900px;
 `;
 
 const Countdown = styled.div`
