@@ -61,15 +61,11 @@ class ScoreScreen extends React.Component {
         this.state = {
             users: null,
             players: {},
-
-
             max_rounds:5,
             rounds: 0,
             playersFinished: false,
             buttonPressed: false
-
         };
-
     }
 
     intervalID = 0;
@@ -78,7 +74,7 @@ class ScoreScreen extends React.Component {
 
 //TODO make sure that all players could update their board before board is rendered
 
-     getRoundInformation = async () => {
+    getRoundInformation = async () => {
          try {
              if(this.state.playersFinished && this.state.buttonPressed){
                  this.props.history.push(`/board`);
@@ -108,7 +104,6 @@ class ScoreScreen extends React.Component {
 
     }
 
-
     componentDidMount() {
 
         this.intervalID = setInterval(this.getRoundInformation,5000)
@@ -120,7 +115,6 @@ class ScoreScreen extends React.Component {
     componentWillUnmount() {
         clearInterval(this.intervalID)
     }
-
 
     async nextRound() {
         try {
@@ -150,7 +144,6 @@ class ScoreScreen extends React.Component {
         }
     }
 
-
     gameHasFinished(){
         return (
 
@@ -166,18 +159,18 @@ class ScoreScreen extends React.Component {
         )
     }
 
-
     convertCorrectedGuessesToMap(correctedGuesses) {
 
-        let tempUsername = "";
-        let tempCoordinates = "";
-        let result = [];
+        let tempUsername = ""
+        let tempCoordinates = ""
+        let result = []
 
         for (let i = 0; i < correctedGuesses.length; i++) {
-            for (let j = 0; j < 1; j++) { // first letters is y/n for correct/incorrect guess
+            for (let j = 0; j < 1; j++) {
+                // first letters is y/n for correct/incorrect guess
                 //tempCoordinates += correctedGuesses.charAt(i+j);
                 if(correctedGuesses.charAt(i+j) === "y"){
-                    tempCoordinates = "✔";
+                    tempCoordinates = "✔"
                 } else {
                     tempCoordinates = "✘";
                 }
@@ -207,34 +200,38 @@ class ScoreScreen extends React.Component {
     }
 
     // create an array containing usernames and their points
-    createPointsArray() {
-        let result = []
-        const temp = this.convertToArray(JSON.parse((localStorage.getItem("players"))));
-
-        for(let e in temp){
-            result.push([temp[e][1]["username"], temp[e][1]["points"]])
+    async createPointsArray() {
+        try {
+            const temp = this.convertToArray(JSON.parse((localStorage.getItem("thePoints"))));
+            let result = []
+            for(let e in temp){
+                console.log("EEEE: ",e)
+               // result.push([temp[e]["username"], temp[e]["points"]])
+            }
+            localStorage.setItem("pointss", result)
         }
-
-        return result;
+        catch (error) {
+            alert(`Something went wrong getting the Players: \n${handleError(error)}`);
+        }
     }
 
     render() {
 
+        // fill in corrected guesses table
         const temp = this.convertCorrectedGuessesToMap(localStorage.getItem("correctedGuesses"));
         const guessesNames = temp.map(tuple => {
                 return (
                     <StyledTd>{tuple[0]}</StyledTd>
                 )
-            }
-        )
+            })
         const guessesCorrected = temp.map(tuple => {
                 return (
                     <StyledTd>{tuple[1]}</StyledTd>
                 )
-            }
-        )
+            })
 
-        const temp2 = this.createPointsArray()
+        // fill in points table
+        const temp2 = this.convertToArray(JSON.parse((localStorage.getItem("thePoints"))));
         const playerNames = temp2.map(tuple =>{
             return(
                 <StyledTd>{tuple[0]}</StyledTd>

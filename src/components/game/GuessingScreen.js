@@ -88,9 +88,8 @@ class GuessingScreen extends React.Component {
             responseRoom: null,
             count: 60.0,
         }
-        this.getScreenshots();
+        this.getScreenshots()
     };
-
 
     // GET REQUEST "/screenshots"
     async getScreenshots(){
@@ -128,10 +127,10 @@ class GuessingScreen extends React.Component {
     // PUT REQUEST
     async sendUserGuesses(){
         try{
-            let temp = this.convertGuessesToString(this.state.guesses);
+            let guessesAsString = this.convertGuessesToString(this.state.guesses);
             const requestBody = JSON.stringify({
                 username: localStorage.getItem("currentUsername"),
-                guesses: temp
+                guesses: guessesAsString
             })
             const response = api.post("/guesses/"+localStorage.getItem("currentLobbyId"), requestBody);
             localStorage.setItem("correctedGuesses", (await response).data);
@@ -150,8 +149,7 @@ class GuessingScreen extends React.Component {
     }
 
     saveGuessToDict(user, value) {
-        this.setState({...this.state,
-            guesses: {...this.state.guesses,[user]:value}})
+        this.setState({...this.state,guesses: {...this.state.guesses,[user]:value}})
     }
 
     // get corrected guesses and points
@@ -165,9 +163,8 @@ class GuessingScreen extends React.Component {
                 thePoints[username] = attribute["points"];
             }
             localStorage.setItem("thePoints", JSON.stringify(thePoints));
-
         } catch(error) {
-            alert(`Something went wrong while receiving the guesses and points: \n${handleError(error)}`);
+            alert(`Something went wrong while receiving the points: \n${handleError(error)}`);
         }
 
         this.props.history.push(`/scoreScreen`);
@@ -200,10 +197,12 @@ class GuessingScreen extends React.Component {
 
         return (
             <Container>
-            <div>
+            <Container>
+                <div>
                 <h1>Which picture were the other players trying to build?</h1>
                 <PictureGrid/>
-            </div>
+                </div>
+            </Container>
                 <div>
                     <h2>Make your guesses:</h2>
                     {(this.state.count + buildRoom.timeDifferenceGuessing) <= 0 ?(this.timeOver()):(<h2>Time left: {('0'+Math.round(this.state.count + buildRoom.timeDifferenceGuessing)).slice(-2)}</h2>

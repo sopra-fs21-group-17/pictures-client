@@ -179,6 +179,7 @@ class MainBoard extends React.Component{
             alert(`Something went wrong getting the Players: \n${handleError(error)}`);
         }
     }
+
     async componentWillMount(){
         await this.initGame();
     }
