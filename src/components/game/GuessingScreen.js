@@ -179,6 +179,9 @@ class GuessingScreen extends React.Component {
         this.props.history.push(`/scoreScreen`);
     }
 
+    async componentDidMount(){
+        await this.resetRoundHandle()
+    }
 
     render() {
         const buildRoom = new BuildRoom(this.state.responseRoom)

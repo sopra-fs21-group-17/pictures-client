@@ -88,7 +88,7 @@ class ScoreScreen extends React.Component {
 
     componentDidMount() {
 
-        this.intervalID = setInterval(this.getRoundInformation,15000)
+        this.intervalID = setInterval(this.getRoundInformation,5000)
 
 
 
