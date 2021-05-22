@@ -231,7 +231,7 @@ class ScoreScreen extends React.Component {
             })
 
         // fill in points table
-        const temp2 = this.convertToArray(JSON.parse((localStorage.getItem("thePoints"))));
+        const temp2 = this.convertToArray(JSON.parse((localStorage.getItem("thePoints"))))
         const playerNames = temp2.map(tuple =>{
             return(
                 <StyledTd>{tuple[0]}</StyledTd>

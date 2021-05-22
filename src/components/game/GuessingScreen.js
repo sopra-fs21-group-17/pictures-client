@@ -156,11 +156,16 @@ class GuessingScreen extends React.Component {
     async showScoreScreen() {
         try{
             const response = await api.get('/score/'+localStorage.getItem("currentLobbyId"));
-
             // punkte auslesen
-            let thePoints = {};
-            for(const [username, attribute] of Object.entries(response.data)){
-                thePoints[username] = attribute["points"];
+            let thePoints = [];
+            let temp = []
+            const data = response.data
+            let nrOfPlayers = JSON.parse((localStorage.getItem("players"))).length
+            localStorage.setItem("DATAAA: ", data)
+            for (var i = 0; i < nrOfPlayers*2; i++) {
+                temp = [data[i],data[i++]]
+                console.log("TEMP", data[i]);
+                thePoints.push(temp)
             }
             localStorage.setItem("thePoints", JSON.stringify(thePoints));
         } catch(error) {
