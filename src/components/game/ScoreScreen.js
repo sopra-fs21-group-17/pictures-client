@@ -188,31 +188,14 @@ class ScoreScreen extends React.Component {
         return result;
     }
 
-    convertToArray(data) {
-
-        let result = [];
-        for (const [username, attribute] of Object.entries(data)) {
-            let tuple = [username, attribute];
-            result.push(tuple);
-        }
-
-        return result;
-    }
-
-    // create an array containing usernames and their points
-    async createPointsArray() {
-        try {
-            const temp = this.convertToArray(JSON.parse((localStorage.getItem("thePoints"))));
-            let result = []
-            for(let e in temp){
-                console.log("EEEE: ",e)
-               // result.push([temp[e]["username"], temp[e]["points"]])
+    getPointsArray(x){
+        let result = []
+        for(let i = 0; i < x.length; i++){
+            if(i % 2 === 0){
+                result.push([x[i],x[i+1]])
             }
-            localStorage.setItem("pointss", result)
         }
-        catch (error) {
-            alert(`Something went wrong getting the Players: \n${handleError(error)}`);
-        }
+        return result
     }
 
     render() {
@@ -231,15 +214,14 @@ class ScoreScreen extends React.Component {
             })
 
         // fill in points table
-        let input = JSON.parse((localStorage.getItem("thePoints")))
+        let input = this.getPointsArray(JSON.parse((localStorage.getItem("thePoints"))))
         if(input === null){ input = ["error","error"]}
-        const temp2 = this.convertToArray(input)
-        const playerNames = temp2.map(tuple =>{
+        const playerNames = input.map(tuple =>{
             return(
                 <StyledTd>{tuple[0]}</StyledTd>
             )
         })
-        const playerPoints = temp2.map(tuple =>{
+        const playerPoints = input.map(tuple =>{
             return(
                 <StyledTd>{tuple[1]}</StyledTd>
             )

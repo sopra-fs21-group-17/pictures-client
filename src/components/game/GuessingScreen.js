@@ -83,7 +83,7 @@ const NotReady = styled.div`
 `;
 
 const Ready = styled.div`
-  margin-left: auto;
+  margin: auto;
   font-weight: bold;
   background: rgba(80, 190, 80, 1);
   border-radius: 100%;
@@ -105,21 +105,18 @@ class GuessingScreen extends React.Component {
                 "D1", "D2", "D3", "D4"],
             guesses: {},
             players: [],
+            isDoneGuessing: false,
             guessesAsString: "",
             responseRoom: null,
             count: 60.0,
             allDoneGuessing: null
         }
-        this.getScreenshots()
     };
 
     // GET REQUEST "/screenshots"
     async getScreenshots(){
         try {
-            //const response = await api.get('/screenshots/'+localStorage.getItem("currentLobbyId"));
-            //await new Promise(resolve => setTimeout(resolve, 1000));
-
-            // new refresh every 100 ms
+            // fetch screenshots every 100 ms
             setInterval(async () =>{
                 const response = await api.get('/screenshots/'+localStorage.getItem("currentLobbyId"));
 
@@ -135,19 +132,6 @@ class GuessingScreen extends React.Component {
                 // Get the returned screenshots and update the state.
                 this.setState({ scsURLsAndUserNames: namesAndScsURLs });
             }, 100)
-            //
-
-            // // extract all names+urls from response except the one of the current user
-            // let namesAndScsURLs = [] // format: [["username","URL"],["username2"],[URL2]]
-            // for(let e in response.data){
-            //     // response_array[i][0] = username
-            //     if(response.data[e][0] !== localStorage.getItem('currentUsername')) {
-            //         namesAndScsURLs.push([response.data[e][0], response.data[e][1]])
-            //     }
-            // }
-
-            // // Get the returned screenshots and update the state.
-            // this.setState({ scsURLsAndUserNames: namesAndScsURLs });
 
         } catch (error) {
             alert(`Something went wrong while fetching the users: \n${handleError(error)}`);
@@ -169,28 +153,16 @@ class GuessingScreen extends React.Component {
         // send this user's guesses to BE
         try{
             let guessesAsString = this.convertGuessesToString(this.state.guesses);
+            console.log("mysubmitted guesses: ",guessesAsString)
             const requestBody = JSON.stringify({
                 username: localStorage.getItem("currentUsername"),
                 guesses: guessesAsString
             })
-            const response = api.post("/guesses/"+localStorage.getItem("currentLobbyId"), requestBody);
-            localStorage.setItem("correctedGuesses", (await response).data);
+            const response = await api.post("/guesses/"+localStorage.getItem("currentLobbyId"), requestBody);
+            localStorage.setItem("correctedGuesses", response.data);
+            this.setState({isDoneGuessing: true});
         } catch(error) {
             alert(`Something went wrong while sending the guesses: \n${handleError(error)}`);
-        }
-    }
-
-    async doneGuessing(){
-        try{
-            await api.put('/users/doneGuessing/'+ localStorage.getItem('currentUsername'))
-
-            // update current players
-            const response = await api.get("/board/"+localStorage.getItem("currentLobbyId"));
-            const stringyfiedPlayers = JSON.stringify(response.data);
-            localStorage.setItem("players", stringyfiedPlayers);
-        }
-        catch(error){
-            alert(`Something went wrong while calling "done guessing": \n${handleError(error)}`);
         }
     }
 
@@ -212,13 +184,11 @@ class GuessingScreen extends React.Component {
         try{
             const response = await api.get('/score/'+localStorage.getItem("currentLobbyId"));
             // punkte auslesen
-            let thePoints = [];
+            let thePoints = []
             let temp = []
             const data = response.data
-            let nrOfPlayers = JSON.parse((localStorage.getItem("players"))).length
-            for (var i = 0; i < nrOfPlayers*2; i++) {
-                temp = [data[i],data[i++]]
-                thePoints.push(temp)
+            for(let i in data[0]) {
+                thePoints.push(data[0][i])
             }
             localStorage.setItem("thePoints", JSON.stringify(thePoints));
         } catch(error) {
@@ -241,11 +211,14 @@ class GuessingScreen extends React.Component {
 
     async componentDidMount(){
         try{
+            // check if ALL users have submitted their guesses
             setInterval(async () =>{
                 const response = await api.get('/game/checkUsersDoneGuessing/'+localStorage.getItem('currentLobbyId'));
-                this.setState({ allDoneGuessing: response.data })
+                this.setState({ allDoneGuessing: response.data });
+            }, 100)
 
-                // update info of all players doneGuessing attribute
+            // update info of all players doneGuessing attribute (true/false)
+            setInterval(async () =>{
                 const response2 = await api.get("/board/"+localStorage.getItem("currentLobbyId"));
                 this.setState({players: response2.data});
             }, 100)
@@ -259,7 +232,7 @@ class GuessingScreen extends React.Component {
 
     render() {
         const buildRoom = new BuildRoom(this.state.responseRoom)
-        const filledTableRows = this.state.scsURLsAndUserNames.map( tuple =>{
+        this.state.scsURLsAndUserNames.map( tuple =>{
                 return(
                     <StyledTr>
                         {/*for dev use, after comment out tuple[0] which displays username...*/}
@@ -276,7 +249,7 @@ class GuessingScreen extends React.Component {
                     </StyledTr>
                 )
             }
-        )
+        );
 
         let nothing = 1 // needed as filler for if-condition...
         return (
@@ -320,9 +293,9 @@ class GuessingScreen extends React.Component {
                     </StyledTable>
                     <Button1
                         width="25%"
+                        disabled={this.state.isDoneGuessing}
                         onClick={() => {
                             this.sendUserGuesses()
-                            this.doneGuessing()
                         }}
                     >
                         My guesses are done!
@@ -336,7 +309,7 @@ class GuessingScreen extends React.Component {
                         DEV: "Guessing is done!"
                     </Button>
                     {(this.state.allDoneGuessing) ?
-                        (this.showScoreScreen()):(nothing = 0)}
+                        (this.showScoreScreen()):(nothing)}
                     <Container>
 
                     {/*Table displaying which users have already submitted their guesses*/}
