@@ -251,7 +251,6 @@ class ScoreScreen extends React.Component {
                         onClick={() =>
                             ( this.nextRound(),
                             this.setState({buttonPressed:true})
-
                             )
                         }
                     >

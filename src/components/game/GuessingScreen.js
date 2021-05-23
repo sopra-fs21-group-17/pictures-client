@@ -9,8 +9,15 @@ import BuildRoom from "../shared/models/BuildRoom";
 
 
 const Button1 = styled(Button)`
-  background: green  
+  background: green;
+  padding: 6px; 
   `;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+`;
 
 const InputField = styled.input`
   &::placeholder {
@@ -49,8 +56,12 @@ const StyledTd = styled.td`
     border-collapse: collapse;
 `;
 
+const StyledTdReady = styled.td`
+    padding: 15px;
+    border-collapse: collapse;
+`;
+
 const StyledTr = styled.tr`
-    border: 1px solid #000;
     border-collapse: collapse;
 `;
 
@@ -68,7 +79,8 @@ const StyledTableReady = styled.table`
     color: #000;
     align: right;
     margin: auto;
-    border-collapse: collapse;
+    border-collapse: collapse;    
+    border: 1px solid rgba(1, 1, 1, 0.1);
 `;
 
 const NotReady = styled.div`
@@ -184,7 +196,6 @@ class GuessingScreen extends React.Component {
             const response = await api.get('/score/'+localStorage.getItem("currentLobbyId"));
             // punkte auslesen
             let thePoints = []
-            let temp = []
             const data = response.data
             for(let i in data[0]) {
                 thePoints.push(data[0][i])
@@ -193,7 +204,6 @@ class GuessingScreen extends React.Component {
         } catch(error) {
             alert(`Something went wrong while receiving the points: \n${handleError(error)}`);
         }
-
         this.props.history.push(`/scoreScreen`);
     }
 
@@ -209,6 +219,10 @@ class GuessingScreen extends React.Component {
     }
 
     async componentDidMount(){
+        await this.fetchChecks()
+    }
+
+    async fetchChecks(){
         try{
             // check if ALL users have submitted their guesses
             setInterval(async () =>{
@@ -223,10 +237,10 @@ class GuessingScreen extends React.Component {
             }, 100)
 
             await this.resetRoundHandle()
-
         }catch (error) {
-            alert(`Something went wrong checking "all users done guessing": \n${handleError(error)}`);
+           alert(`Something went wrong checking "all users done guessing": \n${handleError(error)}`);
         }
+
     }
 
     render() {
@@ -250,7 +264,7 @@ class GuessingScreen extends React.Component {
             }
         );
 
-        let nothing = 1 // needed as filler for if-condition...
+        let nothing = "" // needed as filler for if-condition...
         return (
             <Container>
             <Container>
@@ -290,15 +304,17 @@ class GuessingScreen extends React.Component {
                             }
                         )}
                     </StyledTable>
-                    <Button1
-                        width="25%"
-                        disabled={this.state.isDoneGuessing}
-                        onClick={() => {
-                            this.sendUserGuesses()
-                        }}
-                    >
-                        My guesses are done!
-                    </Button1>
+                    <ButtonContainer>
+                        <Button1
+                            width="25%"
+                            disabled={this.state.isDoneGuessing}
+                            onClick={() => {
+                                this.sendUserGuesses()
+                            }}
+                        >
+                            My guesses are done!
+                        </Button1>
+                    </ButtonContainer>
                     {/*for testing */}
                     {/*<Button*/}
                     {/*    width="25%"*/}
@@ -308,10 +324,10 @@ class GuessingScreen extends React.Component {
                     {/*>*/}
                     {/*    DEV: "Guessing is done!"*/}
                     {/*</Button>*/}
-                    {(this.state.allDoneGuessing) ?
-                        (this.showScoreScreen()):(nothing)}
-                    <Container>
 
+                    {(this.state.allDoneGuessing) ? (this.showScoreScreen()):(nothing)}
+
+                    <Container>
                     {/*Table displaying which users have already submitted their guesses*/}
                     <StyledTableReady>
                         <StyledTr>
@@ -321,16 +337,15 @@ class GuessingScreen extends React.Component {
                         {this.state.players.map( tuple =>{
                                 return(
                                     <StyledTr>
-                                        <StyledTd width={"25%"}>{tuple["username"]}</StyledTd>
-                                        <StyledTd width={"25%"}>{tuple["doneGuessing"] === true ?
+                                        <StyledTdReady width={"25%"}>{tuple["username"]}</StyledTdReady>
+                                        <StyledTdReady width={"25%"}>{tuple["doneGuessing"] === true ?
                                             (<Ready>✔</Ready>) : (<NotReady>✘</NotReady>) }
-                                        </StyledTd>
+                                        </StyledTdReady>
                                     </StyledTr>
                                 )
                             }
                         )}
                     </StyledTableReady>
-
                     </Container>
                 </div>
             </Container>
