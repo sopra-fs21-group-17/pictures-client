@@ -106,7 +106,7 @@ class MainBoard extends React.Component{
         this.state = {
             requested: false,
             players: {},
-            currentSet: "-",
+            mySet: "-",
             myCoordinates: "-",
             coordinateNames: [
                 "A1", "A2", "A3", "A4",
@@ -141,16 +141,6 @@ class MainBoard extends React.Component{
     }
 
     //API REQUESTS//
-
-    // async getPlayersFromLobby(){
-    //     try {
-    //         const response = await api.get("/players");
-    //         this.setState({players: response});
-    //     }
-    //     catch (error) {
-    //         alert(`Something went wrong getting the Players: \n${handleError(error)}`);
-    //     }
-    // }
 
     async initGame(){
         try {

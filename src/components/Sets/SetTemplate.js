@@ -522,33 +522,16 @@ export const SetTemplate = () => {
     const putscreenshot = async () => {
         try {
             const requestBody = JSON.stringify(
-                //URL: localStorage.getItem("screenshot")
                 localStorage.getItem("screenshot")
             )
             await api.put("/screenshot/" + localStorage.getItem("currentUsername"), requestBody);
+
         } catch (error) {
             alert(`Something went wrong while uploading the screenshot URL \n${handleError(error)}`);
         }
-
+        localStorage.removeItem("isbuilding");
 
         // change to next screen
-        // TODO screenshot function too slow, is null
-        // try {
-        //     const requestBody = JSON.stringify({
-        //         URL: localStorage.getItem("screenshot")
-        //     })
-        //
-        //     console.log("REQUEST BODY: ", localStorage.getItem("screenshot"));
-        //
-        //
-        //    await api.put("/screenshot/" + localStorage.getItem("currentUsername"), requestBody);
-
-        //
-        // } catch (error) {
-        //     alert(`Something went wrong while uploading the screenshot URL \n${handleError(error)}`);
-        // }
-        localStorage.removeItem("isbuilding");
-        /** change to next screen*/
         history.push(`/GuessingScreen`)
     }
 
