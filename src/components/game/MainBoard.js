@@ -106,7 +106,7 @@ class MainBoard extends React.Component{
         this.state = {
             requested: false,
             players: {},
-            mySet: "-",
+            currentSet: "-",
             myCoordinates: "-",
             coordinateNames: [
                 "A1", "A2", "A3", "A4",

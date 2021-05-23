@@ -16,10 +16,10 @@ export const Rope = () => {
     //changing the max value of i in the for loop changes the length of the rope
     for (let i = 0; i < 70; i++) {
         let point = {
-            x: 100 + 10 * i,
-            y: 100 + 10 * i,
-            oldx: 100 + 10 * i,
-            oldy: 100 + 10 * i
+            x: canvas.width/2 + 10 * i,
+            y: 10 + 10 * i,
+            oldx: canvas.width/2 + 10 * i,
+            oldy: 10 + 10 * i
         };
         points.push(point);
         points[0].static = false;

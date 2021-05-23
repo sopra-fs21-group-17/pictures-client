@@ -25,7 +25,6 @@ export const FreeBoard = ({ itemlist }) => {
         ref = document.getElementById("BoardContainer").getBoundingClientRect();
     })
 
-
     const [ , drop] = useDrop(() => ({
             accept: ItemTypes.ITEM,
             drop(item, monitor) {
@@ -36,7 +35,6 @@ export const FreeBoard = ({ itemlist }) => {
                     left = monitor.getClientOffset().x - ref.x;
                     top = monitor.getClientOffset().y - ref.y;
                 }
-                console.log();
 
                 if(left < (ref.width * 0.1)){
                     left = (ref.width * 0.1);
@@ -51,7 +49,7 @@ export const FreeBoard = ({ itemlist }) => {
                     top = ((ref.height * 0.9)-window.innerWidth*0.05);
                 }
 
-                moveItem(item._id, left, top,);
+                moveItem(item._id, left, top);
                 return undefined;
             },
         }), [moveItem]);
@@ -67,7 +65,6 @@ export const FreeBoard = ({ itemlist }) => {
                     .filter(item => item.location === 'board')
                     .map((key) => {
                     return (
-
                             <Item
                                 key={key._id}
                                 _id={key._id}
@@ -82,12 +79,8 @@ export const FreeBoard = ({ itemlist }) => {
                                 rotation={key.rotation}
                                 background={key.background}
                             />
-
                     );
                 })}
             </BoardContainer>
         );
-
-
-
 }

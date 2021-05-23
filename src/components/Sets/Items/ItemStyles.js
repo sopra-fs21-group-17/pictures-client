@@ -2,52 +2,23 @@ import styled from "styled-components";
 import img from ".././wood_texture_background2.jpg"
 import stoneimg from ".././stone_background.jpg"
 
-export const ThickRectangle = styled.div`
-
-  border: 2px solid black;
-  position: absolute;
-  width: 1vw;
-  height: 5vw;
-  background: beige;
-  border: 2px solid black;
-  cursor:move;
-`;
-
-export const Formcontainer = styled.div`
-    content:"";
-    display:block;
-    width:70%;
-    height:70%;
-    background-image: url(/Path to your image/);
-    transform: rotate(-45deg);
-    transform-origin:0 0;
-    -ms-transform: rotate(-45deg);
-    -ms-transform-origin:0 0;
-    -webkit-transform: rotate(-45deg);
-    -webkit-transform-origin:0 0;
-    `;
-
 export const Triangle = styled.div`
-
     border:2px solid black;
     top: 52%;
     left: 50%;
     -moz-transform: translateX(-50%) translateY(-50%);
     -webkit-transform: translateX(-50%) translateY(-50%);
     transform: translateX(-50%) translateY(-50%);
-
-
-    `;
+`;
 
 export const Trianglecontainer = styled.div`
     position:relative;
     // z-index: 2;
     width: 5.7vw;
     height: 5.7vw;
-    
     background:black;
     clip-path: polygon( 50% 10%, 0 100%, 100% 100%);
-    `;
+`;
 
 export const Dice = styled.div`
     border:2px solid black;
@@ -58,10 +29,9 @@ export const Dice = styled.div`
     cursor:move;
     background-image: url(${img});
     margin: 10px;
-    `;
+`;
 
 export const Circle = styled.div`
-
     border: 2px solid black;
     z-index: 3;
     position: absolute;
@@ -71,10 +41,9 @@ export const Circle = styled.div`
     background-image: url(${img});
     margin: 10px;
     cursor:move;
-    `;
+`;
 
-export const Rectangle = styled.div`
-
+export const ThickRectangle = styled.div`
     border: 2px solid black;
     z-index: 3;
     position: absolute;
@@ -82,10 +51,9 @@ export const Rectangle = styled.div`
     height: 5vw;
     cursor:move;
     background-image: url(${img});
-    `;
+`;
 
 export const ThinRectangle = styled.div`
-
     border: 2px solid black;
     z-index: 3;
     position: absolute;
@@ -94,8 +62,7 @@ export const ThinRectangle = styled.div`
     cursor:move;
     background-image: url(${img});
     margin: 10px;
-
-    `;
+`;
 
 export const Bridgecontainer = styled.div`
     position: absolute;
@@ -105,7 +72,7 @@ export const Bridgecontainer = styled.div`
     margin: 10px;
     position:relative;
     cursor:move;
-    `;
+`;
 
 export const BridgeRectangle = styled.div`
     border: 2px solid black;
@@ -115,7 +82,7 @@ export const BridgeRectangle = styled.div`
     z-index: 1;
     background:inherit;
     background-image: url(${img});
-    `;
+`;
 
 export const Halfcircle = styled.div`
     position: absolute;
@@ -130,16 +97,7 @@ export const Halfcircle = styled.div`
     z-index: 2;
     bottom: 0;
     left: 28%;
-    `;
-
-export const Bridge = styled.div`
-    width: 5vw;
-    height: 5vw;
-    cursor:move;
-    clip-path: polygon(100% 0%, 59% 51%, 100% 100%, 25% 100%, 25% 51%, 25% 0%);
-    background-image: url(${img});
-    border-radius: %;    
-    `;
+`;
 
 export const Stone =styled.div`
     position: absolute;
