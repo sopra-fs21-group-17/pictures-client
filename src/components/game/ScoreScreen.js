@@ -264,7 +264,7 @@ class ScoreScreen extends React.Component {
 
                 <ButtonContainer>
                     {
-                        this.state.rounds <= this.state.max_rounds ? (this.state.buttonPressed == false? (<Button
+                        this.state.rounds < this.state.max_rounds ? (this.state.buttonPressed == false? (<Button
                         width="25%"
 
                         onClick={() =>
