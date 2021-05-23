@@ -176,16 +176,17 @@ export const ItemContext = createContext({
 })
 let maxamount;
 let currentamount=0;
+
 export const SetTemplate = () => {
 
     const [itemList, setItemList] = useState([    ]);
-    const [pictureURL, setPictureURL ]= useState("")
+    const [pictureURL, setPictureURL] = useState("")
     const [currentRightIndex, setCurrentRightIndex] = useState(5)
     const [currentLeftIndex, setCurrentLeftIndex] = useState(0)
-    let currentSet = "CUBES";
+
 
     const showArrows = () => {
-        if((currentSet) === "STICKS" || (currentSet) === "BLOCKS"){
+        if((localStorage.getItem("mySet")) === "STICKS" || (localStorage.getItem("mySet")) === "BLOCKS"){
             return (
                     <ArrowContainer>
                         <div style={{margin: "5px"}} onClick={() => {
@@ -200,7 +201,7 @@ export const SetTemplate = () => {
     }
 
     const showReset = () => {
-        if((currentSet) !== "STRINGS"){
+        if((localStorage.getItem("mySet")) !== "LACE"){
             return (
                 <Button onClick={() => {
                     fetchItems();
@@ -211,7 +212,7 @@ export const SetTemplate = () => {
     }
 
     const selectBoard = () => {
-        if((currentSet) === "CUBES"){
+        if((localStorage.getItem("mySet")) === "CUBES"){
             return (
                 <GridBoard itemlist={itemList}></GridBoard>
             );
@@ -222,21 +223,13 @@ export const SetTemplate = () => {
         }
     };
 
-    const getSet = async () => {
-        try {
-            const response = await api.get('/users/'+localStorage.getItem("currentUsername"));
-            currentSet = (response.data.assignedSet.toString());
-        }
-        catch (error) {
-            alert(`Something went wrong while getting player set: \n${handleError(error)}`);
-        }
-    };
-
     const getPictureForUser = async () =>{
         try {
             const response = await api.get('/picture/'+localStorage.getItem("id"));
-            const picture = new PicturesModel(response.data)
-            return picture
+            const picture = new PicturesModel(response.data);
+            console.log(response.data.pictureLink);
+            return response.data.pictureLink;
+
         }
         catch (error) {
             alert(`Something went wrong while getting picture: \n${handleError(error)}`);
@@ -244,25 +237,30 @@ export const SetTemplate = () => {
     }
 
     useEffect(() => {
-        //setPictureURL(getPictureForUser())
+        
+        // let pic = getPictureForUser()
+        // console.log(pic);
+        // setPictureURL(pic);
+        //console.log(getPictureForUser());
+
         setPictureURL(localStorage.getItem("myPicURL"))
-        getSet();
         fetchItems();
     }, [])
 
     function fetchItems() {
-        if((currentSet) === "CUBES"){
+        if((localStorage.getItem("mySet")) === "CUBES"){
             setItemList(JSON.parse(JSON.stringify(ItemsSet1)));
-        } else if ((currentSet) === "BLOCKS"){
+        } else if ((localStorage.getItem("mySet")) === "BLOCKS"){
             setItemList(JSON.parse(JSON.stringify(ItemsSet2)));
-        }else if ((currentSet) === "STICKS"){
+        }else if ((localStorage.getItem("mySet")) === "STICKS"){
             setItemList(JSON.parse(JSON.stringify(ItemsSet3)));
-        }else if ((currentSet) === "ICONS"){
+        }else if ((localStorage.getItem("mySet")) === "ICONS"){
             setItemList(JSON.parse(JSON.stringify(ItemsSet4)));
             maxamount=5;
         }else {
             setItemList(JSON.parse(JSON.stringify(ItemsSet5)));
         }
+        console.log(itemList);
     };
 
     function showIcons(){
@@ -287,7 +285,7 @@ export const SetTemplate = () => {
     }
 
     const selectItems = () => {
-        if((currentSet) === "CUBES"){
+        if((localStorage.getItem("mySet")) === "CUBES"){
             return (
                 <Inventory>
                     {itemList
@@ -306,9 +304,9 @@ export const SetTemplate = () => {
                         ))}
                 </Inventory>
             );
-        } else if ((currentSet) === "STRINGS") {
+        } else if ((localStorage.getItem("mySet")) === "LACE") {
             return null
-        }else if ((currentSet === "ICONS")){
+        }else if ((localStorage.getItem("mySet")) === "ICONS"){
         return (
             <Inventory>
                 <ButtonScroll
