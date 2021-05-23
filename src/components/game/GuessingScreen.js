@@ -1,5 +1,3 @@
-// temporary file to simulate GuessingScreen for development
-// TODO change "pictureElement" to user element (create new class for this?)
 import React from 'react';
 import styled from 'styled-components';
 import { BaseContainer } from '../../helpers/layout';
@@ -39,7 +37,8 @@ const Container = styled(BaseContainer)`
 `;
 
 const StyledImg = styled.img`
-    width: 80%;
+    max-width:100%;
+    height:auto;
     border: 1px solid #fff;
     border-collapse: collapse;
 `;
@@ -268,7 +267,7 @@ class GuessingScreen extends React.Component {
                     {/*Table displaying the players screenshots and input fields for guess*/}
                     <StyledTable>
                         <StyledTr>
-                            <StyledTd>for testing: username</StyledTd>
+                            {/*<StyledTd>for testing: username</StyledTd>*/}
                             <StyledTd>What the other players built:</StyledTd>
                             <StyledTd>Coordinates of original picture:</StyledTd>
                         </StyledTr>
@@ -276,7 +275,7 @@ class GuessingScreen extends React.Component {
                                 return(
                                     <StyledTr>
                                         {/*for dev use, after comment out tuple[0] which displays username...*/}
-                                        <StyledTd width={"25%"}>{tuple[0]}</StyledTd>
+                                        {/*<StyledTd width={"25%"}>{tuple[0]}</StyledTd>*/}
                                         <StyledTd width={"25%"}>{<StyledImg src={tuple[1]}/>}</StyledTd>
                                         <StyledTd width={"25%"}>
                                             <InputField
@@ -300,14 +299,15 @@ class GuessingScreen extends React.Component {
                     >
                         My guesses are done!
                     </Button1>
-                    <Button
-                        width="25%"
-                        onClick={() => {
-                             this.showScoreScreen();
-                        }}
-                    >
-                        DEV: "Guessing is done!"
-                    </Button>
+                    {/*for testing */}
+                    {/*<Button*/}
+                    {/*    width="25%"*/}
+                    {/*    onClick={() => {*/}
+                    {/*         this.showScoreScreen();*/}
+                    {/*    }}*/}
+                    {/*>*/}
+                    {/*    DEV: "Guessing is done!"*/}
+                    {/*</Button>*/}
                     {(this.state.allDoneGuessing) ?
                         (this.showScoreScreen()):(nothing)}
                     <Container>

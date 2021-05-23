@@ -1,8 +1,8 @@
-import { api, handleError } from "../../helpers/api";
+import {api, handleError} from "../../helpers/api";
 import PictureElement from "./PictureElement";
 import React from "react";
 import styled from "styled-components";
-import { withRouter } from "react-router-dom";
+import {withRouter} from "react-router-dom";
 import PicturesModel from "../shared/models/PicturesModel";
 
 const GridContainer = styled.div`
@@ -45,8 +45,8 @@ const Grid = styled.div`
   grid-column-end: span 4;
 `;
 
-// TODO make table out of this??
 const GridCoordinate = styled.div`
+  font-weight: bold;
   color: white;
   margin: 15px;
 `;
@@ -59,45 +59,37 @@ const GridVoid = styled.div`
   grid-column-start: 1;
 `;
 
-//TODO add api call method to the rendermethod so pictures are taken from backend
-class PictureGrid extends React.Component{
-    constructor(props){
-        super(props);
-        this.state ={
-            pictureURLs: [],
-            coordinate: [0,1,2,3,
-                4,5,6,7,
-                8,9,10,11,
-                12,13,14,15],
-        }
 
+class PictureGrid extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            pictureURLs: [],
+            coordinate: [0, 1, 2, 3,
+                4, 5, 6, 7,
+                8, 9, 10, 11,
+                12, 13, 14, 15],
+        }
     }
 
-    async getPictures(){
+    async getPictures() {
         try {
-            const response = await api.get("/pictures/"+localStorage.getItem("currentLobbyId"));
+            const response = await api.get("/pictures/" + localStorage.getItem("currentLobbyId"));
             this.setState({pictureURLs: response.data});
-
-        }
-        catch (error) {
+        } catch (error) {
             alert(`Something went wrong getting the Pictures: \n${handleError(error)}`);
         }
     }
 
-
     async componentWillReceiveProps() {
         await this.getPictures()
-
     }
 
-
-
-     render(){
+    render() {
 
         let pictureElements = new Array();
         let index = 0;
-        if(this.state.pictureURLs.length != 0) {
-
+        if (this.state.pictureURLs.length != 0) {
 
             const pictures = this.state.pictureURLs;
 
@@ -109,19 +101,19 @@ class PictureGrid extends React.Component{
             })
         }
 
-        const numberColumn =[1,2,3,4];
+        const numberColumn = [1, 2, 3, 4];
         const columnCoordinates = numberColumn.map((number) => {
             return <GridCoordinate>{number}</GridCoordinate>
         })
 
-        const letterColumn =['A','B','C','D'];
+        const letterColumn = ['A', 'B', 'C', 'D'];
         const rowCoordinates = letterColumn.map((letter) => {
             return <GridCoordinate>{letter}</GridCoordinate>
         })
 
-        return(
+        return (
 
-            <GridContainer >
+            <GridContainer>
                 <GridVoid/>
                 {columnCoordinates}
                 {rowCoordinates}
@@ -133,4 +125,5 @@ class PictureGrid extends React.Component{
         );
     }
 }
+
 export default withRouter(PictureGrid);

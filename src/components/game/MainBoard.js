@@ -86,7 +86,6 @@ height: 600px;
 background: pink;
 margin: 15px;
 border-radius: 5px;
-
 color: black;
 `;
 
@@ -113,6 +112,7 @@ class MainBoard extends React.Component{
                 "B1", "B2", "B3", "B4",
                 "C1", "C2", "C3", "C4",
                 "D1", "D2", "D3", "D4"],
+            // for testing
             picsURLs: [
                 "https://homepages.cae.wisc.edu/~ece533/images/peppers.png", //1
                 "https://homepages.cae.wisc.edu/~ece533/images/monarch.png", //2
