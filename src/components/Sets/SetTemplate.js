@@ -1,4 +1,4 @@
-import React, { createContext, createRef, useEffect, useState } from "react";
+import React, {createContext, createRef, useEffect, useReducer, useState} from "react";
 import styled from "styled-components";
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -102,6 +102,7 @@ const Button = styled.div`
   transition: all 0.3s ease;
   float: right;
 `;
+
 const ButtonScroll = styled.div`
   &:hover {
     transform: translateY(-2px);
@@ -164,32 +165,22 @@ const ItemContainer = styled.div`
   margin-right: 1vw;
   background: inherit;
 `;
-const ItemRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;  
-  height: 100%;
-  width: max;
-  
-  
-`;
 
 
 export const ItemContext = createContext({
     moveItem: null,
     markAsInventory: null,
     markAsSquareField: null,
+    removeSelected: null,
+    setSelected: null,
 })
-
+let maxamount;
+let currentamount=0;
 
 export const SetTemplate = () => {
-    const [itemList, setItemList] = useState([
 
-    ]);
-
-    const [pictureURL, setPictureURL ]= useState(
-        ""
-    )
+    const [itemList, setItemList] = useState([    ]);
+    const [pictureURL, setPictureURL] = useState("")
     const [currentRightIndex, setCurrentRightIndex] = useState(5)
     const [currentLeftIndex, setCurrentLeftIndex] = useState(0)
 
@@ -208,25 +199,17 @@ export const SetTemplate = () => {
                 )
         }
     }
-    // const showScrollBar = () =>{
-    //     if((localStorage.getItem("mySet")) === "ICONS"){
-    //         return(
-    //
-    //             <Inventory>
-    //                 <ButtonContainer>
-    //                     <button onClick={() => scroll(-20)}>▶</button>
-    //                     <button onClick={() => scroll(20)}>◀</button>
-    //                 </ButtonContainer>
-    //             </Inventory>
-    //
-    //
-    //             //     </Col>
-    //             // </Row>
-    //
-    //         )
-    //     }
-    // }
 
+    const showReset = () => {
+        if((localStorage.getItem("mySet")) !== "LACE"){
+            return (
+                <Button onClick={() => {
+                    fetchItems();
+                }}>reset Board
+                </Button>
+            )
+        }
+    }
 
     const selectBoard = () => {
         if((localStorage.getItem("mySet")) === "CUBES"){
@@ -243,8 +226,10 @@ export const SetTemplate = () => {
     const getPictureForUser = async () =>{
         try {
             const response = await api.get('/picture/'+localStorage.getItem("id"));
-            const picture = new PicturesModel(response.data)
-            return picture
+            const picture = new PicturesModel(response.data);
+            console.log(response.data.pictureLink);
+            return response.data.pictureLink;
+
         }
         catch (error) {
             alert(`Something went wrong while getting picture: \n${handleError(error)}`);
@@ -252,48 +237,32 @@ export const SetTemplate = () => {
     }
 
     useEffect(() => {
-        //setPictureURL(getPictureForUser())
+        
+        // let pic = getPictureForUser()
+        // console.log(pic);
+        // setPictureURL(pic);
+        //console.log(getPictureForUser());
+
         setPictureURL(localStorage.getItem("myPicURL"))
-
-        // const response = async () =>{ await api.get('/picture/'+localStorage.getItem(id));}
-
-        // try {
-        //     const response = api.get('/users/'+localStorage.getItem("currentUsername"));
-        //
-        //     const requestBody = JSON.stringify({
-        //         username: this.state.username,
-        //         password: this.state.password
-        //     });
-        //
-        //     const picture = api.get('/picture', requestBody)
-        //
-        // } catch (error) {
-        //     alert(`Something went wrong while fetching the users: \n${handleError(error)}`);
-        // }
-
-
-        if((localStorage.getItem("mySet")) === "CUBES"){
-            setItemList(ItemsSet1)
-        } else if ((localStorage.getItem("mySet")) === "BLOCKS"){
-            setItemList(ItemsSet2)
-        }else if ((localStorage.getItem("mySet")) === "STICKS"){
-            setItemList(ItemsSet3)
-        }else if ((localStorage.getItem("mySet")) === "ICONS"){
-            setItemList(ItemsSet4)
-        }else {
-            setItemList(ItemsSet5)
-        }
+        fetchItems();
     }, [])
 
+    function fetchItems() {
+        if((localStorage.getItem("mySet")) === "CUBES"){
+            setItemList(JSON.parse(JSON.stringify(ItemsSet1)));
+        } else if ((localStorage.getItem("mySet")) === "BLOCKS"){
+            setItemList(JSON.parse(JSON.stringify(ItemsSet2)));
+        }else if ((localStorage.getItem("mySet")) === "STICKS"){
+            setItemList(JSON.parse(JSON.stringify(ItemsSet3)));
+        }else if ((localStorage.getItem("mySet")) === "ICONS"){
+            setItemList(JSON.parse(JSON.stringify(ItemsSet4)));
+            maxamount=5;
+        }else {
+            setItemList(JSON.parse(JSON.stringify(ItemsSet5)));
+        }
+        console.log(itemList);
+    };
 
-    function toLeft(){
-        setCurrentLeftIndex(currentLeftIndex -1);
-        setCurrentRightIndex(currentRightIndex - 1)
-    }
-    function toRight(){
-        setCurrentLeftIndex(currentLeftIndex +1);
-        setCurrentRightIndex(currentRightIndex + 1)
-    }
     function showIcons(){
         setCurrentLeftIndex(currentLeftIndex -1);
         {itemList
@@ -301,7 +270,6 @@ export const SetTemplate = () => {
             .filter(item => item.amount > 0)
             .slice(currentLeftIndex, currentRightIndex)
             .map(item => (
-
                 <ItemContainer>
                     <Item
                         key={item._id.toString()}
@@ -315,7 +283,6 @@ export const SetTemplate = () => {
                 </ItemContainer>
             ))}
     }
-
 
     const selectItems = () => {
         if((localStorage.getItem("mySet")) === "CUBES"){
@@ -337,14 +304,12 @@ export const SetTemplate = () => {
                         ))}
                 </Inventory>
             );
-        } else if ((localStorage.getItem("mySet")) === "STRINGS") {
+        } else if ((localStorage.getItem("mySet")) === "LACE") {
             return null
-        }else if ((localStorage.getItem("mySet") === "ICONS")){
+        }else if ((localStorage.getItem("mySet")) === "ICONS"){
         return (
             <Inventory>
-
                 <ButtonScroll
-
                     disabled={currentLeftIndex <= 0}
                     hidden = {currentLeftIndex === 0 || itemList.filter(item => item.location === 'inventory')
                         .filter(item => item.amount > 0).length <= 6}
@@ -354,11 +319,9 @@ export const SetTemplate = () => {
                         }else{
                             setCurrentLeftIndex(currentLeftIndex  - 1);
                             setCurrentRightIndex(currentRightIndex - 1)}}}
-
                 >
                     ◀
                 </ButtonScroll>
-
                 {itemList
                     .filter(item => item.location === 'inventory')
                     .filter(item => item.amount > 0)
@@ -369,7 +332,6 @@ export const SetTemplate = () => {
                             .filter(item => item.amount > 0)
                             .slice(currentLeftIndex, currentRightIndex)
                             .map(item => (
-
                                 <ItemContainer>
                                     <Item
                                       key={item._id.toString()}
@@ -382,10 +344,7 @@ export const SetTemplate = () => {
                                     />
                                 </ItemContainer>
                         )))}
-
-
                 <ButtonScroll
-
                     disabled={(currentRightIndex) >= itemList
                         .filter(item => item.location === 'inventory')
                         .filter(item => item.amount > 0).length}
@@ -402,11 +361,8 @@ export const SetTemplate = () => {
                 >
                     ▶
                 </ButtonScroll>
-
             </Inventory>
-
         )
-
         }else {
             return (
                 <Inventory>
@@ -449,10 +405,21 @@ export const SetTemplate = () => {
 
         const updatedItem = itemList.filter(item => item._id === id);
 
+        if(updatedItem[0].location==='inventory'&& maxamount!=null){
+            console.log(currentamount)
+            currentamount=currentamount+1;
+            if (currentamount>maxamount){
+
+                // e.message  'zuviele Icons benutzt'
+                alert("Only a maximum of 5 iconcards are allowed!");
+                currentamount=currentamount-1;
+                return;
+        }}
+
         const lastSelectedItem = itemList.filter((item) => item.selected === true);
 
         const newItem = {
-            _id: id+10*id*updatedItem[0].amount, //TODO fix random id (issue with items when adding two returning first and adding another)
+            _id: setId(id), //TODO fix random id (issue with items when adding two returning first and adding another)
             location: 'board',
             top: top,
             left: left,
@@ -482,7 +449,16 @@ export const SetTemplate = () => {
         }
     };
 
+    const setId = newId => {
+        let i = newId
+        while(itemList.filter(item => item._id === i).length > 0){
+            i++;
+        }
+        return i;
+    };
+
     const markAsInventory = _id => {
+        currentamount=currentamount-1;
         //gets the item which was moved
         const movedItem = itemList.filter(item => item._id === _id);
 
@@ -505,7 +481,7 @@ export const SetTemplate = () => {
 
         //creates a new item
         const newSquare = {
-            _id: square._id+10*square._id*square.amount,
+            _id: setId(square._id),
             location: 'squarefield'+x,
             color: selectedItem[0].color,
             amount: selectedItem[0].amount-1,
@@ -525,40 +501,35 @@ export const SetTemplate = () => {
 
     const history = useHistory();
 
-
-
     const removeSelected = () => {
-        const SelectedItem = itemList.filter((item) => item.selected === true);
+        const SelectedItem = itemList.filter(item => item.selected === true);
 
         if(SelectedItem.length > 0){
             SelectedItem[0].selected = false;
             setItemList(itemList.filter((item) => item._id !== SelectedItem[0]._id).concat(SelectedItem[0]));
-        }
-    }
+        };
+    };
 
 
     const ref = createRef()
     const [screenshot, takeScreenshot] = useScreenshot()
     const GetImage = () =>{
         takeScreenshot(ref.current)}
-        //console.log(screenshot)
-        localStorage.setItem("screenshot",screenshot)
 
+    localStorage.setItem("screenshot",screenshot)
 
-
-
-    // localStorage.setItem("screenshot",screenshot)
 
     const putscreenshot = async () => {
         try {
             const requestBody = JSON.stringify(
-                //URL: localStorage.getItem("screenshot")
                 localStorage.getItem("screenshot")
             )
             await api.put("/screenshot/" + localStorage.getItem("currentUsername"), requestBody);
+
         } catch (error) {
             alert(`Something went wrong while uploading the screenshot URL \n${handleError(error)}`);
         }
+        localStorage.removeItem("isbuilding");
 
         // change to next screen
         history.push(`/GuessingScreen`)
@@ -567,16 +538,17 @@ export const SetTemplate = () => {
 
     return (
         <DndProvider backend={HTML5Backend}>
-            <ItemContext.Provider value={{ markAsInventory, moveItem, markAsSquareField }}>
+            <ItemContext.Provider value={{ markAsInventory, moveItem, markAsSquareField}}>
                 <BaseContainer>
                     <TopContainer>
-                        <div  >
+                        <div  style={{display: "flex", flexDirection: "column",  alignItems: "center"}}>
                             <BorderContainer ref={ref}>
                                 <BoardContainer id="BoardContainer">
                                     {selectBoard()}
                                     <CustomDragLayer/>
                                 </BoardContainer>
                             </BorderContainer>
+                            {showReset()}
                         </div>
                         <div style={{padding: '5%', margin: '5%',  display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
                             <ImageBorderContainer>
@@ -587,6 +559,7 @@ export const SetTemplate = () => {
                                 <Button onClick={() => {
                                     removeSelected();
                                     GetImage();
+                                    fetchItems();
                                     setTimeout(function(){ putscreenshot(); }, 200);
 
                                 }}>Submit</Button>

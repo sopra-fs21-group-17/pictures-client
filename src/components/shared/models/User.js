@@ -16,6 +16,7 @@ class User {
     this.assignedCoordinates = null;
     this.correctedGuesses = null;
     this.lobbyId = null;
+    this.doneGuessing = null;
     Object.assign(this, data);
   }
 }

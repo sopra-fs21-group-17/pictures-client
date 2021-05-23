@@ -142,16 +142,6 @@ class MainBoard extends React.Component{
 
     //API REQUESTS//
 
-    // async getPlayersFromLobby(){
-    //     try {
-    //         const response = await api.get("/players");
-    //         this.setState({players: response});
-    //     }
-    //     catch (error) {
-    //         alert(`Something went wrong getting the Players: \n${handleError(error)}`);
-    //     }
-    // }
-
     async initGame(){
         try {
             const response = await api.get("/board/"+localStorage.getItem("currentLobbyId"));
@@ -179,6 +169,7 @@ class MainBoard extends React.Component{
             alert(`Something went wrong getting the Players: \n${handleError(error)}`);
         }
     }
+
     async componentWillMount(){
         await this.initGame();
     }
@@ -216,6 +207,7 @@ class MainBoard extends React.Component{
         const requestBody = JSON.stringify({
             roomId: localStorage.getItem('currentRoomNumber'),
         });
+        localStorage.setItem("isbuilding","true");
 
         await api.post('/buildRooms', requestBody);
 

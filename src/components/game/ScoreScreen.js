@@ -61,15 +61,11 @@ class ScoreScreen extends React.Component {
         this.state = {
             users: null,
             players: {},
-
-
             max_rounds:5,
             rounds: 0,
             playersFinished: false,
             buttonPressed: false
-
         };
-
     }
 
     intervalID = 0;
@@ -78,7 +74,7 @@ class ScoreScreen extends React.Component {
 
 //TODO make sure that all players could update their board before board is rendered
 
-     getRoundInformation = async () => {
+    getRoundInformation = async () => {
          try {
              if(this.state.playersFinished && this.state.buttonPressed){
                  this.props.history.push(`/board`);
@@ -108,7 +104,6 @@ class ScoreScreen extends React.Component {
 
     }
 
-
     componentDidMount() {
 
         this.intervalID = setInterval(this.getRoundInformation,5000)
@@ -120,7 +115,6 @@ class ScoreScreen extends React.Component {
     componentWillUnmount() {
         clearInterval(this.intervalID)
     }
-
 
     async nextRound() {
         try {
@@ -150,7 +144,6 @@ class ScoreScreen extends React.Component {
         }
     }
 
-
     gameHasFinished(){
         return (
 
@@ -166,18 +159,18 @@ class ScoreScreen extends React.Component {
         )
     }
 
-
     convertCorrectedGuessesToMap(correctedGuesses) {
 
-        let tempUsername = "";
-        let tempCoordinates = "";
-        let result = [];
+        let tempUsername = ""
+        let tempCoordinates = ""
+        let result = []
 
         for (let i = 0; i < correctedGuesses.length; i++) {
-            for (let j = 0; j < 1; j++) { // first letters is y/n for correct/incorrect guess
+            for (let j = 0; j < 1; j++) {
+                // first letters is y/n for correct/incorrect guess
                 //tempCoordinates += correctedGuesses.charAt(i+j);
                 if(correctedGuesses.charAt(i+j) === "y"){
-                    tempCoordinates = "✔";
+                    tempCoordinates = "✔"
                 } else {
                     tempCoordinates = "✘";
                 }
@@ -195,52 +188,40 @@ class ScoreScreen extends React.Component {
         return result;
     }
 
-    convertToArray(data) {
-
-        let result = [];
-        for (const [username, attribute] of Object.entries(data)) {
-            let tuple = [username, attribute];
-            result.push(tuple);
-        }
-
-        return result;
-    }
-
-    // create an array containing usernames and their points
-    createPointsArray() {
+    getPointsArray(x){
         let result = []
-        const temp = this.convertToArray(JSON.parse((localStorage.getItem("players"))));
-
-        for(let e in temp){
-            result.push([temp[e][1]["username"], temp[e][1]["points"]])
+        for(let i = 0; i < x.length; i++){
+            if(i % 2 === 0){
+                result.push([x[i],x[i+1]])
+            }
         }
-
-        return result;
+        return result
     }
 
     render() {
 
+        // fill in corrected guesses table
         const temp = this.convertCorrectedGuessesToMap(localStorage.getItem("correctedGuesses"));
         const guessesNames = temp.map(tuple => {
                 return (
                     <StyledTd>{tuple[0]}</StyledTd>
                 )
-            }
-        )
+            })
         const guessesCorrected = temp.map(tuple => {
                 return (
                     <StyledTd>{tuple[1]}</StyledTd>
                 )
-            }
-        )
+            })
 
-        const temp2 = this.createPointsArray()
-        const playerNames = temp2.map(tuple =>{
+        // fill in points table
+        let input = this.getPointsArray(JSON.parse((localStorage.getItem("thePoints"))))
+        if(input === null){ input = ["error","error"]}
+        const playerNames = input.map(tuple =>{
             return(
                 <StyledTd>{tuple[0]}</StyledTd>
             )
         })
-        const playerPoints = temp2.map(tuple =>{
+        const playerPoints = input.map(tuple =>{
             return(
                 <StyledTd>{tuple[1]}</StyledTd>
             )

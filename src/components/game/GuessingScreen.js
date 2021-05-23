@@ -29,12 +29,6 @@ const InputField = styled.input`
   color: white;
 `;
 
-const Label = styled.label`
-  color: white;
-  margin-bottom: 10px;
-  text-transform: uppercase;
-`;
-
 const Container = styled(BaseContainer)`
   display: flex;
   color: white;
@@ -70,7 +64,33 @@ const StyledTable = styled.table`
     border-collapse: collapse;
 `;
 
+const StyledTableReady = styled.table`
+    background: rgba(1, 1, 1, 0.1);
+    color: #000;
+    align: right;
+    margin: auto;
+    border-collapse: collapse;
+`;
 
+const NotReady = styled.div`
+  margin: auto;
+  font-weight: bold;
+  background: rgba(190, 80, 80, 1);
+  border-radius: 100%;
+  padding: 7px;
+  font-size: 20px;
+  width: 40px;
+`;
+
+const Ready = styled.div`
+  margin: auto;
+  font-weight: bold;
+  background: rgba(80, 190, 80, 1);
+  border-radius: 100%;
+  padding: 7px;
+  font-size: 20px;
+  width: 40px;
+`;
 
 class GuessingScreen extends React.Component {
     constructor(props) {
@@ -84,31 +104,34 @@ class GuessingScreen extends React.Component {
                 "C1", "C2", "C3", "C4",
                 "D1", "D2", "D3", "D4"],
             guesses: {},
+            players: [],
+            isDoneGuessing: false,
             guessesAsString: "",
             responseRoom: null,
             count: 60.0,
+            allDoneGuessing: null
         }
-        this.getScreenshots();
     };
-
 
     // GET REQUEST "/screenshots"
     async getScreenshots(){
         try {
-            const response = await api.get('/screenshots/'+localStorage.getItem("currentLobbyId"));
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            // fetch screenshots every 100 ms
+            setInterval(async () =>{
+                const response = await api.get('/screenshots/'+localStorage.getItem("currentLobbyId"));
 
-            // extract all names+urls from response except the one of the current user
-            let namesAndScsURLs = [] // format: [["username","URL"],["username2"],[URL2]]
-            for(let e in response.data){
-                // response_array[i][0] = username
-                if(response.data[e][0] !== localStorage.getItem('currentUsername')) {
-                    namesAndScsURLs.push([response.data[e][0], response.data[e][1]])
+                // extract all names+urls from response except the one of the current user
+                let namesAndScsURLs = [] // format: [["username","URL"],["username2"],[URL2]]
+                for(let e in response.data){
+                    // response_array[i][0] = username
+                    if(response.data[e][0] !== localStorage.getItem('currentUsername')) {
+                        namesAndScsURLs.push([response.data[e][0], response.data[e][1]])
+                    }
                 }
-            }
 
-            // Get the returned screenshots and update the state.
-            this.setState({ scsURLsAndUserNames: namesAndScsURLs });
+                // Get the returned screenshots and update the state.
+                this.setState({ scsURLsAndUserNames: namesAndScsURLs });
+            }, 100)
 
         } catch (error) {
             alert(`Something went wrong while fetching the users: \n${handleError(error)}`);
@@ -127,14 +150,17 @@ class GuessingScreen extends React.Component {
 
     // PUT REQUEST
     async sendUserGuesses(){
+        // send this user's guesses to BE
         try{
-            let temp = this.convertGuessesToString(this.state.guesses);
+            let guessesAsString = this.convertGuessesToString(this.state.guesses);
+            console.log("mysubmitted guesses: ",guessesAsString)
             const requestBody = JSON.stringify({
                 username: localStorage.getItem("currentUsername"),
-                guesses: temp
+                guesses: guessesAsString
             })
-            const response = api.post("/guesses/"+localStorage.getItem("currentLobbyId"), requestBody);
-            localStorage.setItem("correctedGuesses", (await response).data);
+            const response = await api.post("/guesses/"+localStorage.getItem("currentLobbyId"), requestBody);
+            localStorage.setItem("correctedGuesses", response.data);
+            this.setState({isDoneGuessing: true});
         } catch(error) {
             alert(`Something went wrong while sending the guesses: \n${handleError(error)}`);
         }
@@ -150,39 +176,66 @@ class GuessingScreen extends React.Component {
     }
 
     saveGuessToDict(user, value) {
-        this.setState({...this.state,
-            guesses: {...this.state.guesses,[user]:value}})
+        this.setState({...this.state,guesses: {...this.state.guesses,[user]:value}})
     }
 
     // get corrected guesses and points
     async showScoreScreen() {
         try{
             const response = await api.get('/score/'+localStorage.getItem("currentLobbyId"));
-
             // punkte auslesen
-            let thePoints = {};
-            for(const [username, attribute] of Object.entries(response.data)){
-                thePoints[username] = attribute["points"];
+            let thePoints = []
+            let temp = []
+            const data = response.data
+            for(let i in data[0]) {
+                thePoints.push(data[0][i])
             }
             localStorage.setItem("thePoints", JSON.stringify(thePoints));
-
         } catch(error) {
-            alert(`Something went wrong while receiving the guesses and points: \n${handleError(error)}`);
+            alert(`Something went wrong while receiving the points: \n${handleError(error)}`);
         }
 
         this.props.history.push(`/scoreScreen`);
     }
 
+    timeOver(){
+        this.sendUserGuesses()
+        //this.createGuessingInfo();
+        this.showScoreScreen()
+    }
+
+    async componentWillMount(){
+        //await api.put('/guessing/time/'+localStorage.getItem('currentLobbyId'));
+        await this.getScreenshots()
+    }
+
     async componentDidMount(){
-        await this.resetRoundHandle()
+        try{
+            // check if ALL users have submitted their guesses
+            setInterval(async () =>{
+                const response = await api.get('/game/checkUsersDoneGuessing/'+localStorage.getItem('currentLobbyId'));
+                this.setState({ allDoneGuessing: response.data });
+            }, 100)
+
+            // update info of all players doneGuessing attribute (true/false)
+            setInterval(async () =>{
+                const response2 = await api.get("/board/"+localStorage.getItem("currentLobbyId"));
+                this.setState({players: response2.data});
+            }, 100)
+
+            await this.resetRoundHandle()
+
+        }catch (error) {
+            alert(`Something went wrong checking "all users done guessing": \n${handleError(error)}`);
+        }
     }
 
     render() {
         const buildRoom = new BuildRoom(this.state.responseRoom)
-        const filledTableRows = this.state.scsURLsAndUserNames.map( tuple =>{
+        this.state.scsURLsAndUserNames.map( tuple =>{
                 return(
                     <StyledTr>
-                        {/*for dev use, after remove tuple[0] which displays username...*/}
+                        {/*for dev use, after comment out tuple[0] which displays username...*/}
                         <StyledTd width={"25%"}>{tuple[0]}</StyledTd>
                         <StyledTd width={"25%"}>{<StyledImg src={tuple[1]}/>}</StyledTd>
                         <StyledTd width={"25%"}>
@@ -196,30 +249,53 @@ class GuessingScreen extends React.Component {
                     </StyledTr>
                 )
             }
-        )
+        );
 
+        let nothing = 1 // needed as filler for if-condition...
         return (
             <Container>
-            <div>
+            <Container>
+                <div>
                 <h1>Which picture were the other players trying to build?</h1>
                 <PictureGrid/>
-            </div>
+                </div>
+            </Container>
                 <div>
                     <h2>Make your guesses:</h2>
-                    {(this.state.count + buildRoom.timeDifferenceGuessing) <= 0 ?(this.timeOver()):(<h2>Time left: {('0'+Math.round(this.state.count + buildRoom.timeDifferenceGuessing)).slice(-2)}</h2>
-                )}
+                {/*    {(this.state.count + buildRoom.timeDifferenceGuessing) <= 0 ?(this.timeOver()):(<h2>Time left: {('0'+Math.round(this.state.count + buildRoom.timeDifferenceGuessing)).slice(-2)}</h2>*/}
+                {/*)}*/}
+
+                    {/*Table displaying the players screenshots and input fields for guess*/}
                     <StyledTable>
                         <StyledTr>
                             <StyledTd>for testing: username</StyledTd>
                             <StyledTd>What the other players built:</StyledTd>
                             <StyledTd>Coordinates of original picture:</StyledTd>
                         </StyledTr>
-                        {filledTableRows}
+                        {this.state.scsURLsAndUserNames.map( tuple =>{
+                                return(
+                                    <StyledTr>
+                                        {/*for dev use, after comment out tuple[0] which displays username...*/}
+                                        <StyledTd width={"25%"}>{tuple[0]}</StyledTd>
+                                        <StyledTd width={"25%"}>{<StyledImg src={tuple[1]}/>}</StyledTd>
+                                        <StyledTd width={"25%"}>
+                                            <InputField
+                                                placeholder="A1"
+                                                onChange={e => {
+                                                    this.saveGuessToDict(tuple[0], e.target.value);
+                                                }}
+                                            />
+                                        </StyledTd>
+                                    </StyledTr>
+                                )
+                            }
+                        )}
                     </StyledTable>
                     <Button1
                         width="25%"
+                        disabled={this.state.isDoneGuessing}
                         onClick={() => {
-                            this.sendUserGuesses();
+                            this.sendUserGuesses()
                         }}
                     >
                         My guesses are done!
@@ -227,11 +303,35 @@ class GuessingScreen extends React.Component {
                     <Button
                         width="25%"
                         onClick={() => {
-                            this.showScoreScreen();
+                             this.showScoreScreen();
                         }}
                     >
                         DEV: "Guessing is done!"
                     </Button>
+                    {(this.state.allDoneGuessing) ?
+                        (this.showScoreScreen()):(nothing)}
+                    <Container>
+
+                    {/*Table displaying which users have already submitted their guesses*/}
+                    <StyledTableReady>
+                        <StyledTr>
+                            <StyledTd>The other players</StyledTd>
+                            <StyledTd>Done guessing?</StyledTd>
+                        </StyledTr>
+                        {this.state.players.map( tuple =>{
+                                return(
+                                    <StyledTr>
+                                        <StyledTd width={"25%"}>{tuple["username"]}</StyledTd>
+                                        <StyledTd width={"25%"}>{tuple["doneGuessing"] === true ?
+                                            (<Ready>✔</Ready>) : (<NotReady>✘</NotReady>) }
+                                        </StyledTd>
+                                    </StyledTr>
+                                )
+                            }
+                        )}
+                    </StyledTableReady>
+
+                    </Container>
                 </div>
             </Container>
         );

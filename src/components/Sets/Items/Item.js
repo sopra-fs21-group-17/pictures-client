@@ -7,13 +7,13 @@ import {
     Circle,
     Dice,
     Halfcircle,
-    Rectangle,
+    ThickRectangle,
     Stick,
     Stone,
     ThinRectangle,
     Triangle,
     Trianglecontainer
-} from "./BuildingBlocks";
+} from "./ItemStyles";
 import React, {useEffect} from 'react';
 import { Card, Icon } from "./Cards";
 import { Rope } from "./Rope"
@@ -142,8 +142,8 @@ export const Item = ({_id, location, left, top, color, amount, hideSourceOnDrag,
     } else if (style === 'rectangle') {
         return (
             <ItemContainer>
-                <Rectangle ref={drag} style={selected === true ? {border: '3px solid limegreen', transform: 'rotate('+rotation+'deg)', location, left, top, amount} : {transform: 'rotate('+rotation+'deg)', location, left, top, amount}} role="Box">
-                </Rectangle>
+                <ThickRectangle ref={drag} style={selected === true ? {border: '3px solid limegreen', transform: 'rotate('+rotation+'deg)', location, left, top, amount} : {transform: 'rotate('+rotation+'deg)', location, left, top, amount}} role="Box">
+                </ThickRectangle>
             </ItemContainer>
         );
     }
@@ -177,7 +177,7 @@ export const Item = ({_id, location, left, top, color, amount, hideSourceOnDrag,
     }
     else if (style === 'longString') {
         return (
-                 <Rope/>
+            <Rope/>
         )
     }
     else {
