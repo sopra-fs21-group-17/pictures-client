@@ -1,23 +1,28 @@
 import styled from "styled-components";
-import img from ".././wood_texture_background2.jpg"
-import stoneimg from ".././stone_background.jpg"
+import img from "../utils/wood_texture_background2.jpg"
+import stoneimg from "../utils/stone_background.jpg"
+
+//Styles for the Items
 
 export const Triangle = styled.div`
-    border:2px solid black;
-    top: 52%;
-    left: 50%;
-    -moz-transform: translateX(-50%) translateY(-50%);
-    -webkit-transform: translateX(-50%) translateY(-50%);
-    transform: translateX(-50%) translateY(-50%);
+    top: 5.9%;
+    left: 4.5%;
+    position: relative;
+    z-index: 2;
+    width 5.2vw;
+    height: 5.2vw;
+    clip-path: polygon( 50% 10%, 0 100%, 100% 100%);
+    background-image: url(${img});
 `;
 
 export const Trianglecontainer = styled.div`
-    position:relative;
-    // z-index: 2;
+    position:absolute;
+    z-index: 2;
     width: 5.7vw;
     height: 5.7vw;
-    background:black;
+    background: black;
     clip-path: polygon( 50% 10%, 0 100%, 100% 100%);
+    cursor: move;
 `;
 
 export const Dice = styled.div`
@@ -70,7 +75,6 @@ export const Bridgecontainer = styled.div`
     height: 5vw;      
     background: inherit;
     margin: 10px;
-    position:relative;
     cursor:move;
 `;
 

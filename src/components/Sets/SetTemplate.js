@@ -1,4 +1,4 @@
-import React, {createContext, createRef, useEffect, useReducer, useState} from "react";
+import React, {createContext, createRef, useEffect, useState} from "react";
 import styled from "styled-components";
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -15,9 +15,8 @@ import { ItemsSet4 } from "./SetItemLists/ItemsSet4";
 import { ItemsSet5 } from "./SetItemLists/ItemsSet5";
 import { withRouter, useHistory } from "react-router-dom";
 import { useScreenshot } from 'use-react-screenshot'
-import img from "./wood_texture_background.jpg"
+import img from "./utils/wood_texture_background.jpg"
 import { api, handleError } from "../../helpers/api";
-import PicturesModel from "../shared/models/PicturesModel";
 import {CustomDragLayer} from "./Items/CustomDragLayer";
 
 const TopContainer = styled.div`
@@ -132,6 +131,8 @@ const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  padding-left: 5vh;
+  padding-right: 5vh;
 `;
 
 const BoardContainer = styled.div`
@@ -174,6 +175,7 @@ export const ItemContext = createContext({
     removeSelected: null,
     setSelected: null,
 })
+
 let maxamount;
 let currentamount=0;
 
@@ -184,7 +186,7 @@ export const SetTemplate = () => {
     const [currentRightIndex, setCurrentRightIndex] = useState(5)
     const [currentLeftIndex, setCurrentLeftIndex] = useState(0)
 
-
+    //renders the arrows for rotation only for sticks&stones and buildingblocks
     const showArrows = () => {
         if((localStorage.getItem("mySet")) === "STICKS" || (localStorage.getItem("mySet")) === "BLOCKS"){
             return (
@@ -200,10 +202,11 @@ export const SetTemplate = () => {
         }
     }
 
+    //shows the reset board button but not to the strings set
     const showReset = () => {
-        if((localStorage.getItem("mySet")) !== "LACE"){
+        if((localStorage.getItem("mySet")) !== "STRINGS"){
             return (
-                <Button onClick={() => {
+                <Button style={{backgroundColor: "red"}} onClick={() => {
                     fetchItems();
                 }}>reset Board
                 </Button>
@@ -211,6 +214,7 @@ export const SetTemplate = () => {
         }
     }
 
+    //checks which board has to be displayed
     const selectBoard = () => {
         if((localStorage.getItem("mySet")) === "CUBES"){
             return (
@@ -226,8 +230,7 @@ export const SetTemplate = () => {
     const getPictureForUser = async () =>{
         try {
             const response = await api.get('/picture/'+localStorage.getItem("id"));
-            const picture = new PicturesModel(response.data);
-            console.log(response.data.pictureLink);
+            //console.log(response.data.pictureLink);
             return response.data.pictureLink;
 
         }
@@ -247,6 +250,7 @@ export const SetTemplate = () => {
         fetchItems();
     }, [])
 
+    //copies the item list which is needed for the current set
     function fetchItems() {
         if((localStorage.getItem("mySet")) === "CUBES"){
             setItemList(JSON.parse(JSON.stringify(ItemsSet1)));
@@ -256,13 +260,14 @@ export const SetTemplate = () => {
             setItemList(JSON.parse(JSON.stringify(ItemsSet3)));
         }else if ((localStorage.getItem("mySet")) === "ICONS"){
             setItemList(JSON.parse(JSON.stringify(ItemsSet4)));
+            currentamount=0;
             maxamount=5;
         }else {
             setItemList(JSON.parse(JSON.stringify(ItemsSet5)));
         }
-        console.log(itemList);
     };
 
+    //displays the icon cards
     function showIcons(){
         setCurrentLeftIndex(currentLeftIndex -1);
         {itemList
@@ -284,6 +289,7 @@ export const SetTemplate = () => {
             ))}
     }
 
+    //decides which item to render based on given itemset
     const selectItems = () => {
         if((localStorage.getItem("mySet")) === "CUBES"){
             return (
@@ -304,7 +310,7 @@ export const SetTemplate = () => {
                         ))}
                 </Inventory>
             );
-        } else if ((localStorage.getItem("mySet")) === "LACE") {
+        } else if ((localStorage.getItem("mySet")) === "STRINGS") {
             return null
         }else if ((localStorage.getItem("mySet")) === "ICONS"){
         return (
@@ -387,12 +393,12 @@ export const SetTemplate = () => {
         }
     }
 
+    //rotates the items when the arrows are clicked
     const Rotate = (direction) => {
         const selectedItem = itemList.filter((item) => item.selected === true);
 
         if(selectedItem.length > 0){
             if(direction === "Clockwise"){
-
                 selectedItem[0].rotation = (parseInt(selectedItem[0].rotation)+10).toString();
             } else {
                 selectedItem[0].rotation = (parseInt(selectedItem[0].rotation)-10).toString();
@@ -401,12 +407,14 @@ export const SetTemplate = () => {
         }
     }
 
+    //moves the item on the board
     const moveItem = (id, left, top) => {
 
+        //gets the item from the itemlist
         const updatedItem = itemList.filter(item => item._id === id);
 
+        //checks how many icons are on the board
         if(updatedItem[0].location==='inventory'&& maxamount!=null){
-            console.log(currentamount)
             currentamount=currentamount+1;
             if (currentamount>maxamount){
 
@@ -416,10 +424,12 @@ export const SetTemplate = () => {
                 return;
         }}
 
+        //marks the last moved item as selected
         const lastSelectedItem = itemList.filter((item) => item.selected === true);
 
+        //creates a new item to add to the itemlist
         const newItem = {
-            _id: setId(id), //TODO fix random id (issue with items when adding two returning first and adding another)
+            _id: setId(id),
             location: 'board',
             top: top,
             left: left,
@@ -427,17 +437,18 @@ export const SetTemplate = () => {
             amount: updatedItem[0].amount-1,
             hideSourceOnDrag: true,
             style:updatedItem[0].style,
-
             background:updatedItem[0].background,
             selected: true,
             rotation: '0',
         };
 
+        //updates which item is currently selected
         if(lastSelectedItem.length > 0){
             lastSelectedItem[0].selected = false;
             setItemList(itemList.filter((item) => item._id !== lastSelectedItem[0]._id).concat(lastSelectedItem[0]));
         }
 
+        //updates the top and left of the icons whe moved
         if(updatedItem[0].location !== 'inventory'){
             updatedItem[0].left = left;
             updatedItem[0].top = top;
@@ -449,6 +460,7 @@ export const SetTemplate = () => {
         }
     };
 
+    //creates a new id for the items and checks that its not used
     const setId = newId => {
         let i = newId
         while(itemList.filter(item => item._id === i).length > 0){
@@ -501,6 +513,7 @@ export const SetTemplate = () => {
 
     const history = useHistory();
 
+    //sets the last moved item to not selected
     const removeSelected = () => {
         const SelectedItem = itemList.filter(item => item.selected === true);
 
@@ -510,31 +523,28 @@ export const SetTemplate = () => {
         };
     };
 
-
+//hook for creating screenshot from html node
     const ref = createRef()
     const [screenshot, takeScreenshot] = useScreenshot()
     const GetImage = () =>{
         takeScreenshot(ref.current)}
-
     localStorage.setItem("screenshot",screenshot)
 
-
+// create a screenshot,send it to the backend and switch to the GuessingScreen
     const putscreenshot = async () => {
         try {
             const requestBody = JSON.stringify(
                 localStorage.getItem("screenshot")
             )
+            // send it to the backend
             await api.put("/screenshot/" + localStorage.getItem("currentUsername"), requestBody);
-
         } catch (error) {
             alert(`Something went wrong while uploading the screenshot URL \n${handleError(error)}`);
         }
         localStorage.removeItem("isbuilding");
-
         // change to next screen
         history.push(`/GuessingScreen`)
     }
-
 
     return (
         <DndProvider backend={HTML5Backend}>
@@ -548,22 +558,26 @@ export const SetTemplate = () => {
                                     <CustomDragLayer/>
                                 </BoardContainer>
                             </BorderContainer>
-                            {showReset()}
+
                         </div>
                         <div style={{padding: '5%', margin: '5%',  display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
                             <ImageBorderContainer>
                                 <ImageContainer src={pictureURL} className="img-fluid" alt=""/>
                             </ImageBorderContainer>
                             {showArrows()}
-                            <ButtonContainer>
-                                <Button onClick={() => {
-                                    removeSelected();
-                                    GetImage();
-                                    fetchItems();
-                                    setTimeout(function(){ putscreenshot(); }, 200);
+                            <div style={{display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center"}}>
+                                {showReset()}
+                                <ButtonContainer>
+                                    <Button onClick={() => {
+                                        removeSelected();
+                                        GetImage();
+                                        fetchItems();
+                                        setTimeout(function(){ putscreenshot(); }, 200);
+                                    }}>Submit</Button>
+                                </ButtonContainer>
 
-                                }}>Submit</Button>
-                            </ButtonContainer>
+                            </div>
+
                         </div>
                     </TopContainer>
                     <BottomContainer>

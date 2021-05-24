@@ -10,16 +10,16 @@ const layerStyles = {
     top: 0,
     width: "100%",
     height: "100%",
-    //backgroundColor: "red"
-    //transform: "translate(-125px, 100px)"
 };
 
-function getItemStyles(initialOffset, currentOffset, clientOffset, initialClientOffset) {
+//translates the dragpreview based on the mouseposition
+function getItemStyles(initialOffset, currentOffset) {
     if (!initialOffset || !currentOffset) {
         return {
             display: "none"
         };
     }
+
     let { x, y } = currentOffset;
     const transform = `translate(${x-(window.outerWidth/20)}px, ${y+(window.outerHeight/20)}px)`;
     return {
@@ -33,20 +33,17 @@ export const CustomDragLayer = (props) => {
         itemType,
         isDragging,
         item,
-        clientOffset,
         initialOffset,
         currentOffset,
-        initialClientOffset
     } = useDragLayer((monitor) => ({
         item: monitor.getItem(),
         itemType: monitor.getItemType(),
-        clientOffset: monitor.getClientOffset(),
-        initialClientOffset: monitor.getInitialClientOffset(),
         initialOffset: monitor.getInitialSourceClientOffset(),
         currentOffset: monitor.getSourceClientOffset(),
         isDragging: monitor.isDragging(),
     }));
 
+    //renders the dragpreview
     function renderItem() {
         switch (itemType) {
             case ItemTypes.ITEM:
@@ -62,7 +59,7 @@ export const CustomDragLayer = (props) => {
 
     return (
         <div style={layerStyles}>
-            <div style={getItemStyles(initialOffset, currentOffset, clientOffset, initialClientOffset)}>
+            <div style={getItemStyles(initialOffset, currentOffset)}>
                 {renderItem()}
             </div>
         </div>
