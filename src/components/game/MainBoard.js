@@ -149,8 +149,8 @@ class MainBoard extends React.Component{
             this.setState({requested: true});
 
             const stringyfiedPlayers = JSON.stringify(response.data);
-            localStorage.setItem("players", stringyfiedPlayers);
-
+         //   localStorage.setItem("players", stringyfiedPlayers);
+            localStorage.setItem("currentNoOfUsers",response.data.length) //needed for guard
             // update players assigned coord. & set to display it to them
             for(const [key, val] of Object.entries(this.state.players)){
                 if(val.username === localStorage.getItem('currentUsername')){

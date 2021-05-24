@@ -94,6 +94,7 @@ class ScoreScreen extends React.Component {
              console.log(response.data["numberOfPlayers"])
              console.log("All players finished:" + checkPlayersFinished)
              console.log("Button was pressed:" + this.state.buttonPressed)
+             localStorage.setItem("currentNoOfUsers",response.data["numberOfPlayers"])
          } catch (error) {
              alert(`Something went wrong getting the current round: \n${handleError(error)}`);
          }
@@ -125,18 +126,14 @@ class ScoreScreen extends React.Component {
         }
     }
 
-    async playAgain(){
-        //TODO frage was da passiere sell --> id lobby gschickt werde --> denne eifach im backend alli betroffene Repos leere aber lobby laa?
-        this.props.history.push('/lobbies/' + localStorage.getItem("currentLobbyId"));
 
-    }
-
-    async exitGame() {
+    exitGame = async () => {
         try {
             //TODO zrugg is Home alles leere --> BE user us de lobby entferne alueg
-            await api.delete("/players/" + localStorage.getItem("id") + "/" + localStorage.getItem("currentLobbyId"));
+            await api.delete("/players/" + localStorage.getItem("currentLobbyId") + "/" + localStorage.getItem("id"));
 
-            this.setState({buttonPressed: true, playersFinished: true})
+            this.setState({buttonPressed: true})
+            this.setState({playersFinished: true})
             localStorage.removeItem('currentLobbyId');
             this.props.history.push("/home")
         } catch (error) {
@@ -144,20 +141,6 @@ class ScoreScreen extends React.Component {
         }
     }
 
-    gameHasFinished(){
-        return (
-
-                <Button
-                    width="25%"
-                    onClick={() => {
-                        this.playAgain();
-                    }}
-                >
-                    play again
-
-                </Button>
-        )
-    }
 
     convertCorrectedGuessesToMap(correctedGuesses) {
 
@@ -257,7 +240,7 @@ class ScoreScreen extends React.Component {
                         Ok, next round!
                         </Button>):<Button1
                         width="25%"
-                        disabled={true}>Ok, next round!</Button1>):this.gameHasFinished()
+                        disabled={true}>Ok, next round!</Button1>):("")
                     }
                     <Button
                         width="25%"

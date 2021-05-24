@@ -165,6 +165,13 @@ class Home extends React.Component {
             alert(`Something went wrong while fetching the users: \n${handleError(error)}`);
         }
     }
+    //will delete a game and lobby after a player is redirected to the home screen from exiting a game
+    // async componentWillUnmount(){
+    //     try {
+    //         await api.delete('/games/' + localStorage.getItem("currentLobbyId"))
+    //     } catch (error){// just continue it is expected that this w
+    //          }
+    // }
 
     render() {
 
