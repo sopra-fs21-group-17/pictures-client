@@ -89,7 +89,6 @@ class PictureGrid extends React.Component {
     render() {
 
         let pictureElements = new Array();
-        let index = 0;
         if (this.state.pictureURLs.length != 0) {
 
             const pictures = this.state.pictureURLs;

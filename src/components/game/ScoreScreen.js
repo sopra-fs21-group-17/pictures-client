@@ -69,10 +69,6 @@ class ScoreScreen extends React.Component {
     }
 
     intervalID = 0;
- //   playersFinished =false;
- //   buttonPressed=false;
-
-//TODO make sure that all players could update their board before board is rendered
 
     getRoundInformation = async () => {
          try {
@@ -133,7 +129,6 @@ class ScoreScreen extends React.Component {
 
     exitGame = async () => {
         try {
-            //TODO zrugg is Home alles leere --> BE user us de lobby entferne alueg
             await api.delete("/players/" + localStorage.getItem("currentLobbyId") + "/" + localStorage.getItem("id"));
 
             this.setState({buttonPressed: true})
@@ -143,6 +138,22 @@ class ScoreScreen extends React.Component {
         } catch (error) {
             alert(`Something went wrong during the preparation of next Round: \n${handleError(error)}`);
         }
+    }
+
+    buttonHandler(){
+        return(this.state.rounds < this.state.max_rounds ? (this.state.buttonPressed == false? (<Button
+            width="25%"
+
+            onClick={() =>
+                ( this.nextRound(),
+                        this.setState({buttonPressed:true})
+                )
+            }
+        >
+            Ok, next round!
+        </Button>):<Button1
+            width="25%"
+            disabled={true}>Ok, next round!</Button1>):(""))
     }
 
 
@@ -231,21 +242,7 @@ class ScoreScreen extends React.Component {
                 </StyledTable>
 
                 <ButtonContainer>
-                    {
-                        this.state.rounds < this.state.max_rounds ? (this.state.buttonPressed == false? (<Button
-                        width="25%"
-
-                        onClick={() =>
-                            ( this.nextRound(),
-                            this.setState({buttonPressed:true})
-                            )
-                        }
-                    >
-                        Ok, next round!
-                        </Button>):<Button1
-                        width="25%"
-                        disabled={true}>Ok, next round!</Button1>):("")
-                    }
+                    {this.buttonHandler()}
                     <Button
                         width="25%"
                         onClick={() => {

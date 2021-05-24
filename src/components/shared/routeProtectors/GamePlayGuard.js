@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import { Redirect } from "react-router-dom";
-import {api, handleError} from "../../../helpers/api";
+import {api} from "../../../helpers/api";
 
 /**
  * routeProtectors interfaces can tell the router whether or not it should allow navigation to a requested route.
@@ -25,7 +25,7 @@ export const GamePlayGuard = props => {
     }
 
     useEffect(() => {
-        getRoundInformation().then(r => {})
+        getRoundInformation()
     }, [])
 
 
