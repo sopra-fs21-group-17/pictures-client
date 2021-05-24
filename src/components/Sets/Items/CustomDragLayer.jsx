@@ -20,6 +20,7 @@ function getItemStyles(initialOffset, currentOffset, clientOffset, initialClient
             display: "none"
         };
     }
+
     let { x, y } = currentOffset;
     const transform = `translate(${x-(window.outerWidth/20)}px, ${y+(window.outerHeight/20)}px)`;
     return {
@@ -55,6 +56,7 @@ export const CustomDragLayer = (props) => {
                 return null;
         }
     }
+
 
     if (!isDragging) {
         return null;

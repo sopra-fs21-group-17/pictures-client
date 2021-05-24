@@ -46,7 +46,7 @@ const stickstyle = {
 }
 
 export const Item = ({_id, location, left, top, color, amount, hideSourceOnDrag, style, selected, rotation, background: icon}) => {
-    
+
     function getStyles(left, top, isDragging) {
         const transform = `translate3d(${left}px, ${top}px, 0`;
         return {
@@ -108,7 +108,7 @@ export const Item = ({_id, location, left, top, color, amount, hideSourceOnDrag,
         return (
             <ItemContainer>
 
-                <Trianglecontainer ref={drag} style={selected === true ? {border: '3px solid limegreen', transform: 'rotate('+rotation+'deg)',
+                <Trianglecontainer ref={drag} style={selected === true ? {background: "limegreen", transform: 'rotate('+rotation+'deg)',
                     location, left, top, amount} : {transform: 'rotate('+rotation+'deg)', location, left, top, amount}} role="Box">
                     <Triangle/>
                 </Trianglecontainer>
@@ -156,10 +156,10 @@ export const Item = ({_id, location, left, top, color, amount, hideSourceOnDrag,
         );
     } else if (style === 'bridge') {
         return (
-            <ItemContainer>
-                <Bridgecontainer ref={drag} style={selected === true ? {border: '3px solid limegreen', transform: 'rotate('+rotation+'deg)', location, left, top, amount} : {transform: 'rotate('+rotation+'deg)', location, left, top, amount}} role="Box">
-                    <Halfcircle/>
-                    <BridgeRectangle/>
+            <ItemContainer style={location === "inventory" ? {background: "#303036"} : {background: "#C4C4C4"}}>
+                <Bridgecontainer ref={drag} style={{ transform: 'rotate('+rotation+'deg)', location, left, top, amount}} role="Box">
+                    <Halfcircle style={selected === true ? {borderTop: "2px solid limegreen", borderRight: "2px solid limegreen", borderLeft: "2px solid limegreen"} : {}}/>
+                    <BridgeRectangle style={selected === true ? {border: '3px solid limegreen'} : {}}/>
                 </Bridgecontainer>
             </ItemContainer>
 

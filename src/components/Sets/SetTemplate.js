@@ -201,7 +201,7 @@ export const SetTemplate = () => {
     }
 
     const showReset = () => {
-        if((localStorage.getItem("mySet")) !== "LACE"){
+        if((localStorage.getItem("mySet")) !== "STRINGS"){
             return (
                 <Button onClick={() => {
                     fetchItems();
@@ -226,8 +226,7 @@ export const SetTemplate = () => {
     const getPictureForUser = async () =>{
         try {
             const response = await api.get('/picture/'+localStorage.getItem("id"));
-            const picture = new PicturesModel(response.data);
-            console.log(response.data.pictureLink);
+            //console.log(response.data.pictureLink);
             return response.data.pictureLink;
 
         }
@@ -304,7 +303,7 @@ export const SetTemplate = () => {
                         ))}
                 </Inventory>
             );
-        } else if ((localStorage.getItem("mySet")) === "LACE") {
+        } else if ((localStorage.getItem("mySet")) === "STRINGS") {
             return null
         }else if ((localStorage.getItem("mySet")) === "ICONS"){
         return (
