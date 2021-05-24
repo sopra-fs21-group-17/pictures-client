@@ -61,7 +61,7 @@ class AppRouter extends React.Component {
                         <Lobby />
                   )}
               />
-              {/*<GamePlayGuard>*/}  //TODO Correct Gameplay Guard
+              {/*<GamePlayGuard>*/} //TODO Correct Gameplay Guard
               <Route
                   path="/board"
                   exact

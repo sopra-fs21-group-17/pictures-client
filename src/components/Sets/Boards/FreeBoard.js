@@ -11,9 +11,6 @@ const BoardContainer = styled.div`
   height: 100%;
   background: #C4C4C4;
   position: relative;
-  // display: grid;
-  // grid-template-columns: repeat(3, 1fr);
-  // grid-template-rows: repeat(3, 1fr);
 `;
 
 export const FreeBoard = ({ itemlist }) => {
@@ -21,21 +18,28 @@ export const FreeBoard = ({ itemlist }) => {
     const { moveItem } = useContext(ItemContext)
     let ref;
 
+    //gets the dimensions of the board directly from the DOM
     useEffect(() => {
         ref = document.getElementById("BoardContainer").getBoundingClientRect();
     })
 
+    //makes the free board a drop target
     const [ , drop] = useDrop(() => ({
             accept: ItemTypes.ITEM,
             drop(item, monitor) {
+
+                //calculates the new top and left for the moved item
                 const delta = monitor.getDifferenceFromInitialOffset();
                 let left = Math.round(item.left + delta.x);
                 let top = Math.round(item.top + delta.y);
+
+                //sets top and left of item if it was moved from the inventory
                 if(item.location === "inventory"){
                     left = monitor.getClientOffset().x - ref.x;
                     top = monitor.getClientOffset().y - ref.y;
                 }
 
+                //Checks if the items are placed to close to the border
                 if(left < (ref.width * 0.1)){
                     left = (ref.width * 0.1);
                 }
@@ -49,6 +53,7 @@ export const FreeBoard = ({ itemlist }) => {
                     top = ((ref.height * 0.9)-window.innerWidth*0.05);
                 }
 
+                //applies changes to the item
                 moveItem(item._id, left, top);
                 return undefined;
             },
