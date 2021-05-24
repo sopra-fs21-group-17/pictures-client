@@ -15,7 +15,7 @@ import { ItemsSet4 } from "./SetItemLists/ItemsSet4";
 import { ItemsSet5 } from "./SetItemLists/ItemsSet5";
 import { withRouter, useHistory } from "react-router-dom";
 import { useScreenshot } from 'use-react-screenshot'
-import img from "./wood_texture_background.jpg"
+import img from "./utils/wood_texture_background.jpg"
 import { api, handleError } from "../../helpers/api";
 import PicturesModel from "../shared/models/PicturesModel";
 import {CustomDragLayer} from "./Items/CustomDragLayer";
@@ -509,31 +509,28 @@ export const SetTemplate = () => {
         };
     };
 
-
+//hook for creating screenshot from html node
     const ref = createRef()
     const [screenshot, takeScreenshot] = useScreenshot()
     const GetImage = () =>{
         takeScreenshot(ref.current)}
-
     localStorage.setItem("screenshot",screenshot)
 
-
+// create a screenshot,send it to the backend and switch to the GuessingScreen
     const putscreenshot = async () => {
         try {
             const requestBody = JSON.stringify(
                 localStorage.getItem("screenshot")
             )
+            // send it to the backend
             await api.put("/screenshot/" + localStorage.getItem("currentUsername"), requestBody);
-
         } catch (error) {
             alert(`Something went wrong while uploading the screenshot URL \n${handleError(error)}`);
         }
         localStorage.removeItem("isbuilding");
-
         // change to next screen
         history.push(`/GuessingScreen`)
     }
-
 
     return (
         <DndProvider backend={HTML5Backend}>

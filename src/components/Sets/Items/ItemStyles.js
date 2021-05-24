@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import img from ".././wood_texture_background2.jpg"
-import stoneimg from ".././stone_background.jpg"
+import img from "../utils/wood_texture_background2.jpg"
+import stoneimg from "../utils/stone_background.jpg"
 
 export const Triangle = styled.div`
     top: 5.9%;

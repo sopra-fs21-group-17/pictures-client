@@ -20,7 +20,7 @@ const SquareFieldContainer = styled.div`
 export const SquareField = (props) => {
 
     const { markAsSquareField } = useContext(ItemContext)
-
+    //SquareFields, which only allows SquareItems inside
     const[{isOver}, drop] = useDrop({
         accept: ItemTypes.SQUARE,
         drop: (item, monitor) => markAsSquareField(item,props.x),

@@ -23,7 +23,11 @@ const squareStyle = { width: '33.333333%', height: '33.33333%' };
 export const GridBoard = ({ itemlist }) => {
 
 
-
+    /**
+     *
+     * @param i
+     * @returns {JSX.Element}
+     */
     function renderSquare(i) {
         const x = i
         return (<div key={i} style={squareStyle}>
@@ -44,12 +48,15 @@ export const GridBoard = ({ itemlist }) => {
             </SquareField>
         </div>);
     }
+    //create an empty list and put 9 Squares in it.
     const squares = [];
     for (let i = 0; i < 9; i += 1) {
         squares.push(renderSquare(i));
 
 
     }
+    //return the whole GridBoard
+
     return <div style={boardStyle}>{squares}</div>;
 };
 
