@@ -1,6 +1,6 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { Redirect } from "react-router-dom";
-import {api} from "../../../helpers/api";
+import {api, handleError} from "../../../helpers/api";
 
 /**
  * routeProtectors interfaces can tell the router whether or not it should allow navigation to a requested route.
@@ -12,12 +12,27 @@ import {api} from "../../../helpers/api";
  * @param props
  */
 export const GamePlayGuard = props => {
-    if (localStorage.getItem("currentNoOfUsers") === localStorage.getItem("numberOfUsers") || window.location.pathname === ('/lobbies/'+ localStorage.getItem('lobbyId'))) {
-        return props.children;
+
+    const [currentAmountOfPlayers,setCurrentAmountOfPlayers]= useState(localStorage.getItem("currentNoOfUsers"))
+
+    const getRoundInformation = async () => {
+        try {
+            const response = await api.get("/rounds/" + localStorage.getItem("currentLobbyId"))
+            setCurrentAmountOfPlayers(response.data["numberOfPlayers"])
+        } catch (error){
+
+        }
     }
 
+    useEffect(() => {
+        getRoundInformation().then(r => {})
+    }, [])
 
 
+
+    if (window.location.pathname === ('/lobbies/'+ localStorage.getItem('lobbyId'))|| localStorage.getItem("currentNoOfUsers") == currentAmountOfPlayers)  {
+        return props.children;
+    }
 
     return (<alert>A player has left the game, you will be redirected to your home screen.</alert>,
         <Redirect to={"/home"} />

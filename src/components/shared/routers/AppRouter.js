@@ -61,14 +61,17 @@ class AppRouter extends React.Component {
                         <Lobby />
                   )}
               />
-              {/*<GamePlayGuard>*/}  //TODO Correct Gameplay Guard
+
               <Route
                   path="/board"
                   exact
                   render={() => (
+                      <GamePlayGuard>
                       <MainBoard />
+                      </GamePlayGuard>
                   )}
               />
+
               <Route
                   path="/buildScreen"
                   exact
@@ -99,7 +102,7 @@ class AppRouter extends React.Component {
                       <ScoreScreen />
                   )}
               />
-                {/*</GamePlayGuard>*/}
+
             <Route
               path="/home"
               render={() => (

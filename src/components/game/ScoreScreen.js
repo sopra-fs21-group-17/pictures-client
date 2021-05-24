@@ -79,11 +79,15 @@ class ScoreScreen extends React.Component {
              if(this.state.playersFinished && this.state.buttonPressed){
                  this.props.history.push(`/board`);
              }
+
              const response = await api.get("/rounds/" + localStorage.getItem("currentLobbyId"))
              this.setState({rounds: response.data.rounds})
 
 
              //makes the boolean --> the boolean will only return true once all players have finished the round (pressed the button)
+            if(response.data["numberOfPlayers"] < 3){
+                this.exitGame().then()
+            }
 
              const checkPlayersFinished = response.data["numberOfPlayers"] <= response.data["allUsersFinishedRound"]
              this.setState({playersFinished: checkPlayersFinished})
