@@ -56,7 +56,6 @@ class BuildScreen extends React.Component {
                 this.setState({responseRoom: responseCheck.data})
             }, 500)
 
-
         } catch (error) {
             alert(`Something went wrong while fetching the users: \n${handleError(error)}`);
         }

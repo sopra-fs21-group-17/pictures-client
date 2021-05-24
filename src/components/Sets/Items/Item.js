@@ -163,19 +163,19 @@ export const Item = ({_id, location, left, top, color, amount, hideSourceOnDrag,
             </ItemContainer>
 
         );
-    } else if (style === 'longString') {
+    } else  {
         return (
             <Rope/>
         )
-    } else {
-        //if none of the styles is matching a default stick style is returned
-        return (
-            <ItemContainer>
-                <div ref={drag} style={{...stickstyle, transform: 'rotate('+rotation+'deg)',  location, left, top, amount}} >
-                    {showAmount()}
-                </div>
-            </ItemContainer>
-        );
-    }
+        // } else {
+        //     //if none of the styles is matching a default stick style is returned
+        //     return (
+        //         <ItemContainer>
+        //             <div ref={drag} style={{...stickstyle, transform: 'rotate('+rotation+'deg)',  location, left, top, amount}} >
+        //                 {showAmount()}
+        //             </div>
+        //         </ItemContainer>
+        //     );
+         }
 
-}
+    }

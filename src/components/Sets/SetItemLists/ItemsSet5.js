@@ -8,5 +8,7 @@ export const ItemsSet5 = [
         amount: 1,
         hideSourceOnDrag: false,
         style: 'longString',
+        points: [],
+        sticks: [],
     },
 ]

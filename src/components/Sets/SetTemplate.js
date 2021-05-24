@@ -131,6 +131,8 @@ const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  padding-left: 5vh;
+  padding-right: 5vh;
 `;
 
 const BoardContainer = styled.div`
@@ -204,7 +206,7 @@ export const SetTemplate = () => {
     const showReset = () => {
         if((localStorage.getItem("mySet")) !== "STRINGS"){
             return (
-                <Button onClick={() => {
+                <Button style={{backgroundColor: "red"}} onClick={() => {
                     fetchItems();
                 }}>reset Board
                 </Button>
@@ -556,21 +558,26 @@ export const SetTemplate = () => {
                                     <CustomDragLayer/>
                                 </BoardContainer>
                             </BorderContainer>
-                            {showReset()}
+
                         </div>
                         <div style={{padding: '5%', margin: '5%',  display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
                             <ImageBorderContainer>
                                 <ImageContainer src={pictureURL} className="img-fluid" alt=""/>
                             </ImageBorderContainer>
                             {showArrows()}
-                            <ButtonContainer>
-                                <Button onClick={() => {
-                                    removeSelected();
-                                    GetImage();
-                                    fetchItems();
-                                    setTimeout(function(){ putscreenshot(); }, 200);
-                                }}>Submit</Button>
-                            </ButtonContainer>
+                            <div style={{display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center"}}>
+                                {showReset()}
+                                <ButtonContainer>
+                                    <Button onClick={() => {
+                                        removeSelected();
+                                        GetImage();
+                                        fetchItems();
+                                        setTimeout(function(){ putscreenshot(); }, 200);
+                                    }}>Submit</Button>
+                                </ButtonContainer>
+
+                            </div>
+
                         </div>
                     </TopContainer>
                     <BottomContainer>

@@ -1,3 +1,6 @@
+import {useEffect} from "react";
+import { ItemsSet5 } from "../SetItemLists/ItemsSet5";
+
 export const Rope = () => {
 
     //change these values to change the behaviour of the rope
@@ -7,32 +10,39 @@ export const Rope = () => {
     let canvas = document.getElementById("canvas");
     let mouseControl = false;
 
-    let points = [],
-        sticks = [];
+    let points = ItemsSet5[0].points,
+        sticks = ItemsSet5[0].sticks;
 
     let oldpoint = null;
 
-    //creating all the points of the rope and setting their initial position
-    //changing the max value of i in the for loop changes the length of the rope
-    for (let i = 0; i < 70; i++) {
-        let point = {
-            x: canvas.width/2 + 10 * i,
-            y: 10 + 10 * i,
-            oldx: canvas.width/2 + 10 * i,
-            oldy: 10 + 10 * i
-        };
-        points.push(point);
-        points[0].static = false;
-        if (oldpoint) {
-            let stick = {
-                p0: oldpoint,
-                p1: point,
-                length: distance(oldpoint, point)
+    useEffect(() => {
+        createPoints();
+    }, [])
+
+    function createPoints() {
+        //creating all the points of the rope and setting their initial position
+        //changing the max value of i in the for loop changes the length of the rope
+        for (let i = 0; i < 70; i++) {
+            let point = {
+                x: canvas.width/2 + 10 * i,
+                y: 10 + 10 * i,
+                oldx: canvas.width/2 + 10 * i,
+                oldy: 10 + 10 * i
             };
-            sticks.push(stick);
+            points.push(point);
+            points[0].static = false;
+            if (oldpoint) {
+                let stick = {
+                    p0: oldpoint,
+                    p1: point,
+                    length: distance(oldpoint, point)
+                };
+                sticks.push(stick);
+            }
+            oldpoint = point;
         }
-        oldpoint = point;
     }
+
 
     let mousePos;
     let point;
