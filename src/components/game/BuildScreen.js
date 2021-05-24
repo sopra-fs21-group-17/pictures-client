@@ -53,7 +53,7 @@ class BuildScreen extends React.Component {
             }, 100)
             this.checkInterval = setInterval(async () =>{
                 const responseCheck = await api.get('/buildRooms/'+localStorage.getItem('currentLobbyId'));
-                //this.setState({responseRoom: responseCheck.data})
+                this.setState({responseRoom: responseCheck.data})
             }, 500)
 
 
