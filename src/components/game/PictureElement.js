@@ -10,9 +10,15 @@ import {api, handleError} from "../../helpers/api";
 
 const GridElement = styled.div`
 position: relative;
-background: white;
+background: transparent;
+
+padding-left: 2px;
+padding-right: 2px;
+padding-color: white;
+
 min-height: 100px;
-min-width: 100px`;
+min-width: 100px;`;
+
 
 
 

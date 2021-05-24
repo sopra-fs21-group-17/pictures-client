@@ -4,6 +4,7 @@ import React from "react";
 import styled from "styled-components";
 import {withRouter} from "react-router-dom";
 import PicturesModel from "../shared/models/PicturesModel";
+import img from "./wood_texture_background.jpg"
 
 const GridContainer = styled.div`
   
@@ -33,9 +34,9 @@ const Grid = styled.div`
   padding-right: 15px;
   padding-top: 15px;
   padding-bottom: 15px;
-  border-radius: 5px;
   
-  background: linear-gradient(rgb(27, 124, 186), rgb(2, 46, 101));
+  
+  background-image: url(${img});
   transition: opacity 0.5s ease, transform 0.5s ease;
   grid-template-columns: repeat(4,1fr);
   grid-template-rows: repeat(4,1fr);
