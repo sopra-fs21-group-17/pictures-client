@@ -255,6 +255,7 @@ export const SetTemplate = () => {
             setItemList(JSON.parse(JSON.stringify(ItemsSet3)));
         }else if ((localStorage.getItem("mySet")) === "ICONS"){
             setItemList(JSON.parse(JSON.stringify(ItemsSet4)));
+            currentamount=0;
             maxamount=5;
         }else {
             setItemList(JSON.parse(JSON.stringify(ItemsSet5)));
