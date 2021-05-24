@@ -1,9 +1,6 @@
 import styled from "styled-components";
 import {useDrag} from "react-dnd";
-
-
 import React from "react";
-
 import {ItemTypes} from '../utils/Items';
 
 
@@ -28,6 +25,7 @@ const SquareContainer = styled.div`
 
 export const Square = props => {
 
+    //makes the Square item Draggable and defines what is returned in the item
     const [{isDragging}, drag] = useDrag({
         type: ItemTypes.SQUARE,
         item: {
@@ -40,6 +38,7 @@ export const Square = props => {
         }),
     });
 
+    //only show the amount on the items located in the inventory
     function showAmount(){
         if(props.location === 'inventory'){
             return props.amount.toString()+'X';
