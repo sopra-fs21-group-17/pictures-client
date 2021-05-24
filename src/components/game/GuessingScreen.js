@@ -245,7 +245,7 @@ class GuessingScreen extends React.Component {
 
     render() {
         const buildRoom = new BuildRoom(this.state.responseRoom)
-        this.state.scsURLsAndUserNames.map( tuple =>{
+        this.state.scsURLsAndUserNames.forEach( tuple =>{
                 return(
                     <StyledTr>
                         {/*for dev use, after comment out tuple[0] which displays username...*/}
@@ -263,6 +263,8 @@ class GuessingScreen extends React.Component {
                 )
             }
         );
+
+
 
         let nothing = "" // needed as filler for if-condition...
         return (
