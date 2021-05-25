@@ -1,9 +1,10 @@
-import { api, handleError } from "../../helpers/api";
+import {api, handleError} from "../../helpers/api";
 import PictureElement from "./PictureElement";
 import React from "react";
 import styled from "styled-components";
-import { withRouter } from "react-router-dom";
+import {withRouter} from "react-router-dom";
 import PicturesModel from "../shared/models/PicturesModel";
+import img from "./wood_texture_background.jpg"
 
 const GridContainer = styled.div`
   
@@ -19,7 +20,6 @@ const GridContainer = styled.div`
   'B G G G G'
   'C G G G G'
   'D G G G G';
- 
 `;
 
 const Grid = styled.div`
@@ -34,10 +34,9 @@ const Grid = styled.div`
   padding-right: 15px;
   padding-top: 15px;
   padding-bottom: 15px;
-  border-radius: 5px;
   
   
-  background: linear-gradient(rgb(27, 124, 186), rgb(2, 46, 101));
+  background-image: url(${img});
   transition: opacity 0.5s ease, transform 0.5s ease;
   grid-template-columns: repeat(4,1fr);
   grid-template-rows: repeat(4,1fr);
@@ -47,63 +46,50 @@ const Grid = styled.div`
   grid-column-end: span 4;
 `;
 
-
 const GridCoordinate = styled.div`
- height: 25px;
-  width: 25px;
-  color: black;
-  background: pink;
-  border-radius: 50px;
+  font-weight: bold;
+  color: white;
   margin: 15px;
 `;
 
 const GridVoid = styled.div`
-background: transparent;
- height: auto;
+  background: transparent;
+  height: auto;
   width: auto;
   grid-row-start: 1;
   grid-column-start: 1;
 `;
 
-//TODO add api call method to the rendermethod so pictures are taken from backend
-class PictureGrid extends React.Component{
-    constructor(props){
-        super(props);
-        this.state ={
-            pictureURLs: [],
-            coordinate: [0,1,2,3,
-                4,5,6,7,
-                8,9,10,11,
-                12,13,14,15],
-        }
 
+class PictureGrid extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            pictureURLs: [],
+            coordinate: [0, 1, 2, 3,
+                4, 5, 6, 7,
+                8, 9, 10, 11,
+                12, 13, 14, 15],
+        }
     }
 
-    async getPictures(){
+    async getPictures() {
         try {
-            const response = await api.get("/pictures/"+localStorage.getItem("currentLobbyId"));
+            const response = await api.get("/pictures/" + localStorage.getItem("currentLobbyId"));
             this.setState({pictureURLs: response.data});
-
-        }
-        catch (error) {
+        } catch (error) {
             alert(`Something went wrong getting the Pictures: \n${handleError(error)}`);
         }
     }
 
-    // TODO auskommentiert zum testen
-    async componentWillMount() {
+    async componentWillReceiveProps() {
         await this.getPictures()
-
     }
 
-
-
-     render(){
+    render() {
 
         let pictureElements = new Array();
-        let index = 0;
-        if(this.state.pictureURLs.length != 0) {
-
+        if (this.state.pictureURLs.length != 0) {
 
             const pictures = this.state.pictureURLs;
 
@@ -115,19 +101,19 @@ class PictureGrid extends React.Component{
             })
         }
 
-        const numberColumn =[1,2,3,4];
+        const numberColumn = [1, 2, 3, 4];
         const columnCoordinates = numberColumn.map((number) => {
             return <GridCoordinate>{number}</GridCoordinate>
         })
 
-        const letterColumn =['A','B','C','D'];
+        const letterColumn = ['A', 'B', 'C', 'D'];
         const rowCoordinates = letterColumn.map((letter) => {
             return <GridCoordinate>{letter}</GridCoordinate>
         })
 
-        return(
+        return (
 
-            <GridContainer >
+            <GridContainer>
                 <GridVoid/>
                 {columnCoordinates}
                 {rowCoordinates}
@@ -139,4 +125,5 @@ class PictureGrid extends React.Component{
         );
     }
 }
+
 export default withRouter(PictureGrid);

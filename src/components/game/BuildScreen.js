@@ -9,8 +9,11 @@ import SetTemplate from "../Sets/SetTemplate";
 import BuildRoom from "../shared/models/BuildRoom";
 
 const Container = styled(BaseContainer)`
-  color: black;
-  //text-align: center;
+  // display: flex;
+  // color: white;
+  // text-align: center;
+  // flex-direction: row;
+  // min-width: 900px;
 `;
 
 const Countdown = styled.div`
@@ -50,8 +53,8 @@ class BuildScreen extends React.Component {
             }, 100)
             this.checkInterval = setInterval(async () =>{
                 const responseCheck = await api.get('/buildRooms/'+localStorage.getItem('currentLobbyId'));
-                this.setState({responseRoom: responseCheck.data})}, 500)
-
+                this.setState({responseRoom: responseCheck.data})
+            }, 500)
 
         } catch (error) {
             alert(`Something went wrong while fetching the users: \n${handleError(error)}`);
@@ -106,7 +109,7 @@ class BuildScreen extends React.Component {
 
 
     async userFinishedBuilding() {
-        this.putscreenshot()
+        await this.putscreenshot()
         await api.put('/guessing/time/'+localStorage.getItem('currentLobbyId'));
 
         this.props.history.push(`/GuessingScreen`);

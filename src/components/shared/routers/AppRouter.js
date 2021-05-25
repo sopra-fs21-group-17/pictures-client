@@ -14,6 +14,8 @@ import BuildScreen from "../../game/BuildScreen";
 import ScoreScreen from "../../game/ScoreScreen";
 import MainBoard from "../../game/MainBoard";
 import { SetTemplate } from "../../Sets/SetTemplate";
+import {BuildscreenGuard} from "../routeProtectors/BuildscreenGuard";
+import {GamePlayGuard} from "../routeProtectors/GamePlayGuard";
 // import Lobby from "../../game/Lobby";
 // import ScoreScreen from "../../game/ScoreScreen";
 // import GuessingScreen from "../../game/GuessingScreen";
@@ -59,18 +61,24 @@ class AppRouter extends React.Component {
                         <Lobby />
                   )}
               />
+
               <Route
                   path="/board"
                   exact
                   render={() => (
+                      <GamePlayGuard>
                       <MainBoard />
+                      </GamePlayGuard>
                   )}
               />
+
               <Route
                   path="/buildScreen"
                   exact
                   render={() => (
+                      <BuildscreenGuard>
                       <BuildScreen />
+                      </BuildscreenGuard>
                   )}
               />
               <Route
@@ -94,6 +102,7 @@ class AppRouter extends React.Component {
                       <ScoreScreen />
                   )}
               />
+
             <Route
               path="/home"
               render={() => (

@@ -146,16 +146,16 @@ class Home extends React.Component {
     async componentDidMount() {
         try {
             //const respons = await api.get('/users');
-            const response = await api.get('/users/'+localStorage.getItem('currentUsername'));
-            const createRoomNumber= this.randomRoomNumber(4);
+            const response = await api.get('/users/' + localStorage.getItem('currentUsername'));
+            const createRoomNumber = this.randomRoomNumber(4);
 
 
             // Get the returned users and update the state.
-            this.setState({ users: response.data });
+            this.setState({users: response.data});
 
-            if (this.state.lobbyId !== null){
+            if (this.state.lobbyId !== null) {
                 localStorage.setItem('currentRoomNumber', this.state.lobbyId)
-            }else{
+            } else {
                 this.setState({roomNumber: createRoomNumber});
                 localStorage.setItem('currentRoomNumber', createRoomNumber)
             }
@@ -163,8 +163,18 @@ class Home extends React.Component {
 
         } catch (error) {
             alert(`Something went wrong while fetching the users: \n${handleError(error)}`);
+
+
+        }
+        try {
+            await api.delete('/games/' + localStorage.getItem("currentLobbyId"))
+        } catch (error) {// just continue it is expected that this w }
         }
     }
+    //will delete a game and lobby after a player is redirected to the home screen from exiting a game
+    // async componentWillUnmount(){
+    //
+    // }
 
     render() {
 

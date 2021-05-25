@@ -196,6 +196,7 @@ class Lobby extends React.Component {
                     style={{margin:"1.5px", position: "fixed", left:"760px", top:"170px"}}
                 >Copied!</h6>
                 {((this.state.count + lobby.timeDifference) <= 0.0 && lobby.lobbyReady) || lobby.lobbyReady? (
+                    localStorage.setItem("numberOfUsers",this.state.users.length),
                     this.props.history.push("/board")
                 ):( this.state.count + lobby.timeDifference <= 0.0 ?( this.backToHome()):
                     (<Countdown style={{position:"relative", left: "0%", top:"-5px", color:"white", justifyContent:"center", fontSize: "100px", fontWeight:"bold"}}>

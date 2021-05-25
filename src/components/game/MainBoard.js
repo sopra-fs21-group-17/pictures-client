@@ -1,7 +1,3 @@
-// TODO define game states
-// TODO add getRequest for after guessing for ending guesses
-// TODO will need to be styled
-// TODO map urls to components
 
 import React from 'react';
 import { withRouter } from 'react-router-dom';
@@ -18,6 +14,10 @@ const Container = styled(BaseContainer)`
   flex-direction: row;
   min-width: 900px;
   
+  `;
+
+const Button1 = styled(Button)`
+  background: green  
   `;
 
 const GridContainer = styled.div`
@@ -86,7 +86,6 @@ height: 600px;
 background: pink;
 margin: 15px;
 border-radius: 5px;
-
 color: black;
 `;
 
@@ -113,6 +112,7 @@ class MainBoard extends React.Component{
                 "B1", "B2", "B3", "B4",
                 "C1", "C2", "C3", "C4",
                 "D1", "D2", "D3", "D4"],
+            // for testing
             picsURLs: [
                 "https://homepages.cae.wisc.edu/~ece533/images/peppers.png", //1
                 "https://homepages.cae.wisc.edu/~ece533/images/monarch.png", //2
@@ -142,16 +142,6 @@ class MainBoard extends React.Component{
 
     //API REQUESTS//
 
-    // async getPlayersFromLobby(){
-    //     try {
-    //         const response = await api.get("/players");
-    //         this.setState({players: response});
-    //     }
-    //     catch (error) {
-    //         alert(`Something went wrong getting the Players: \n${handleError(error)}`);
-    //     }
-    // }
-
     async initGame(){
         try {
             const response = await api.get("/board/"+localStorage.getItem("currentLobbyId"));
@@ -159,8 +149,8 @@ class MainBoard extends React.Component{
             this.setState({requested: true});
 
             const stringyfiedPlayers = JSON.stringify(response.data);
-            localStorage.setItem("players", stringyfiedPlayers);
-
+         //   localStorage.setItem("players", stringyfiedPlayers);
+            localStorage.setItem("currentNoOfUsers",response.data.length) //needed for guard
             // update players assigned coord. & set to display it to them
             for(const [key, val] of Object.entries(this.state.players)){
                 if(val.username === localStorage.getItem('currentUsername')){
@@ -179,6 +169,7 @@ class MainBoard extends React.Component{
             alert(`Something went wrong getting the Players: \n${handleError(error)}`);
         }
     }
+
     async componentWillMount(){
         await this.initGame();
     }
@@ -186,24 +177,29 @@ class MainBoard extends React.Component{
 
     render(){
         return(<Container>
-            <PictureGrid/>
+            <div>
+                <h1>Take a look at your assigned coordinates</h1>
+                <PictureGrid/>
+            </div>
+            <div>
             <table>
                 <td>
                     <tr>Build the picture located at</tr>
                     <tr>{this.state.myCoordinates}</tr>
                     <tr>
                         <ButtonContainer>
-                            <Button
+                            <Button1
                                 onClick={() => {
                                     this.showBuildScreen();
                                 }}
                             >
-                                take me to build screen
-                            </Button>
+                                got it !
+                            </Button1>
                         </ButtonContainer>
                     </tr>
                 </td>
             </table>
+            </div>
         </Container>);
     }
 
@@ -211,6 +207,7 @@ class MainBoard extends React.Component{
         const requestBody = JSON.stringify({
             roomId: localStorage.getItem('currentRoomNumber'),
         });
+        localStorage.setItem("isbuilding","true");
 
         await api.post('/buildRooms', requestBody);
 

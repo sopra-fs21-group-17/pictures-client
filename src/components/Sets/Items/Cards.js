@@ -1,5 +1,10 @@
 import styled from "styled-components";
 
+/** Styles for the Iconcards
+ *
+ *
+ */
+
 
 export const Card = styled.div`
   position: absolute;
