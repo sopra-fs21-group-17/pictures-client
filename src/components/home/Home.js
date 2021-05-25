@@ -142,15 +142,18 @@ class Home extends React.Component {
         // this.setState({'username': value});
         this.setState({ [key]: value });
     }
+    handleKeyPress(e){
+            if (e.keyCode === 13) {
+                this.joinLobby()
+        }
+    }
 
     async componentDidMount() {
         try {
-            //const respons = await api.get('/users');
+
             const response = await api.get('/users/' + localStorage.getItem('currentUsername'));
             const createRoomNumber = this.randomRoomNumber(4);
-
-
-            // Get the returned users and update the state.
+            // Get the returned user and update the state.
             this.setState({users: response.data});
 
             if (this.state.lobbyId !== null) {
@@ -159,8 +162,6 @@ class Home extends React.Component {
                 this.setState({roomNumber: createRoomNumber});
                 localStorage.setItem('currentRoomNumber', createRoomNumber)
             }
-
-
         } catch (error) {
             alert(`Something went wrong while fetching the users: \n${handleError(error)}`);
 
@@ -201,6 +202,7 @@ class Home extends React.Component {
                             id="edit"
                             style={{visibility: "visible"}}
                             placeholder="Enter Code to Join Game"
+                            onKeyDown={e => {this.handleKeyPress(e)}}
                             onChange={e => {
                                 this.handleInputChange('lobbyIdInput', e.target.value);
                             }}

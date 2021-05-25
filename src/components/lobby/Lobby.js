@@ -167,6 +167,12 @@ class Lobby extends React.Component {
             alert(`Something went wrong while fetching the users: \n${handleError(error)}`);
         }
     }
+    componentWillUnmount() {
+        //clear intervals
+        if(this.usersInterval) clearInterval(this.usersInterval);
+        if(this.countInterval) clearInterval(this.countInterval);
+        if(this.checkInterval) clearInterval(this.checkInterval);
+    }
 
 
     render(){
@@ -200,8 +206,11 @@ class Lobby extends React.Component {
                     this.props.history.push("/board")
                 ):( this.state.count + lobby.timeDifference <= 0.0 ?( this.backToHome()):
                     (<Countdown style={{position:"relative", left: "0%", top:"-5px", color:"white", justifyContent:"center", fontSize: "100px", fontWeight:"bold"}}>
-                        <span style={{fontSize: "35px", color: "rgba(170, 170, 170, 1)", marginTop: "0px"}}>Countdown: </span><br></br>
-                        {('0' + parseFloat(this.state.count + lobby.timeDifference).toFixed(0)).slice(-2)}</Countdown>))}
+                        <span style={{fontSize: "35px", color: "rgba(170, 170, 170, 1)", marginTop: "0px"}}>Countdown:
+                        </span>
+                        <br></br>
+                        {('0' + parseFloat(this.state.count + lobby.timeDifference).toFixed(0)).slice(-2)}
+                    </Countdown>))}
                 {!this.state.users ? (
                     <Spinner />
                 ) : (

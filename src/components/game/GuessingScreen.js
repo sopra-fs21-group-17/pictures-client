@@ -219,7 +219,17 @@ class GuessingScreen extends React.Component {
     }
 
     async componentDidMount(){
+        this.countInterval = setInterval(async () =>{
+            await api.put('/guessing/count/'+localStorage.getItem('currentLobbyId'))},100)
+        this.checkInterval = setInterval(async () =>{
+            const responseCheck = await api.get('/buildRooms/'+localStorage.getItem('currentLobbyId'));
+            this.setState({responseRoom: responseCheck.data})}, 100)
         await this.fetchChecks()
+    }
+    componentWillUnmount() {
+        //clear intervals
+        if(this.countInterval) clearInterval(this.countInterval);
+        if(this.checkInterval) clearInterval(this.checkInterval);
     }
 
     async fetchChecks(){
@@ -277,8 +287,8 @@ class GuessingScreen extends React.Component {
             </Container>
                 <div>
                     <h2>Make your guesses:</h2>
-                {/*    {(this.state.count + buildRoom.timeDifferenceGuessing) <= 0 ?(this.timeOver()):(<h2>Time left: {('0'+Math.round(this.state.count + buildRoom.timeDifferenceGuessing)).slice(-2)}</h2>*/}
-                {/*)}*/}
+                    {(this.state.count + buildRoom.timeDifferenceGuessing) <= 0 ?(this.timeOver()):(<h2>Time left: {('0'+Math.round(this.state.count + buildRoom.timeDifferenceGuessing)).slice(-2)}</h2>
+                )}
 
                     {/*Table displaying the players screenshots and input fields for guess*/}
                     <StyledTable>

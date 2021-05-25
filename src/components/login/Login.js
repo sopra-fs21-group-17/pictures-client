@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback, useRef} from 'react';
 import styled from 'styled-components';
 import { BaseContainer } from '../../helpers/layout';
 import { api, handleError } from '../../helpers/api';
@@ -32,6 +32,7 @@ const Form = styled.div`
   border-radius: 5px;
   background: rgba(137, 137, 137, 1);
   transition: opacity 0.5s ease, transform 0.5s ease;
+ 
 `;
 
 const InputField = styled.input`
@@ -84,6 +85,8 @@ class Login extends React.Component {
       responseUser: null
     };
   }
+
+
   /**
    * HTTP POST request is sent to the backend.
    * If the request is successful, a new user is returned to the front-end
@@ -126,6 +129,7 @@ class Login extends React.Component {
    * @param key (the key of the state for identifying the field that needs to be updated)
    * @param value (the value that gets assigned to the identified state key)
    */
+
   handleInputChange(key, value) {
     // Example: if the key is username, this statement is the equivalent to the following one:
     // this.setState({'username': value});
@@ -140,6 +144,24 @@ class Login extends React.Component {
    * It will trigger an extra rendering, but it will happen before the browser updates the screen.
    */
   componentDidMount() {}
+  handleKeyPress(e, Number){
+    if (Number === 1) {
+      if (e.keyCode === 13 || e.keyCode === 40) {
+        this.refs.passwordField.focus()
+      }
+    }else if (Number === 2){
+      if (e.keyCode === 13){
+        this.login()
+      }else if (e.keyCode === 38){
+        this.refs.usernameField.focus()
+      }
+    }
+  }
+
+
+
+
+
 
   render() {
     return (
@@ -149,14 +171,20 @@ class Login extends React.Component {
         <FormContainer>
           <Form>
             <InputField
+
               placeholder="Username"
+              ref="usernameField"
+              onKeyDown={e => {this.handleKeyPress(e, 1)}}
               onChange={e => {
                 this.handleInputChange('username', e.target.value);
               }}
             />
             <InputField
+
               placeholder="Password"
               type="password"
+              ref="passwordField"
+              onKeyDown={e => {this.handleKeyPress(e, 2)}}
               onChange={e => {
                 this.handleInputChange('password', e.target.value);
               }}
@@ -166,6 +194,7 @@ class Login extends React.Component {
         </FormContainer>
         <ButtonContainer>
           <Button
+              ref="loginButton"
               disabled={!this.state.username || !this.state.password}
               width="20%"
               onClick={() => {
@@ -178,6 +207,7 @@ class Login extends React.Component {
         <ButtonContainer>
           <Button
               width="20%"
+              ref="registerButton"
               onClick={() => {
                 this.register();
               }}

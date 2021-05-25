@@ -123,6 +123,19 @@ class Registration extends React.Component {
         // this.setState({'username': value});
         this.setState({ [key]: value });
     }
+    handleKeyPress(e, Number){
+        if (Number === 1) {
+            if (e.keyCode === 13 || e.keyCode === 40) {
+                this.refs.passwordField.focus()
+            }
+        }else if (Number === 2){
+            if (e.keyCode === 13){
+                this.register()
+            }else if (e.keyCode === 38){
+                this.refs.usernameField.focus()
+            }
+        }
+    }
 
     /**
      * componentDidMount() is invoked immediately after a component is mounted (inserted into the tree).
@@ -143,6 +156,8 @@ class Registration extends React.Component {
                         <Label>Username</Label>
                         <InputField
                             placeholder="Username"
+                            ref="usernameField"
+                            onKeyDown={e => {this.handleKeyPress(e, 1)}}
                             onChange={e => {
                                 this.handleInputChange('username', e.target.value);
                             }}
@@ -150,7 +165,9 @@ class Registration extends React.Component {
                         <Label>Password</Label>
                         <InputField
                             placeholder="Password"
+                            ref="passwordField"
                             type="password"
+                            onKeyDown={e => {this.handleKeyPress(e, 2)}}
                             onChange={e => {
                                 this.handleInputChange('password', e.target.value);
                             }}

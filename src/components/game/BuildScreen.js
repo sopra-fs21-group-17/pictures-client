@@ -50,15 +50,21 @@ class BuildScreen extends React.Component {
 
             this.countInterval = setInterval(async () =>{
                 await api.put('/buildRooms/count/'+localStorage.getItem('currentLobbyId'))
-            }, 100)
+            }, 100);
+
             this.checkInterval = setInterval(async () =>{
                 const responseCheck = await api.get('/buildRooms/'+localStorage.getItem('currentLobbyId'));
-                this.setState({responseRoom: responseCheck.data})
-            }, 500)
+                this.setState({responseRoom: responseCheck.data})}, 100)
 
         } catch (error) {
             alert(`Something went wrong while fetching the users: \n${handleError(error)}`);
         }
+    }
+    componentWillUnmount() {
+        //clear intervals
+
+        if(this.countInterval) clearInterval(this.countInterval);
+        if(this.checkInterval) clearInterval(this.checkInterval);
     }
 
     render() {
@@ -85,11 +91,13 @@ class BuildScreen extends React.Component {
         return (
             <Container>
                 <div style={{color: "black", textAlign: "center"}}>
-                    {this.state.countMin <= 0 && (this.state.count + buildRoom.timeDifference) <= 0 ? (this.userFinishedBuilding()):(
-                        <Countdown style={{fontSize: "50px"}}>Time Left: <br></br>
+                    {this.state.countMin <= 0 && (this.state.count + buildRoom.timeDifference) <= 0 ?
+                        (this.userFinishedBuilding()):
+                        (<Countdown style={{fontSize: "35px"}}>Time Left:
+                            <br></br>
                             <span style={{fontWeight: "bold", fontFamily: "\"Open Sans\", sans-serif;", color: "white"}}>
                             {('0'+ this.state.countMin).slice(-2)}:{('0'+Math.round(this.state.count + buildRoom.timeDifference)).slice(-2)}
-                        </span>
+                            </span>
                         </Countdown>)}
                 </div>
                 <div >

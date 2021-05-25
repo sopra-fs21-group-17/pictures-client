@@ -4,6 +4,7 @@ export const Button = styled.button`
   &:hover {
     transform: translateY(-2px);
   }
+  
   padding: 6px;
   font-weight: 700;
   text-transform: uppercase;
@@ -18,4 +19,5 @@ export const Button = styled.button`
   opacity: ${props => (props.disabled ? 0.4 : 1)};
   background: rgba(110, 110, 110, 1);
   transition: all 0.3s ease;
+  
 `;
