@@ -170,17 +170,20 @@ class Home extends React.Component {
 
         return (
             <Container>
-                <h1>PICTURES</h1>
-                <h2>HOME</h2>
-                <p>Logged in as:</p>
+                <h1 style={{fontSize:"50px"}}>PICTURES</h1>
+                <h2 style={{fontSize:"30px"}}>HOME</h2>
+                <p style={{fontSize:"20px"}}>Logged in as:</p>
                 {!this.state.users ? (
                     <Spinner />
                 ) : (
                     <div>
-                        <Users>
+                        <Users style={{fontSize:"25px"}}>
                             <PlayerContainer>
-                                <Player user={this.state.users}
-                                        hidden={localStorage.getItem('currentUsername') !== this.state.users.username}/>
+                                <Player
+                                    style={{fontSize:"25px"}}
+                                    user={this.state.users}
+                                    hidden={localStorage.getItem('currentUsername') !== this.state.users.username}
+                                />
                             </PlayerContainer>
 
                         </Users>

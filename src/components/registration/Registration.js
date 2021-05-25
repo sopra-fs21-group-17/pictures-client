@@ -22,7 +22,7 @@ const Form = styled.div`
   flex-direction: column;
   justify-content: center;
   width: 50%;
-  height: 275px;
+  height: 230px;
   font-size: 16px;
   font-weight: 300;
   padding-left: 37px;
@@ -78,7 +78,7 @@ class Registration extends React.Component {
         this.state = {
             username: null,
             password: null,
-            birthdate: "",
+
         };
     }
     /**
@@ -91,7 +91,6 @@ class Registration extends React.Component {
             const requestBody = JSON.stringify({
                 username: this.state.username,
                 password: this.state.password,
-                birthdate: this.state.birthdate,
             });
             const response = await api.post('/users', requestBody);
 
@@ -156,22 +155,11 @@ class Registration extends React.Component {
                                 this.handleInputChange('password', e.target.value);
                             }}
                         />
-                        <Label>Birthdate</Label>
-                        <InputField
-                            placeholder="Birthdate"
-                            type="date"
-                            max="2003-04-21"
-                            min="1903-01-02"
-                            onChange={e => {
-                                this.handleInputChange('birthdate', e.target.value);
-                            }}
-                        />
-
                     </Form>
                 </FormContainer>
                 <ButtonContainer>
                     <Button
-                        disabled={!this.state.username || !this.state.password || !this.state.birthdate}
+                        disabled={!this.state.username || !this.state.password}
                         width="20%"
                         onClick={() => {
                             this.register();

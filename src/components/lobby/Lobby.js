@@ -109,7 +109,7 @@ class Lobby extends React.Component {
             users: null,
             loggedUser: null,
             responseLobby: null,
-            count: 10000.0,
+            count: 99.0,
             copied: false,
         };
     }
