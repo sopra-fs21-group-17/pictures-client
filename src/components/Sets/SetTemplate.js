@@ -230,7 +230,9 @@ export const SetTemplate = () => {
     const getPictureForUser = async () =>{
         try {
             const response = await api.get('/picture/'+localStorage.getItem("id"));
-            //console.log(response.data.pictureLink);
+            console.log(response.data.pictureLink);
+            localStorage.setItem("MyPicture",response.data.pictureLink)
+
             return response.data.pictureLink;
 
         }
@@ -239,14 +241,15 @@ export const SetTemplate = () => {
         }
     }
 
+
     useEffect(() => {
         
-        // let pic = getPictureForUser()
-        // console.log(pic);
-        // setPictureURL(pic);
-        //console.log(getPictureForUser());
+        let pic = getPictureForUser()
+        console.log(pic);
+        setPictureURL(pic);
 
-        setPictureURL(localStorage.getItem("myPicURL"))
+
+        // setPictureURL(localStorage.getItem("myPicURL"))
         fetchItems();
     }, [])
 
@@ -562,7 +565,7 @@ export const SetTemplate = () => {
                         </div>
                         <div style={{padding: '5%', margin: '5%',  display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
                             <ImageBorderContainer>
-                                <ImageContainer src={pictureURL} className="img-fluid" alt=""/>
+                                <ImageContainer src={localStorage.getItem("MyPicture")} className="img-fluid" alt=""/>
                             </ImageBorderContainer>
                             {showArrows()}
                             <div style={{display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center"}}>
