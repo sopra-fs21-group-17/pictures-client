@@ -144,14 +144,11 @@ class MainBoard extends React.Component{
 
     async initGame(){
         try {
-            const response = await api.get("/board/"+localStorage.getItem("currentLobbyId"));
-            this.setState({players: response.data});
-            this.setState({requested: true});
+            const response = await api.get("/board/"+localStorage.getItem("currentLobbyId"))
+            this.setState({players: response.data})
+            this.setState({requested: true})
 
-            const stringyfiedPlayers = JSON.stringify(response.data);
-            localStorage.setItem("players", stringyfiedPlayers);
-            localStorage.setItem("currentNoOfUsers",response.data.length) //needed for guard
-            // update players assigned coord. & set to display it to them
+            // update players assigned coordinate & set to display it to them
             for(const [key, val] of Object.entries(this.state.players)){
                 if(val.username === localStorage.getItem('currentUsername')){
                     this.setState({
@@ -161,12 +158,16 @@ class MainBoard extends React.Component{
                     localStorage.setItem("myPicURL", this.state.picsURLs[val.assignedCoordinates])
                     break;
                 }
+                delete val.password
             }
 
-            localStorage.setItem("mySet", this.state.mySet);
+            // add NEEDED info to localstorage
+            localStorage.setItem("players", JSON.stringify(this.state.players))
+            localStorage.setItem("mySet", this.state.mySet)
+            localStorage.setItem("currentNoOfUsers", response.data.length) //needed for guard
         }
         catch (error) {
-            alert(`Something went wrong getting the Players: \n${handleError(error)}`);
+            alert(`Something went wrong getting the Players: \n${handleError(error)}`)
         }
     }
 
