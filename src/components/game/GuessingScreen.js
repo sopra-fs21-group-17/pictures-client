@@ -103,6 +103,11 @@ const Ready = styled.div`
   width: 40px;
 `;
 
+const StyledP = styled.p`
+  color: red;
+  background: rgba(1, 1, 1, 0.25);
+`;
+
 class GuessingScreen extends React.Component {
     constructor(props) {
         super(props);
@@ -120,7 +125,8 @@ class GuessingScreen extends React.Component {
             guessesAsString: "",
             responseRoom: null,
             count: 60.0,
-            allDoneGuessing: null
+            allDoneGuessing: null,
+            wrongInput: false
         }
     };
 
@@ -187,7 +193,12 @@ class GuessingScreen extends React.Component {
     }
 
     saveGuessToDict(user, value) {
-        this.setState({...this.state,guesses: {...this.state.guesses,[user]:value}})
+        // regex input validation for guesses
+        if(value.match("[A-Da-d]{1}[1-4]{1}") != null){
+            this.setState({...this.state,guesses: {...this.state.guesses,[user]:value}})
+            this.setState({wrongInput: false})
+        }
+        else{ this.setState({wrongInput: true})}
     }
 
     // get corrected guesses and points
@@ -226,6 +237,7 @@ class GuessingScreen extends React.Component {
             this.setState({responseRoom: responseCheck.data})}, 100)
         await this.fetchChecks()
     }
+
     componentWillUnmount() {
         //clear intervals
         if(this.countInterval) clearInterval(this.countInterval);
@@ -238,13 +250,13 @@ class GuessingScreen extends React.Component {
             setInterval(async () =>{
                 const response = await api.get('/game/checkUsersDoneGuessing/'+localStorage.getItem('currentLobbyId'));
                 this.setState({ allDoneGuessing: response.data });
-            }, 100)
+            }, 1000)
 
             // update info of all players doneGuessing attribute (true/false)
             setInterval(async () =>{
                 const response2 = await api.get("/board/"+localStorage.getItem("currentLobbyId"));
                 this.setState({players: response2.data});
-            }, 100)
+            }, 1000)
 
             await this.resetRoundHandle()
         }catch (error) {
@@ -274,8 +286,6 @@ class GuessingScreen extends React.Component {
             }
         );
 
-
-
         let nothing = "" // needed as filler for if-condition...
         return (
             <Container>
@@ -287,9 +297,11 @@ class GuessingScreen extends React.Component {
             </Container>
                 <div>
                     <h2>Make your guesses:</h2>
-                    {(this.state.count + buildRoom.timeDifferenceGuessing) <= 0 ?(this.timeOver()):(<h2>Time left: {('0'+Math.round(this.state.count + buildRoom.timeDifferenceGuessing)).slice(-2)}</h2>
-                )}
+                {/*    {(this.state.count + buildRoom.timeDifferenceGuessing) <= 0 ?(this.timeOver()):(<h2>Time left: {('0'+Math.round(this.state.count + buildRoom.timeDifferenceGuessing)).slice(-2)}</h2>*/}
+                {/*)}*/}
 
+                    {/*Display error message if wrong input for guesses was given*/}
+                    {(this.state.wrongInput) ? (<StyledP>! Please, use this format for your guesses: "A1", "d4" (A-D and 1-4).</StyledP>):(nothing)}
                     {/*Table displaying the players screenshots and input fields for guess*/}
                     <StyledTable>
                         <StyledTr>
@@ -300,7 +312,7 @@ class GuessingScreen extends React.Component {
                         {this.state.scsURLsAndUserNames.map( tuple =>{
                                 return(
                                     <StyledTr>
-                                        {/*for dev use, after comment out tuple[0] which displays username...*/}
+                                        {/*for testing, after comment out tuple[0] which displays username...*/}
                                         {/*<StyledTd width={"25%"}>{tuple[0]}</StyledTd>*/}
                                         <StyledTd width={"25%"}>{<StyledImg src={tuple[1]}/>}</StyledTd>
                                         <StyledTd width={"25%"}>
@@ -319,7 +331,7 @@ class GuessingScreen extends React.Component {
                     <ButtonContainer>
                         <Button1
                             width="25%"
-                            disabled={this.state.isDoneGuessing}
+                            disabled={this.state.isDoneGuessing || this.state.wrongInput}
                             onClick={() => {
                                 this.sendUserGuesses()
                             }}

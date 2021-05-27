@@ -126,7 +126,6 @@ class ScoreScreen extends React.Component {
         }
     }
 
-
     exitGame = async () => {
         try {
             await api.delete("/players/" + localStorage.getItem("currentLobbyId") + "/" + localStorage.getItem("id"));
@@ -155,7 +154,6 @@ class ScoreScreen extends React.Component {
             width="25%"
             disabled={true}>Ok, next round!</Button1>):(""))
     }
-
 
     convertCorrectedGuessesToMap(correctedGuesses) {
 
