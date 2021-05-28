@@ -1,5 +1,5 @@
 # Pictures: Game of the year 2020
-## Done by Group 17 as part of the course "Software-Praktikum" at UZH, spring semester 2021
+*Done by Group 17 as part of the course "Software-Praktikum" at UZH, spring semester 2021*
 
 ## Introduction
 We created a digital version of the game of the year 2020 called Pictures. 
