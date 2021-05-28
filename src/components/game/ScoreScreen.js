@@ -140,7 +140,7 @@ class ScoreScreen extends React.Component {
     }
 
     buttonHandler(){
-        return(this.state.rounds < this.state.max_rounds ? (this.state.buttonPressed == false? (<Button
+        return(this.state.rounds < this.state.max_rounds ? (!this.state.buttonPressed (<Button
             width="25%"
 
             onClick={() =>
@@ -212,14 +212,14 @@ class ScoreScreen extends React.Component {
         // fill in points table
         let input = this.getPointsArray(JSON.parse((localStorage.getItem("thePoints"))))
         if(input === null){ input = ["error","error"]}
-        const playerNames = input.map(tuple =>{
+        const playerNames = input.map(element =>{
             return(
-                <StyledTd>{tuple[0]}</StyledTd>
+                <StyledTd>{element[0]}</StyledTd>
             )
         })
-        const playerPoints = input.map(tuple =>{
+        const playerPoints = input.map(point =>{
             return(
-                <StyledTd>{tuple[1]}</StyledTd>
+                <StyledTd>{point[1]}</StyledTd>
             )
         })
 
