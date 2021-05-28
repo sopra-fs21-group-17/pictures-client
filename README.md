@@ -77,6 +77,7 @@ $ npm run dev
 ```
 A browser window showing localhost:3000 port will automaticaly open (if not, manually type localhost:3000 into your web-browser)
  and you can start developing :-)
+ 
 ## 📸 Illustrations
 **Here is how a game round looks like:**  
 After registration/login, you can "create a new game" and you'll be forwarded to the lobby.
@@ -99,8 +100,11 @@ Other developers who are interested in contributing to this project might implem
 - highlight the assigned picture of the player in the picture grid  
 Unfortunately due to time constraints these features could not be implemented in this sprint.
 
-## 🖋️ Authors
+## 🖋️ Authors and acknowledgement
 @dkajin, @jukosta, @lakicv, @olstra, @xinox2000
+*We want to thank community of photographers on Unsplash for their wonderful work. 
+As we fetch the photos at random, the single contributors are hard to identify. We highly encourage 
+you to visit [Unsplash](https://unsplash.com/) as our form of appreciation.*
 
 ## ⚖️ License
 This project is licensed under the terms of the XXX license.
