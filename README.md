@@ -78,7 +78,7 @@ $ npm run dev
 A browser window showing localhost:3000 port will automaticaly open (if not, manually type localhost:3000 into your web-browser)
  and you can start developing :-)
 ## 📸 Illustrations
-**Here is how a game round looks like:** 
+**Here is how a game round looks like:**  
 After registration/login, you can "create a new game" and you'll be forwarded to the lobby.
 By sharing your lobby code with your friends they can join your game.
 ![](./Readme_Pictures/01-Lobby.png)
