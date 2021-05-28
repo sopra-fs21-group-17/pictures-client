@@ -86,11 +86,11 @@ After all players are ready, the game is initialized and the main board is displ
 ![](./Readme_Pictures/02-MainBoard.png)
 By pressing on the button you can start rebuilding your picture assigned with your 
 assigned set:  
-TODO PIC  
+![](Readme_Pictures/03-BuildScreen.png)
 After submitting your screenshot, the guessing screen is displayed:
-![](./Readme_Pictures/03-GuessingScreen.png)
+![](Readme_Pictures/04-GuessingScreen.png)
 As soon as all players are done guessing, the score board is shown:
-![](./Readme_Pictures/04-ScoreScreen.png)
+![](Readme_Pictures/05-ScoreScreen.png)
 
 ## 🚗 Roadmap
 Other developers who are interested in contributing to this project might implement 
