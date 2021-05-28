@@ -128,7 +128,7 @@ class GuessingScreen extends React.Component {
             allDoneGuessing: null,
             wrongInput: false
         }
-    };
+    }
 
     // GET REQUEST "/screenshots"
     async getScreenshots(){
@@ -220,7 +220,6 @@ class GuessingScreen extends React.Component {
 
     timeOver(){
         this.sendUserGuesses()
-        //this.createGuessingInfo();
         this.showScoreScreen()
     }
 
@@ -266,7 +265,7 @@ class GuessingScreen extends React.Component {
     }
 
     render() {
-        const buildRoom = new BuildRoom(this.state.responseRoom)
+        //const buildRoom = new BuildRoom(this.state.responseRoom)
         this.state.scsURLsAndUserNames.forEach( tuple =>{
                 return(
                     <StyledTr>
