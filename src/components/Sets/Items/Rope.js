@@ -89,9 +89,14 @@ export const Rope = () => {
 
     //calculates the distance between two points
     function distance(a, b) {
-        let dx = a.x - b.x;
-        let dy = a.y - b.y;
-        return Math.sqrt(dx * dx + dy * dy);
+        try {
+            let dx = a.x - b.x;
+            let dy = a.y - b.y;
+            return Math.sqrt(dx * dx + dy * dy);
+        } catch (error){
+            return 1000
+        }
+
     }
 
     //updates the position of the lines when the rope is dragged

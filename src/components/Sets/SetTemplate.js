@@ -204,7 +204,7 @@ export const SetTemplate = () => {
 
     //shows the reset board button but not to the strings set
     const showReset = () => {
-        if((localStorage.getItem("mySet")) !== "STRINGS"){
+        if((localStorage.getItem("mySet")) !== "LACE"){
             return (
                 <Button style={{backgroundColor: "red"}} onClick={() => {
                     fetchItems();
@@ -313,7 +313,7 @@ export const SetTemplate = () => {
                         ))}
                 </Inventory>
             );
-        } else if ((localStorage.getItem("mySet")) === "STRINGS") {
+        } else if ((localStorage.getItem("mySet")) === "LACE") {
             return null
         }else if ((localStorage.getItem("mySet")) === "ICONS"){
         return (
