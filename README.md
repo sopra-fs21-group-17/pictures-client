@@ -67,7 +67,7 @@ $ npm -v
 ```bash 
 $ git clone https://github.com/sopra-fs21-group-17/pictures-client 
 ```
-4. Open the projects folder and install all needed packages through
+4. Open the projects folder and install all needed packages through:
 ```bash 
 $ npm install
 ```
