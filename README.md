@@ -1,5 +1,5 @@
 # Pictures: Game of the year 2020
-## Done by Group 17 as part of the course "Software-Praktikum" at UZH, spring semester 2021
+*Done by Group 17 as part of the course "Software-Praktikum" at UZH, spring semester 2021*
 
 ## Introduction
 We created a digital version of the game of the year 2020 called Pictures. 
@@ -96,7 +96,7 @@ As soon as all players are done guessing, the score board is shown:
 Other developers who are interested in contributing to this project might implement 
 (but not only) some of these features:  
 - a filter to filter out easy to re-build pictures 
-- highlight the assigned picture of the player in the picture grid
+- highlight the assigned picture of the player in the picture grid  
 Unfortunately due to time constraints these features could not be implemented in this sprint.
 
 ## 🖋️ Authors
