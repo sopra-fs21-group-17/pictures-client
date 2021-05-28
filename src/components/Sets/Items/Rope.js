@@ -23,23 +23,23 @@ export const Rope = () => {
         //creating all the points of the rope and setting their initial position
         //changing the max value of i in the for loop changes the length of the rope
         for (let i = 0; i < 70; i++) {
-            let point = {
+            let newPoint = {
                 x: canvas.width/2 + 10 * i,
                 y: 10 + 10 * i,
                 oldx: canvas.width/2 + 10 * i,
                 oldy: 10 + 10 * i
             };
-            points.push(point);
+            points.push(newPoint);
             points[0].static = false;
             if (oldpoint) {
                 let stick = {
                     p0: oldpoint,
-                    p1: point,
-                    length: distance(oldpoint, point)
+                    p1: newPoint,
+                    length: distance(oldpoint, newPoint)
                 };
                 sticks.push(stick);
             }
-            oldpoint = point;
+            oldpoint = newPoint;
         }
     }
 
@@ -50,11 +50,11 @@ export const Rope = () => {
     canvas.addEventListener('mousemove', function (evt) {
 
         //gets the mouse position
-        function getMousePos(canvas, evt) {
-            let rect = canvas.getBoundingClientRect();
+        function getMousePos(board, event) {
+            let rect = board.getBoundingClientRect();
             return {
-                x: evt.clientX - rect.left,
-                y: evt.clientY - rect.top
+                x: event.clientX - rect.left,
+                y: event.clientY - rect.top
             };
         }
 
@@ -100,9 +100,9 @@ export const Rope = () => {
             let s = sticks[i],
                 dx = s.p1.x - s.p0.x,
                 dy = s.p1.y - s.p0.y,
-                distance = Math.sqrt(dx * dx + dy * dy),
-                difference = s.length - distance,
-                percent = difference / distance;
+                movedDistance = Math.sqrt(dx * dx + dy * dy),
+                difference = s.length - movedDistance,
+                percent = difference / movedDistance;
 
             if (!s.p0.static && !s.p1.static) {
                 percent /= 2;
@@ -125,73 +125,73 @@ export const Rope = () => {
     }
 
     //updates the positions of the points when the rope is draqgged
-    function movePoint(point) {
-        let vx = point.x - point.oldx;
-        let vy = point.y - point.oldy;
+    function movePoint(updatedPoint) {
+        let vx = updatedPoint.x - updatedPoint.oldx;
+        let vy = updatedPoint.y - updatedPoint.oldy;
 
-        point.oldx = point.x;
-        point.oldy = point.y;
-        point.x = point.oldx + vx * FRICTION;
-        point.y = point.oldy + vy * FRICTION;
+        updatedPoint.oldx = updatedPoint.x;
+        updatedPoint.oldy = updatedPoint.y;
+        updatedPoint.x = updatedPoint.oldx + vx * FRICTION;
+        updatedPoint.y = updatedPoint.oldy + vy * FRICTION;
     }
 
     //adds gravitational force
-    function gravitatePoint(point) {
-        point.y = point.y + GRAVITY;
+    function gravitatePoint(updatedPoint) {
+        updatedPoint.y = updatedPoint.y + GRAVITY;
     }
 
     //moves all nonfixed points when the rope is dragged
-    function animatePoints(points) {
-        for (let i = 0; i < points.length; i++) {
-            let point = points[i];
-            if (!point.static) {
-                movePoint(point);
-                gravitatePoint(point);
-                correctPoint(point);
+    function animatePoints(newPoints) {
+        for (let i = 0; i < newPoints.length; i++) {
+            let movedPoint = newPoints[i];
+            if (!movedPoint.static) {
+                movePoint(movedPoint);
+                gravitatePoint(movedPoint);
+                correctPoint(movedPoint);
             }
         }
     }
 
     //moves points when rope is dragged
-    function correctPoint(point) {
-        let diffX = (point.x - point.oldx);
-        let diffY = (point.y - point.oldy);
-        if (point.x < 0) {
-            point.oldx = -point.x + diffX * BOUNCE;
-            point.x = -point.x;
+    function correctPoint(correctedPoint) {
+        let diffX = (correctedPoint.x - correctedPoint.oldx);
+        let diffY = (correctedPoint.y - correctedPoint.oldy);
+        if (correctedPoint.x < 0) {
+            correctedPoint.oldx = -correctedPoint.x + diffX * BOUNCE;
+            correctedPoint.x = -correctedPoint.x;
         }
-        if (point.x > canvas.width) {
-            point.oldx = canvas.width - (point.x - canvas.width) + diffX * BOUNCE;
-            point.x = canvas.width - (point.x - canvas.width);
+        if (correctedPoint.x > canvas.width) {
+            correctedPoint.oldx = canvas.width - (correctedPoint.x - canvas.width) + diffX * BOUNCE;
+            correctedPoint.x = canvas.width - (correctedPoint.x - canvas.width);
         }
 
-        if (point.y < 0) {
-            point.oldy = -point.y + diffY * BOUNCE;
-            point.y = -point.y;
+        if (correctedPoint.y < 0) {
+            correctedPoint.oldy = -correctedPoint.y + diffY * BOUNCE;
+            correctedPoint.y = -correctedPoint.y;
         }
-        if (point.y > canvas.height) {
-            point.oldy = canvas.height - (point.y - canvas.height) + diffY * BOUNCE;
-            point.y = canvas.height - (point.y - canvas.height);
+        if (correctedPoint.y > canvas.height) {
+            correctedPoint.oldy = canvas.height - (correctedPoint.y - canvas.height) + diffY * BOUNCE;
+            correctedPoint.y = canvas.height - (correctedPoint.y - canvas.height);
         }
     }
 
     //draws the rope on the canvas
-    function drawPoints(context, points) {
+    function drawPoints(context, finalPoints) {
         let i;
         context.beginPath();
 
-        for (i = 1; i < points.length; i++) {
+        for (i = 1; i < finalPoints.length; i++) {
             context.beginPath();
             context.strokeStyle = "#000000";
-            context.moveTo(points[i - 1].x, points[i - 1].y);
+            context.moveTo(finalPoints[i - 1].x, finalPoints[i - 1].y);
             context.lineWidth = 5;
-            context.lineTo(points[i].x, points[i].y);
+            context.lineTo(finalPoints[i].x, finalPoints[i].y);
             context.stroke();
         }
-     for (i=0; i<points.length; i++) {
+     for (i=0; i<finalPoints.length; i++) {
        context.fillStyle="#898989";
        context.beginPath();
-       context.arc(points[i].x,points[i].y, 2, 0, Math.PI*2);
+       context.arc(finalPoints[i].x,finalPoints[i].y, 2, 0, Math.PI*2);
        context.fill();
      }
     }

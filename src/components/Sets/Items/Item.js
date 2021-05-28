@@ -49,14 +49,14 @@ export const Item = ({_id, location, left, top, color, amount, hideSourceOnDrag,
 
     //makes the item invisible when it is dragged
     //necessary for the dragpreview
-    function getStyles(left, top, isDragging) {
-        const transform = `translate3d(${left}px, ${top}px, 0`;
+    function getStyles(x, y, dragState) {
+        const transform = `translate3d(${x}px, ${y}px, 0`;
         return {
             position: 'absolute',
             transform,
             WebkitTransform: transform,
-            opacity: isDragging ? 0 : 1,
-            height: isDragging ? 0 : '',
+            opacity: dragState ? 0 : 1,
+            height: dragState ? 0 : '',
         };
     }
 
