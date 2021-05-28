@@ -140,7 +140,7 @@ class ScoreScreen extends React.Component {
     }
 
     buttonHandler(){
-        return(this.state.rounds < this.state.max_rounds ? (!this.state.buttonPressed (<Button
+        return(this.state.rounds < this.state.max_rounds ? (!this.state.buttonPressed ? (<Button
             width="25%"
 
             onClick={() =>
