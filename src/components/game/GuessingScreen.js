@@ -224,7 +224,7 @@ class GuessingScreen extends React.Component {
     }
 
     async componentWillMount(){
-        //await api.put('/guessing/time/'+localStorage.getItem('currentLobbyId'));
+        await api.put('/guessing/time/'+localStorage.getItem('currentLobbyId'));
         await this.getScreenshots()
     }
 
@@ -236,6 +236,13 @@ class GuessingScreen extends React.Component {
             this.setState({responseRoom: responseCheck.data})}, 100)
 
         await this.fetchChecks()
+
+    }
+
+    componentWillUnmount() {
+        //clear intervals
+        if(this.countInterval) clearInterval(this.countInterval);
+        if(this.checkInterval) clearInterval(this.checkInterval);
     }
 
     async fetchChecks(){
@@ -259,12 +266,14 @@ class GuessingScreen extends React.Component {
         }catch (error) {
             alert(`Something went wrong checking "all users done guessing": \n${handleError(error)}`);
         }
+
     }
 
     render() {
-        //const buildRoom = new BuildRoom(this.state.responseRoom)
+        const buildRoom = new BuildRoom(this.state.responseRoom)
         this.state.scsURLsAndUserNames.forEach( tuple =>{
                 return(
+
                     <StyledTr>
                         {/*for dev use, after comment out tuple[0] which displays username...*/}
                         <StyledTd width={"25%"}>{tuple[0]}</StyledTd>
@@ -295,6 +304,8 @@ class GuessingScreen extends React.Component {
                     <h2>Make your guesses:</h2>
                     {/*    {(this.state.count + buildRoom.timeDifferenceGuessing) <= 0 ?(this.timeOver()):(<h2>Time left: {('0'+Math.round(this.state.count + buildRoom.timeDifferenceGuessing)).slice(-2)}</h2>*/}
                     {/*)}*/}
+                    {(this.state.count + buildRoom.timeDifferenceGuessing) <= 0 ?(this.timeOver()):(<h2>Time left: {('0'+Math.round(this.state.count + buildRoom.timeDifferenceGuessing)).slice(-2)}</h2>
+                )}
 
                     {/*Display error message if wrong input for guesses was given*/}
                     {(this.state.wrongInput) ? (<StyledP>! Please, use this format for your guesses: "A1", "d4" (A-D and 1-4).</StyledP>):(nothing)}

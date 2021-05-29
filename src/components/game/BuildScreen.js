@@ -1,12 +1,14 @@
 // temporary file to simulate BuildScreen for development
 
-import React from 'react';
+import React, {createRef} from 'react';
 import styled from 'styled-components';
 import { BaseContainer } from '../../helpers/layout';
 import { api, handleError } from '../../helpers/api';
 import { withRouter } from 'react-router-dom';
 import SetTemplate from "../Sets/SetTemplate";
 import BuildRoom from "../shared/models/BuildRoom";
+import LobbyModel from "../shared/models/LobbyModel";
+import {useScreenshot} from "use-react-screenshot";
 
 const Container = styled(BaseContainer)`
   // display: flex;
@@ -19,8 +21,9 @@ const Container = styled(BaseContainer)`
 const Countdown = styled.div`
   margin-top = 10px;
   margin-bottom = 20px;
-  font-size = 100px;
+  font-s ize = 100px;
 `;
+
 
 class BuildScreen extends React.Component {
     constructor() {
@@ -28,16 +31,49 @@ class BuildScreen extends React.Component {
         this.state = {
             users: null,
             responseRoom: null,
+            loggedUser: null,
+            responseLobby: null,
             countMin: 5.0,
             count: 0.0,
         };
     }
+
+    // takeScreenshot(){
+    //     const ref = createRef()
+    //     const [screenshot, takeScreenshot] = useScreenshot()
+    //     const GetImage = () =>{
+    //         takeScreenshot(ref.current)}
+    //
+    //     GetImage()
+    //     localStorage.setItem("screenshot",screenshot);
+
+   // }
 
     async putscreenshot() {
         try {
             await api.put("/screenshot/"+localStorage.getItem("currentUsername"), localStorage.getItem("screenshot"));
         } catch (error) {
             alert(`Something went wrong  \n${handleError(error)}`);
+        }
+    }
+
+
+
+
+
+
+    async ready(){
+        try{
+            const requestBodyPut = JSON.stringify({
+                username: null,
+            });
+            await api.put('/users/buildScreens/'+ localStorage.getItem('currentUsername'), requestBodyPut)
+
+            // document.getElementById("edit").style.cssText="visibility: hidden";
+            // document.getElementById("edit2").style.cssText="visibility: hidden";
+
+        } catch (error) {
+            alert(`Something went wrong while calling "ready()": \n${handleError(error)}`);
         }
     }
 
@@ -48,13 +84,27 @@ class BuildScreen extends React.Component {
             // Get the returned users and update the state.
             this.setState({ users: response.data });
 
+            const responseUser = await api.get('/users/'+localStorage.getItem('currentUsername'));
+            this.setState({ loggedUser: responseUser.data });
+
+            this.usersInterval = setInterval(async () =>{
+                const response = await api.get('/lobbies/users/'+localStorage.getItem('currentLobbyId'));
+                this.state.users = response.data}, 100);
+
             this.countInterval = setInterval(async () =>{
                 await api.put('/buildRooms/count/'+localStorage.getItem('currentLobbyId'))
             }, 100);
 
             this.checkInterval = setInterval(async () =>{
                 const responseCheck = await api.get('/buildRooms/'+localStorage.getItem('currentLobbyId'));
+                const responseData = responseCheck.data
                 this.setState({responseRoom: responseCheck.data})}, 100)
+
+            this.checkIntervalLobby = setInterval(async () =>{
+                const responseCheck = await api.get('/lobbies/buildScreens/ready/'+localStorage.getItem('currentLobbyId'));
+                const responseData = responseCheck.data
+                this.setState({responseLobby: responseCheck.data})}, 100)
+
 
         } catch (error) {
             alert(`Something went wrong while fetching the users: \n${handleError(error)}`);
@@ -87,12 +137,15 @@ class BuildScreen extends React.Component {
              this.state.count = 299.00
              this.state.countMin = 0
          }
+        const lobby = new LobbyModel(this.state.responseLobby)
 
         return (
             <Container>
                 <div style={{color: "black", textAlign: "center"}}>
-                    {this.state.countMin <= 0 && (this.state.count + buildRoom.timeDifference) <= 0 ?
-                        (this.userFinishedBuilding()):
+                    {(this.state.countMin <= 0 && (this.state.count + buildRoom.timeDifference) <= 0) || lobby.lobbyReadyBuildScreen?
+                    // {lobby.lobbyReadyBuildScreen ?
+                        (this.userFinishedBuilding()
+                        ):
                         (<Countdown style={{fontSize: "35px"}}>Time Left:
                             <br></br>
                             <span style={{fontWeight: "bold", fontFamily: "\"Open Sans\", sans-serif;", color: "white"}}>
@@ -117,10 +170,19 @@ class BuildScreen extends React.Component {
 
 
     async userFinishedBuilding() {
-        await this.putscreenshot()
+        //await this.putscreenshot()
+        //this.takeScreenshot();
+        await api.put('/lobbies/buildScreens/ready/timers/'+localStorage.getItem('currentLobbyId'));
+        // setTimeout(async () =>{ await this.putscreenshot(); }, 200)
+
         await api.put('/guessing/time/'+localStorage.getItem('currentLobbyId'));
 
+        localStorage.removeItem("isbuilding");
+
         this.props.history.push(`/GuessingScreen`);
+
+        window.location.reload();
+
     }
 }
 

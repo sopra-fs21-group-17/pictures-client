@@ -18,6 +18,8 @@ import { useScreenshot } from 'use-react-screenshot'
 import img from "./utils/wood_texture_background.jpg"
 import { api, handleError } from "../../helpers/api";
 import {CustomDragLayer} from "./Items/CustomDragLayer";
+import BuildRoom from "../shared/models/BuildRoom";
+import LobbyModel from "../shared/models/LobbyModel";
 
 const TopContainer = styled.div`
   margin-top: 2em;
@@ -167,6 +169,14 @@ const ItemContainer = styled.div`
   background: inherit;
 `;
 
+const Countdown = styled.div`
+  margin-top = 10px;
+  margin-bottom = 5px;
+  font-Size = 35px;
+  color: white;
+`;
+
+
 
 export const ItemContext = createContext({
     moveItem: null,
@@ -179,12 +189,34 @@ export const ItemContext = createContext({
 let maxamount;
 let currentamount=0;
 
+
+
 export const SetTemplate = () => {
 
     const [itemList, setItemList] = useState([    ]);
     const [pictureURL, setPictureURL] = useState("")
     const [currentRightIndex, setCurrentRightIndex] = useState(5)
     const [currentLeftIndex, setCurrentLeftIndex] = useState(0)
+    const [submitted, setSubmitted] = useState(false)
+    const [countMin, setCountMin] = useState(5.0)
+    const [count, setCount] = useState(0.0)
+    const [responseRoom, setResponseRoom] = useState({
+    // roomId: null,
+    //     creationTime: null,
+    //     timeDifference: null,
+    //     creationTimeGuessing: null,
+    //     timeDifferenceGuessing: null
+     })
+    const [responseLobby, setResponseLobby] = useState({
+        //usersList: {},
+        // lobbyId: null,
+        // creationTime: null,
+        // timeDifference: null,
+        // playersCount: null,
+        // lobbyReady: null,
+        // lobbyReadyBuildScreen: null
+        })
+    const [timeInterval, setTimeInterval] = useState(0);
 
     //renders the arrows for rotation only for sticks&stones and buildingblocks
     const showArrows = () => {
@@ -544,16 +576,122 @@ export const SetTemplate = () => {
         } catch (error) {
             alert(`Something went wrong while uploading the screenshot URL \n${handleError(error)}`);
         }
+        //localStorage.removeItem("isbuilding");
+        // change to next screen
+        //history.push(`/GuessingScreen`)
+    }
+
+    const ready = async () => {
+        try{
+            const requestBodyPut = JSON.stringify({
+                username: null,
+            });
+            await api.put('/users/buildScreens/'+ localStorage.getItem('currentUsername'), requestBodyPut)
+
+
+                setSubmitted( true)
+                        setTimeout(() =>{
+                            setSubmitted(false)
+                        },2000)
+
+            //document.getElementById("edit").style.cssText="visibility: hidden";
+           //document.getElementById("edit1").style.cssText="visibility: visible";
+
+        } catch (error) {
+            alert(`Something went wrong while calling "ready()": \n${handleError(error)}`);
+        }
+    }
+
+    setTimeout(() => {
+        setTimeInterval(timeInterval + 1);
+    }, 100);
+    useEffect(async () => {
+        //let countInterval = setInterval(async () =>{
+            await api.put('/buildRooms/count/'+localStorage.getItem('currentLobbyId'))
+        //}, 100);
+
+        //const checkInterval = setInterval(async () =>{
+            const responseCheck = await api.get('/buildRooms/'+localStorage.getItem('currentLobbyId'));
+            //console.log(responseCheck.data)
+            //setResponseRoom(responseCheck.data);
+        //   ,100)
+
+        //const checkIntervalLobby = setInterval(async () =>{
+            const responseCheckLobby =  await api.get('/lobbies/buildScreens/ready/' + localStorage.getItem('currentLobbyId'));
+        setResponseLobby({responseLobby: responseCheckLobby.data})
+        console.log(responseCheckLobby.data)
+        //, 100)
+
+        //return () => {
+           // clearInterval(countInterval);
+            //clearInterval(checkInterval)
+            //clearInterval(checkIntervalLobby);
+        },[timeInterval]);
+
+    // const countInterval = setInterval(async () =>{
+    //     await api.put('/buildRooms/count/'+localStorage.getItem('currentLobbyId'))
+    // }, 100);
+    //
+    // const checkInterval = setInterval(async () =>{
+    //     const responseCheck = await api.get('/buildRooms/'+localStorage.getItem('currentLobbyId'));
+    //     setResponseRoom(responseCheck.data)}, 100)
+    // const checkIntervalLobby = setInterval(async () =>{
+    //     const responseCheckLobby = await api.get('/lobbies/buildScreens/ready/'+localStorage.getItem('currentLobbyId'));
+    //     setResponseLobby(responseCheckLobby.data)}, 100)
+
+
+    const buildRoom = new BuildRoom(responseRoom)
+    const difference = Math.round(buildRoom.timeDifference)
+    if(difference< 0.00 && difference>=-59.00){
+        setCount(59)
+        setCountMin(4)
+    } else if (difference<-59.00 && difference>=-119.00){
+        setCount(119.00)
+        setCountMin(3)
+    }else if (difference<-119.00 && difference>=-179.00){
+        setCount(179.00)
+        setCountMin(2)
+    }else if (difference< -179.00 && difference>=-239.00){
+        setCount(239.00)
+        setCountMin(1)
+
+    }else if (difference< -239.00){
+        setCount(299.00)
+        setCountMin(0)
+
+    }
+
+    const lobby = new LobbyModel(responseLobby)
+
+    const timeUp = async () => {
+
+        removeSelected();
+        GetImage();
+        fetchItems();
+        setTimeout(function(){ putscreenshot(); }, 200);
+        await api.put('/guessing/time/'+localStorage.getItem('currentLobbyId'));
         localStorage.removeItem("isbuilding");
         // change to next screen
         history.push(`/GuessingScreen`)
     }
 
+
     return (
         <DndProvider backend={HTML5Backend}>
             <ItemContext.Provider value={{ markAsInventory, moveItem, markAsSquareField}}>
                 <BaseContainer>
+                    {lobby.lobbyReadyBuildScreen? (
+                       timeUp()
+                    // ):(<Countdown style={{display:"flex", flexDirection:"column", alignItems:"center", fontSize:"35px"}}>
+                    //     Time Left:
+                    //     <br></br>
+                    //     <span style={{fontWeight: "bold", fontFamily: "\"Open Sans\", sans-serif;", fontSize:"35px"}}>
+                    //         {('0'+ countMin).slice(-2)}:{('0'+Math.round(count + buildRoom.timeDifference)).slice(-2)}
+                    //     </span>
+                    // </Countdown>
+                        ):(
                     <TopContainer>
+
                         <div  style={{display: "flex", flexDirection: "column",  alignItems: "center"}}>
                             <BorderContainer ref={ref}>
                                 <BoardContainer id="BoardContainer">
@@ -571,24 +709,32 @@ export const SetTemplate = () => {
                             <div style={{display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center"}}>
                                 {showReset()}
                                 <ButtonContainer>
-                                    <Button onClick={() => {
+                                    <Button
+                                        id="edit"
+                                        onClick={() => {
                                         removeSelected();
                                         GetImage();
                                         fetchItems();
+                                        ready();
                                         setTimeout(function(){ putscreenshot(); }, 200);
                                     }}>Submit</Button>
+
                                 </ButtonContainer>
+                                <h6 hidden={submitted === false}
+                                    style={{margin:"1.5px", position: "fixed", left:"1000px", top:"580px", color: "white"}}
+                                >Submitted!</h6>
 
                             </div>
 
                         </div>
-                    </TopContainer>
+                    </TopContainer>)}
                     <BottomContainer>
                         {selectItems()}
                     </BottomContainer>
                 </BaseContainer>
             </ItemContext.Provider>
         </DndProvider>
+
     );
 };
 

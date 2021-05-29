@@ -16,6 +16,7 @@ class User {
     this.correctedGuesses = null;
     this.lobbyId = null;
     this.doneGuessing = null;
+    this.isReadyBuildScreen = null;
     Object.assign(this, data);
   }
 }

@@ -208,7 +208,15 @@ class MainBoard extends React.Component{
         const requestBody = JSON.stringify({
             roomId: localStorage.getItem('currentRoomNumber'),
         });
+
+        const userReqBody = JSON.stringify({
+            username: localStorage.getItem('currentUsername'),
+        });
         localStorage.setItem("isbuilding","true");
+
+        await api.put('/users/buildScreens/start/'+localStorage.getItem('currentUsername'), userReqBody);
+
+        await api.put('/lobbies/buildScreens/ready/preparations/'+localStorage.getItem('currentLobbyId'));
 
         await api.post('/buildRooms', requestBody);
 
