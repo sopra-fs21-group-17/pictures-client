@@ -15,8 +15,6 @@ min-height: 100px;
 min-width: 100px;`;
 
 
-
-
 const ImageContainer = styled.img`
   top: 50%
   position: absolute;

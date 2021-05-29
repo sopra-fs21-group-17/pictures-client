@@ -155,6 +155,7 @@ class MainBoard extends React.Component{
                         mySet: val.assignedSet,
                         myCoordinates: this.state.coordinateNames[val.assignedCoordinates]
                     });
+                    localStorage.setItem("myCoordinates", val.assignedCoordinates)
                     localStorage.setItem("myPicURL", this.state.picsURLs[val.assignedCoordinates])
                     break;
                 }
@@ -174,6 +175,7 @@ class MainBoard extends React.Component{
     async componentWillMount(){
         await this.initGame();
     }
+
     //DISPLAY//
 
     render(){
@@ -183,10 +185,11 @@ class MainBoard extends React.Component{
                 <PictureGrid/>
             </div>
             <div>
-            <table>
+            <table style={{position: "fixed", top: "250px", margin: "10px"}}>
                 <td>
-                    <tr>Build the picture located at</tr>
-                    <tr>{this.state.myCoordinates}</tr>
+                    <tr><h3>You have been assigned the picture located at the following coordinates:</h3></tr>
+                    <tr style={{"font-weight":"bold"}}>{this.state.myCoordinates}</tr>
+                    <tr><p>(highlighted in green)</p></tr>
                     <tr>
                         <ButtonContainer>
                             <Button1
