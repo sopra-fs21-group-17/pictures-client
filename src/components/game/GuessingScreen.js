@@ -125,7 +125,7 @@ class GuessingScreen extends React.Component {
             guessesAsString: "",
             responseRoom: null,
             count: 60.0,
-            allDoneGuessing: null,
+            allDoneGuessing: false, // default value
             wrongInput: false
         }
     }
@@ -234,13 +234,8 @@ class GuessingScreen extends React.Component {
         this.checkInterval = setInterval(async () =>{
             const responseCheck = await api.get('/buildRooms/'+localStorage.getItem('currentLobbyId'));
             this.setState({responseRoom: responseCheck.data})}, 100)
-        await this.fetchChecks()
-    }
 
-    componentWillUnmount() {
-        //clear intervals
-        if(this.countInterval) clearInterval(this.countInterval);
-        if(this.checkInterval) clearInterval(this.checkInterval);
+        await this.fetchChecks()
     }
 
     async fetchChecks(){
@@ -248,20 +243,22 @@ class GuessingScreen extends React.Component {
             // check if ALL users have submitted their guesses
             setInterval(async () =>{
                 const response = await api.get('/game/checkUsersDoneGuessing/'+localStorage.getItem('currentLobbyId'));
+
                 this.setState({ allDoneGuessing: response.data });
-            }, 1000)
+
+                if(this.state.allDoneGuessing){ await this.showScoreScreen() }
+            }, 100)
 
             // update info of all players doneGuessing attribute (true/false)
             setInterval(async () =>{
                 const response2 = await api.get("/board/"+localStorage.getItem("currentLobbyId"));
                 this.setState({players: response2.data});
-            }, 1000)
+            }, 100)
 
             await this.resetRoundHandle()
         }catch (error) {
-           alert(`Something went wrong checking "all users done guessing": \n${handleError(error)}`);
+            alert(`Something went wrong checking "all users done guessing": \n${handleError(error)}`);
         }
-
     }
 
     render() {
@@ -288,16 +285,16 @@ class GuessingScreen extends React.Component {
         let nothing = "" // needed as filler for if-condition...
         return (
             <Container>
-            <Container>
-                <div>
-                <h1>Which picture were the other players trying to build?</h1>
-                <PictureGrid/>
-                </div>
-            </Container>
+                <Container>
+                    <div>
+                        <h1>Which picture were the other players trying to build?</h1>
+                        <PictureGrid/>
+                    </div>
+                </Container>
                 <div>
                     <h2>Make your guesses:</h2>
-                {/*    {(this.state.count + buildRoom.timeDifferenceGuessing) <= 0 ?(this.timeOver()):(<h2>Time left: {('0'+Math.round(this.state.count + buildRoom.timeDifferenceGuessing)).slice(-2)}</h2>*/}
-                {/*)}*/}
+                    {/*    {(this.state.count + buildRoom.timeDifferenceGuessing) <= 0 ?(this.timeOver()):(<h2>Time left: {('0'+Math.round(this.state.count + buildRoom.timeDifferenceGuessing)).slice(-2)}</h2>*/}
+                    {/*)}*/}
 
                     {/*Display error message if wrong input for guesses was given*/}
                     {(this.state.wrongInput) ? (<StyledP>! Please, use this format for your guesses: "A1", "d4" (A-D and 1-4).</StyledP>):(nothing)}
@@ -348,27 +345,27 @@ class GuessingScreen extends React.Component {
                     {/*    DEV: "Guessing is done!"*/}
                     {/*</Button>*/}
 
-                    {(this.state.allDoneGuessing) ? (this.showScoreScreen()):(nothing)}
+                    {/*{(this.state.allDoneGuessing) ? (this.showScoreScreen()):(nothing)}*/}
 
                     <Container>
-                    {/*Table displaying which users have already submitted their guesses*/}
-                    <StyledTableReady>
-                        <StyledTr>
-                            <StyledTd>The other players</StyledTd>
-                            <StyledTd>Done guessing?</StyledTd>
-                        </StyledTr>
-                        {this.state.players.map( tuple =>{
-                                return(
-                                    <StyledTr>
-                                        <StyledTdReady width={"25%"}>{tuple["username"]}</StyledTdReady>
-                                        <StyledTdReady width={"25%"}>{tuple["doneGuessing"] === true ?
-                                            (<Ready>✔</Ready>) : (<NotReady>✘</NotReady>) }
-                                        </StyledTdReady>
-                                    </StyledTr>
-                                )
-                            }
-                        )}
-                    </StyledTableReady>
+                        {/*Table displaying which users have already submitted their guesses*/}
+                        <StyledTableReady>
+                            <StyledTr>
+                                <StyledTd>The other players</StyledTd>
+                                <StyledTd>Done guessing?</StyledTd>
+                            </StyledTr>
+                            {this.state.players.map( tuple =>{
+                                    return(
+                                        <StyledTr>
+                                            <StyledTdReady width={"25%"}>{tuple["username"]}</StyledTdReady>
+                                            <StyledTdReady width={"25%"}>{tuple["doneGuessing"] === true ?
+                                                (<Ready>✔</Ready>) : (<NotReady>✘</NotReady>) }
+                                            </StyledTdReady>
+                                        </StyledTr>
+                                    )
+                                }
+                            )}
+                        </StyledTableReady>
                     </Container>
                 </div>
             </Container>
