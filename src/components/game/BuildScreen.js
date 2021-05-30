@@ -20,8 +20,9 @@ const Container = styled(BaseContainer)`
 
 const Countdown = styled.div`
   margin-top = 10px;
-  margin-bottom = 20px;
-  font-s ize = 100px;
+  margin-bottom = 0px;
+  font-Size = 100px;
+  color: white;
 `;
 
 
@@ -146,7 +147,7 @@ class BuildScreen extends React.Component {
                     // {lobby.lobbyReadyBuildScreen ?
                         (this.userFinishedBuilding()
                         ):
-                        (<Countdown style={{fontSize: "35px"}}>Time Left:
+                        (<Countdown style ={{fontSize: "27px"}}>Time Left:
                             <br></br>
                             <span style={{fontWeight: "bold", fontFamily: "\"Open Sans\", sans-serif;", color: "white"}}>
                             {('0'+ this.state.countMin).slice(-2)}:{('0'+Math.round(this.state.count + buildRoom.timeDifference)).slice(-2)}

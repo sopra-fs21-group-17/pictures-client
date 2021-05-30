@@ -22,13 +22,13 @@ const Form = styled.div`
   flex-direction: column;
   justify-content: center;
   width: 50%;
-  height: 230px;
+  height: 290px;
   font-size: 16px;
   font-weight: 300;
   padding-left: 37px;
   padding-right: 37px;
   border-radius: 5px;
-  background: rgba(137, 137, 137, 1);
+  background: rgba(127, 127, 127, 1);
   transition: opacity 0.5s ease, transform 0.5s ease;
 `;
 
@@ -41,13 +41,14 @@ const InputField = styled.input`
   margin-left: -4px;
   border: none;
   border-radius: 5px;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   background: rgba(230, 230, 230, 0.2);
   color: white;
 `;
 const Label = styled.label`
   color: white;
   margin-bottom: 10px;
+  margin-top: 10px;
   text-transform: uppercase;
 `;
 
@@ -150,10 +151,10 @@ class Registration extends React.Component {
         return (
             <BaseContainer>
                 <Header height={"100"} />
-                <h1 style={{color: "white", textAlign: "center", fontSize: "60px"}}>Register</h1>
+                <h1 style={{color: "white", textAlign: "center", fontSize: "60px", marginTop:"5px"}}>Register</h1>
                 <FormContainer>
                     <Form>
-                        <Label>Username</Label>
+                        <Label>Enter Username here</Label>
                         <InputField
                             placeholder="Username"
                             ref="usernameField"
@@ -162,7 +163,7 @@ class Registration extends React.Component {
                                 this.handleInputChange('username', e.target.value);
                             }}
                         />
-                        <Label>Password</Label>
+                        <Label>Enter Password here</Label>
                         <InputField
                             placeholder="Password"
                             ref="passwordField"
