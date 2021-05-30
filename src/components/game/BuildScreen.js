@@ -173,9 +173,9 @@ class BuildScreen extends React.Component {
     async userFinishedBuilding() {
         //await this.putscreenshot()
         //this.takeScreenshot();
-        await api.put('/lobbies/buildScreens/ready/timers/'+localStorage.getItem('currentLobbyId'));
         // setTimeout(async () =>{ await this.putscreenshot(); }, 200)
     setTimeout(async () =>{
+        await api.put('/lobbies/buildScreens/ready/timers/'+localStorage.getItem('currentLobbyId'));
         await api.put('/guessing/time/'+localStorage.getItem('currentLobbyId'));
         localStorage.removeItem("isbuilding");
         this.props.history.push(`/GuessingScreen`);
