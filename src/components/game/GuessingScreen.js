@@ -134,7 +134,7 @@ class GuessingScreen extends React.Component {
     async getScreenshots(){
         try {
             // fetch screenshots every 100 ms
-            setInterval(async () =>{
+            //setInterval(async () =>{
                 const response = await api.get('/screenshots/'+localStorage.getItem("currentLobbyId"));
 
                 // extract all names+urls from response except the one of the current user
@@ -148,7 +148,7 @@ class GuessingScreen extends React.Component {
 
                 // Get the returned screenshots and update the state.
                 this.setState({ scsURLsAndUserNames: namesAndScsURLs });
-            }, 100)
+            //}, 100)
 
         } catch (error) {
             alert(`Something went wrong while fetching the users: \n${handleError(error)}`);
@@ -239,16 +239,12 @@ class GuessingScreen extends React.Component {
 
     }
 
-    componentWillUnmount() {
-        //clear intervals
-        if(this.countInterval) clearInterval(this.countInterval);
-        if(this.checkInterval) clearInterval(this.checkInterval);
-    }
+
 
     async fetchChecks(){
         try{
             // check if ALL users have submitted their guesses
-            setInterval(async () =>{
+            this.guessingInterval = setInterval(async () =>{
                 const response = await api.get('/game/checkUsersDoneGuessing/'+localStorage.getItem('currentLobbyId'));
 
                 this.setState({ allDoneGuessing: response.data });
@@ -257,23 +253,30 @@ class GuessingScreen extends React.Component {
             }, 100)
 
             // update info of all players doneGuessing attribute (true/false)
-            setInterval(async () =>{
+            this.doneGuessingInterval = setInterval(async () =>{
                 const response2 = await api.get("/board/"+localStorage.getItem("currentLobbyId"));
                 this.setState({players: response2.data});
             }, 100)
 
             await this.resetRoundHandle()
+
         }catch (error) {
             alert(`Something went wrong checking "all users done guessing": \n${handleError(error)}`);
         }
 
     }
 
+    componentWillUnmount() {
+        //clear intervals
+        if(this.countInterval) clearInterval(this.countInterval);
+        if(this.checkInterval) clearInterval(this.checkInterval);
+        if(this.guessingInterval) clearInterval(this.guessingInterval);
+        if(this.doneGuessingInterval) clearInterval(this.doneGuessingInterval);
+    }
     render() {
         const buildRoom = new BuildRoom(this.state.responseRoom)
         this.state.scsURLsAndUserNames.forEach( tuple =>{
                 return(
-
                     <StyledTr>
                         {/*for dev use, after comment out tuple[0] which displays username...*/}
                         <StyledTd width={"25%"}>{tuple[0]}</StyledTd>
@@ -302,12 +305,11 @@ class GuessingScreen extends React.Component {
                 </Container>
                 <div>
                     <h2>Make your guesses:</h2>
-                    {/*    {(this.state.count + buildRoom.timeDifferenceGuessing) <= 0 ?(this.timeOver()):(<h2>Time left: {('0'+Math.round(this.state.count + buildRoom.timeDifferenceGuessing)).slice(-2)}</h2>*/}
-                    {/*)}*/}
                     {(this.state.count + buildRoom.timeDifferenceGuessing) <= 0 ?(this.timeOver()):(<h2>Time left: {('0'+Math.round(this.state.count + buildRoom.timeDifferenceGuessing)).slice(-2)}</h2>
                 )}
-
                     {/*Display error message if wrong input for guesses was given*/}
+                    <p>Please type in your guesses into each box with the following format: "a1", "D4", etc.</p>
+                    <p>Letters from A-D and numbers from 1-4.</p>
                     {(this.state.wrongInput) ? (<StyledP>! Please, use this format for your guesses: "A1", "d4" (A-D and 1-4).</StyledP>):(nothing)}
                     {/*Table displaying the players screenshots and input fields for guess*/}
                     <StyledTable>
@@ -356,8 +358,6 @@ class GuessingScreen extends React.Component {
                     {/*    DEV: "Guessing is done!"*/}
                     {/*</Button>*/}
 
-                    {/*{(this.state.allDoneGuessing) ? (this.showScoreScreen()):(nothing)}*/}
-
                     <Container>
                         {/*Table displaying which users have already submitted their guesses*/}
                         <StyledTableReady>
@@ -382,7 +382,6 @@ class GuessingScreen extends React.Component {
             </Container>
         );
     }
-
 }
 
 export default withRouter(GuessingScreen);

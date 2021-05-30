@@ -107,4 +107,4 @@ As we fetch the photos at random, the single contributors are hard to identify. 
 you to visit [Unsplash](https://unsplash.com/) as our form of appreciation.*
 
 ## ⚖️ License
-This project is licensed under the terms of the XXX license.
+This project is licensed under the terms of the  Apache-2.0 License.

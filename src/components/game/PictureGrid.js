@@ -1,5 +1,6 @@
 import {api, handleError} from "../../helpers/api";
 import PictureElement from "./PictureElement";
+import PictureElementSpecial from "./PictureElementSpecial";
 import React from "react";
 import styled from "styled-components";
 import {withRouter} from "react-router-dom";
@@ -92,12 +93,16 @@ class PictureGrid extends React.Component {
         if (this.state.pictureURLs.length != 0) {
 
             const pictures = this.state.pictureURLs;
-
+            let i = 0;
             pictures.forEach(picture => {
-                let pic = new PicturesModel(picture);
-
-
-                pictureElements.push(<PictureElement pictureURL={pic.pictureLink}> </PictureElement>)
+                let pic = new PicturesModel(picture)
+                if(i.toString() === localStorage.getItem("myCoordinates") && window.location.href === "http://localhost:3000/board"){
+                    pictureElements.push(<PictureElementSpecial pictureURL={pic.pictureLink}> </PictureElementSpecial>)
+                }
+                else{
+                    pictureElements.push(<PictureElement pictureURL={pic.pictureLink}> </PictureElement>)
+                }
+                i+=1
             })
         }
 
@@ -112,12 +117,10 @@ class PictureGrid extends React.Component {
         })
 
         return (
-
             <GridContainer>
                 <GridVoid/>
                 {columnCoordinates}
                 {rowCoordinates}
-
                 <Grid>
                     {pictureElements}
                 </Grid>

@@ -141,6 +141,8 @@ class MainBoard extends React.Component{
     }
 
     //API REQUESTS//
+    secondTry = false;
+
 
     async initGame(){
         try {
@@ -155,6 +157,7 @@ class MainBoard extends React.Component{
                         mySet: val.assignedSet,
                         myCoordinates: this.state.coordinateNames[val.assignedCoordinates]
                     });
+                    localStorage.setItem("myCoordinates", val.assignedCoordinates)
                     localStorage.setItem("myPicURL", this.state.picsURLs[val.assignedCoordinates])
                     break;
                 }
@@ -167,13 +170,21 @@ class MainBoard extends React.Component{
             localStorage.setItem("currentNoOfUsers", response.data.length) //needed for guard
         }
         catch (error) {
-            alert(`Something went wrong getting the Players: \n${handleError(error)}`)
+            if(this.secondTry === true){
+                alert(`Something went wrong getting the Players: \n${handleError(error)}`)
+            }
+            else{
+                this.secondTry = true
+                await this.initGame()
+
+            }
         }
     }
 
     async componentWillMount(){
         await this.initGame();
     }
+
     //DISPLAY//
 
     render(){
@@ -183,10 +194,11 @@ class MainBoard extends React.Component{
                 <PictureGrid/>
             </div>
             <div>
-            <table>
+            <table style={{position: "fixed", top: "250px", margin: "10px"}}>
                 <td>
-                    <tr>Build the picture located at</tr>
-                    <tr>{this.state.myCoordinates}</tr>
+                    <tr><h3>You have been assigned the picture located at the following coordinates:</h3></tr>
+                    <tr style={{"font-weight":"bold"}}>{this.state.myCoordinates}</tr>
+                    <tr><p>(highlighted in green)</p></tr>
                     <tr>
                         <ButtonContainer>
                             <Button1
