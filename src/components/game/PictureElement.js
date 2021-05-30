@@ -24,7 +24,6 @@ const ImageContainer = styled.img`
   max-width: 200px;
   min-height: 150px;
   min-width: 150px;
-  
 `;
 
 

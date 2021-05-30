@@ -170,15 +170,15 @@ class GuessingScreen extends React.Component {
     async sendUserGuesses(){
         // send this user's guesses to BE
         try{
-            let guessesAsString = this.convertGuessesToString(this.state.guesses);
-            console.log("mysubmitted guesses: ",guessesAsString)
+            let guessesAsString = this.convertGuessesToString(this.state.guesses)
             const requestBody = JSON.stringify({
                 username: localStorage.getItem("currentUsername"),
                 guesses: guessesAsString
             })
-            const response = await api.post("/guesses/"+localStorage.getItem("currentLobbyId"), requestBody);
-            localStorage.setItem("correctedGuesses", response.data);
-            this.setState({isDoneGuessing: true});
+            const response = await api.post("/guesses/"+localStorage.getItem("currentLobbyId"), requestBody)
+            localStorage.setItem("correctedGuesses", response.data)
+            this.setState({isDoneGuessing: true})
+
         } catch(error) {
             alert(`Something went wrong while sending the guesses: \n${handleError(error)}`);
         }
@@ -384,6 +384,7 @@ class GuessingScreen extends React.Component {
             </Container>
         );
     }
+
 }
 
 export default withRouter(GuessingScreen);

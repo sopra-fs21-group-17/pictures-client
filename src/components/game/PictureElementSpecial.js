@@ -5,26 +5,28 @@ import "./picture.css";
 
 const GridElement = styled.div`
 position: relative;
-background: #13fb03;
 
 padding-left: 2px;
 padding-right: 2px;
 padding-color: white;
 
 min-height: 100px;
-min-width: 100px;`;
+min-width: 100px;
+box-shadow: 0 0 5em #13fb03;
+`;
 
 
 const ImageContainer = styled.img`
   top: 50%
   position: absolute;
-  height: 90%;
-  width: 90%;
+  height: 100%;
+  width: 100%;
   max-height:200px;
   max-width: 200px;
   min-height: 150px;
   min-width: 150px; 
 `;
+// TODO make rgba for green #13fb03 highlight
 
 
 class PictureElementSpecial extends React.Component {

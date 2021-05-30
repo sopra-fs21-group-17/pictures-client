@@ -59,23 +59,10 @@ class Home extends React.Component {
     }
 
     logout() {
-        localStorage.removeItem('token')
-        localStorage.removeItem('currentUsername');
-        localStorage.removeItem('id');
-        localStorage.removeItem('currentRoomNumber');
-        localStorage.removeItem('currentLobbyId');
-        localStorage.removeItem('lobbyId');
-        localStorage.removeItem('mySet');
-        localStorage.removeItem('players');
-        localStorage.removeItem('screenshot');
-        localStorage.removeItem('correctedGuesses')
-        localStorage.removeItem('thePoints')
-        localStorage.removeItem('screenshot')
-
-
-
+        localStorage.clear();
         this.props.history.push('/login');
     }
+
     randomRoomNumber(length){
         let validCharacters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         let roomNumber = '';

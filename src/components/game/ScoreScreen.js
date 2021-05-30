@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import { BaseContainer } from '../../helpers/layout';
-import { api, handleError } from '../../helpers/api';
-import { Button } from '../../views/design/Button';
-import { withRouter } from 'react-router-dom';
+import {BaseContainer} from '../../helpers/layout';
+import {api, handleError} from '../../helpers/api';
+import {Button} from '../../views/design/Button';
+import {withRouter} from 'react-router-dom';
 
 const Button1 = styled(Button)`
   background: green  
@@ -61,7 +61,7 @@ class ScoreScreen extends React.Component {
         this.state = {
             users: null,
             players: {},
-            max_rounds:5,
+            max_rounds: 5,
             rounds: 0,
             playersFinished: false,
             buttonPressed: false
@@ -71,49 +71,44 @@ class ScoreScreen extends React.Component {
     intervalID = 0;
 
     getRoundInformation = async () => {
-         try {
-             const check_numberOfPlayers = localStorage.getItem("numberOfUsers") === localStorage.getItem("cu")
+        try {
+            const check_numberOfPlayers = localStorage.getItem("numberOfUsers") === localStorage.getItem("cu")
 
-             if(this.state.playersFinished && this.state.buttonPressed){
-                 this.props.history.push(`/board`);
-             }
+            if (this.state.playersFinished && this.state.buttonPressed) {
+                this.props.history.push(`/board`);
+            }
 
-             const response = await api.get("/rounds/" + localStorage.getItem("currentLobbyId"))
-             this.setState({rounds: response.data.rounds})
+            const response = await api.get("/rounds/" + localStorage.getItem("currentLobbyId"))
+            this.setState({rounds: response.data.rounds})
 
-
-             //makes the boolean --> the boolean will only return true once all players have finished the round (pressed the button)
-            if(response.data["numberOfPlayers"] < 3){
+            //makes the boolean --> the boolean will only return true once all players have finished the round (pressed the button)
+            if (response.data["numberOfPlayers"] < 3) {
                 alert('Another Players has left the game, you will be returned to home')
                 this.exitGame().then()
             }
 
-             const checkPlayersFinished = response.data["numberOfPlayers"] <= response.data["allUsersFinishedRound"]
-             this.setState({playersFinished: checkPlayersFinished})
+            const checkPlayersFinished = response.data["numberOfPlayers"] <= response.data["allUsersFinishedRound"]
+            this.setState({playersFinished: checkPlayersFinished})
 
 
-             console.log(response.data.rounds)
-             console.log(response.data["allUsersFinishedRound"])
-             console.log(response.data["numberOfPlayers"])
-             console.log("All players finished:" + checkPlayersFinished)
-             console.log("Button was pressed:" + this.state.buttonPressed)
-             localStorage.setItem("currentNoOfUsers",response.data["numberOfPlayers"])
-         } catch (error) {
-             alert(`Something went wrong getting the current round: \n${handleError(error)}`);
-         }
-     }
+            console.log(response.data.rounds)
+            console.log(response.data["allUsersFinishedRound"])
+            console.log(response.data["numberOfPlayers"])
+            console.log("All players finished:" + checkPlayersFinished)
+            console.log("Button was pressed:" + this.state.buttonPressed)
+            localStorage.setItem("currentNoOfUsers", response.data["numberOfPlayers"])
+        } catch (error) {
+            alert(`Something went wrong getting the current round: \n${handleError(error)}`);
+            this.exitGame().then()
+        }
+    }
 
     async componentWillMount() {
-       await this.getRoundInformation()
-
+        await this.getRoundInformation()
     }
 
     componentDidMount() {
-
-        this.intervalID = setInterval(this.getRoundInformation,5000)
-
-
-
+        this.intervalID = setInterval(this.getRoundInformation, 5000)
     }
 
     componentWillUnmount() {
@@ -142,20 +137,20 @@ class ScoreScreen extends React.Component {
         }
     }
 
-    buttonHandler(){
-        return(this.state.rounds < this.state.max_rounds ? (!this.state.buttonPressed ? (<Button
+    buttonHandler() {
+        return (this.state.rounds < this.state.max_rounds ? (!this.state.buttonPressed ? (<Button
             width="25%"
 
             onClick={() =>
-                ( this.nextRound(),
-                        this.setState({buttonPressed:true})
+                (this.nextRound(),
+                        this.setState({buttonPressed: true})
                 )
             }
         >
             Ok, next round!
-        </Button>):<Button1
+        </Button>) : <Button1
             width="25%"
-            disabled={true}>Ok, next round!</Button1>):(""))
+            disabled={true}>Ok, next round!</Button1>) : (""))
     }
 
     convertCorrectedGuessesToMap(correctedGuesses) {
@@ -168,7 +163,7 @@ class ScoreScreen extends React.Component {
             for (let j = 0; j < 1; j++) {
                 // first letters is y/n for correct/incorrect guess
                 //tempCoordinates += correctedGuesses.charAt(i+j);
-                if(correctedGuesses.charAt(i+j) === "y"){
+                if (correctedGuesses.charAt(i + j) === "y") {
                     tempCoordinates = "✔"
                 } else {
                     tempCoordinates = "✘";
@@ -187,11 +182,13 @@ class ScoreScreen extends React.Component {
         return result;
     }
 
-    getPointsArray(x){
+    getPointsArray(x) {
         let result = []
-        for(let i = 0; i < x.length; i++){
-            if(i % 2 === 0){
-                result.push([x[i],x[i+1]])
+        if(x !== null) {
+            for (let i = 0; i < x.length; i++) {
+                if (i % 2 === 0) {
+                    result.push([x[i], x[i + 1]])
+                }
             }
         }
         return result
@@ -202,26 +199,29 @@ class ScoreScreen extends React.Component {
         // fill in corrected guesses table
         const temp = this.convertCorrectedGuessesToMap(localStorage.getItem("correctedGuesses"));
         const guessesNames = temp.map(tuple => {
-                return (
-                    <StyledTd>{tuple[0]}</StyledTd>
-                )
-            })
+            return (
+                <StyledTd>{tuple[0]}</StyledTd>
+            )
+        })
+
         const guessesCorrected = temp.map(tuple => {
-                return (
-                    <StyledTd>{tuple[1]}</StyledTd>
-                )
-            })
+            return (
+                <StyledTd>{tuple[1]}</StyledTd>
+            )
+        })
 
         // fill in points table
         let input = this.getPointsArray(JSON.parse((localStorage.getItem("thePoints"))))
-        if(input === null){ input = ["error","error"]}
-        const playerNames = input.map(element =>{
-            return(
+        if (input === null) {
+            input = ["error", "error"]
+        }
+        const playerNames = input.map(element => {
+            return (
                 <StyledTd>{element[0]}</StyledTd>
             )
         })
-        const playerPoints = input.map(point =>{
-            return(
+        const playerPoints = input.map(point => {
+            return (
                 <StyledTd>{point[1]}</StyledTd>
             )
         })
@@ -254,10 +254,11 @@ class ScoreScreen extends React.Component {
                     </Button>
 
                 </ButtonContainer>
-                {this.state.buttonPressed ==  true? <h2>...waiting for the other players to finish</h2>:<h2></h2>}
+                {this.state.buttonPressed == true ? <h2>...waiting for the other players to finish</h2> : <h2></h2>}
             </Container>
         );
     }
 
 }
+
 export default withRouter(ScoreScreen);

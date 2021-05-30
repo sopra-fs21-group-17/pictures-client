@@ -96,7 +96,9 @@ class PictureGrid extends React.Component {
             let i = 0;
             pictures.forEach(picture => {
                 let pic = new PicturesModel(picture)
-                if(i.toString() === localStorage.getItem("myCoordinates") && window.location.href === "http://localhost:3000/board"){
+                if(i.toString() === localStorage.getItem("myCoordinates")
+                    && (window.location.href === "http://localhost:3000/board" || window.location.href === "https://sopra-fs21-group-17-client.herokuapp.com/board")
+                ){
                     pictureElements.push(<PictureElementSpecial pictureURL={pic.pictureLink}> </PictureElementSpecial>)
                 }
                 else{
