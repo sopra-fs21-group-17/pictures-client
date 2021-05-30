@@ -224,7 +224,7 @@ class GuessingScreen extends React.Component {
     }
 
     async componentWillMount(){
-        await api.put('/guessing/time/'+localStorage.getItem('currentLobbyId'));
+        //await api.put('/guessing/time/'+localStorage.getItem('currentLobbyId'));
         await this.getScreenshots()
     }
 

@@ -196,7 +196,9 @@ class MainBoard extends React.Component{
             <div>
             <table style={{position: "fixed", top: "250px", margin: "10px"}}>
                 <td>
-                    <tr><h3>You have been assigned the picture located at the following coordinates:</h3></tr>
+                    <tr><h3>You have been assigned the picture
+                        <br></br>
+                        located at the following coordinates:</h3></tr>
                     <tr style={{"font-weight":"bold"}}>{this.state.myCoordinates}</tr>
                     <tr><p>(highlighted in green)</p></tr>
                     <tr>
