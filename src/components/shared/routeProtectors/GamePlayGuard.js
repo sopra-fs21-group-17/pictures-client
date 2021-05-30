@@ -30,7 +30,7 @@ export const GamePlayGuard = props => {
 
 
 
-    if (window.location.pathname === ('/lobbies/'+ localStorage.getItem('lobbyId'))|| localStorage.getItem("currentNoOfUsers") == currentAmountOfPlayers)  {
+    if (window.location.pathname === ('/lobbies/'+ localStorage.getItem('currentLobbyId'))|| localStorage.getItem("currentNoOfUsers") === currentAmountOfPlayers)  {
         return props.children;
     }
 

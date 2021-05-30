@@ -66,9 +66,9 @@ class AppRouter extends React.Component {
                   path="/board"
                   exact
                   render={() => (
-                      <GamePlayGuard>
+
                       <MainBoard />
-                      </GamePlayGuard>
+                      
                   )}
               />
 

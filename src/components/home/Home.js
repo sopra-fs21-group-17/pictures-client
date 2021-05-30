@@ -174,7 +174,6 @@ class Home extends React.Component {
     }
     //will delete a game and lobby after a player is redirected to the home screen from exiting a game
     // async componentWillUnmount(){
-    //
     // }
 
     render() {
