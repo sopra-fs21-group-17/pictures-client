@@ -718,11 +718,14 @@ export const SetTemplate = () => {
                                         ready();
                                         setTimeout(function(){ putscreenshot(); }, 200);
                                     }}>Submit</Button>
+                                    <h6 hidden={submitted === false}
+                                        style={{margin:"5px", color: "white"}}
+                                    >Submitted!</h6>
 
                                 </ButtonContainer>
-                                <h6 hidden={submitted === false}
-                                    style={{margin:"1.5px", position: "fixed", left:"1000px", top:"580px", color: "white"}}
-                                >Submitted!</h6>
+                                {/*<h6 hidden={submitted === false}*/}
+                                {/*    style={{margin:"1.5px", position: "fixed", left:"1000px", top:"580px", color: "white"}}*/}
+                                {/*>Submitted!</h6>*/}
 
                             </div>
 
