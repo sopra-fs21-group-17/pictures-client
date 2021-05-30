@@ -82,6 +82,7 @@ class ScoreScreen extends React.Component {
 
              //makes the boolean --> the boolean will only return true once all players have finished the round (pressed the button)
             if(response.data["numberOfPlayers"] < 3){
+                alert('Another Players has left the game, you will be returned to home')
                 this.exitGame().then()
             }
 

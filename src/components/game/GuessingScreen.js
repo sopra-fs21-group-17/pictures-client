@@ -239,18 +239,12 @@ class GuessingScreen extends React.Component {
 
     }
 
-    componentWillUnmount() {
-        //clear intervals
-        if(this.countInterval) clearInterval(this.countInterval);
-        if(this.checkInterval) clearInterval(this.checkInterval);
-        if(this.guessingInterval) clearInterval(this.guessingInterval);
-        if(this.doneGuessingInterval) clearInterval(this.doneGuessingInterval);
-    }
+
 
     async fetchChecks(){
         try{
             // check if ALL users have submitted their guesses
-            const guessingInterval = setInterval(async () =>{
+            this.guessingInterval = setInterval(async () =>{
                 const response = await api.get('/game/checkUsersDoneGuessing/'+localStorage.getItem('currentLobbyId'));
 
                 this.setState({ allDoneGuessing: response.data });
@@ -259,7 +253,7 @@ class GuessingScreen extends React.Component {
             }, 100)
 
             // update info of all players doneGuessing attribute (true/false)
-            const doneGuessingInterval = setInterval(async () =>{
+            this.doneGuessingInterval = setInterval(async () =>{
                 const response2 = await api.get("/board/"+localStorage.getItem("currentLobbyId"));
                 this.setState({players: response2.data});
             }, 100)
@@ -272,6 +266,13 @@ class GuessingScreen extends React.Component {
 
     }
 
+    componentWillUnmount() {
+        //clear intervals
+        if(this.countInterval) clearInterval(this.countInterval);
+        if(this.checkInterval) clearInterval(this.checkInterval);
+        if(this.guessingInterval) clearInterval(this.guessingInterval);
+        if(this.doneGuessingInterval) clearInterval(this.doneGuessingInterval);
+    }
     render() {
         const buildRoom = new BuildRoom(this.state.responseRoom)
         this.state.scsURLsAndUserNames.forEach( tuple =>{

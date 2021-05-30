@@ -141,6 +141,8 @@ class MainBoard extends React.Component{
     }
 
     //API REQUESTS//
+    secondTry = false;
+
 
     async initGame(){
         try {
@@ -168,7 +170,14 @@ class MainBoard extends React.Component{
             localStorage.setItem("currentNoOfUsers", response.data.length) //needed for guard
         }
         catch (error) {
-            alert(`Something went wrong getting the Players: \n${handleError(error)}`)
+            if(this.secondTry === true){
+                alert(`Something went wrong getting the Players: \n${handleError(error)}`)
+            }
+            else{
+                this.secondTry = true
+                await this.initGame()
+
+            }
         }
     }
 
