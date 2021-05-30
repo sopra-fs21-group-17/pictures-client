@@ -175,15 +175,11 @@ class BuildScreen extends React.Component {
         //this.takeScreenshot();
         await api.put('/lobbies/buildScreens/ready/timers/'+localStorage.getItem('currentLobbyId'));
         // setTimeout(async () =>{ await this.putscreenshot(); }, 200)
-
+    setTimeout(async () =>{
         await api.put('/guessing/time/'+localStorage.getItem('currentLobbyId'));
-
         localStorage.removeItem("isbuilding");
-
         this.props.history.push(`/GuessingScreen`);
-
-        window.location.reload();
-
+        window.location.reload(); }, 200)
     }
 }
 
