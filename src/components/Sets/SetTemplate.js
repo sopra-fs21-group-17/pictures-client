@@ -565,7 +565,7 @@ export const SetTemplate = () => {
         takeScreenshot(ref.current)}
     localStorage.setItem("screenshot",screenshot)
 
-// create a screenshot,send it to the backend and switch to the GuessingScreen
+    // create a screenshot,send it to the backend and switch to the GuessingScreen
     const putscreenshot = async () => {
         try {
             const requestBody = JSON.stringify(
@@ -716,7 +716,7 @@ export const SetTemplate = () => {
                                         GetImage();
                                         fetchItems();
                                         ready();
-                                        setTimeout(function(){ putscreenshot(); }, 200);
+                                        setTimeout(function(){ putscreenshot(); }, 2000);
                                     }}>Submit</Button>
                                     <h6 hidden={submitted === false}
                                         style={{margin:"5px", color: "white"}}

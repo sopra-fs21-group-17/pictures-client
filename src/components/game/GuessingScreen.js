@@ -144,6 +144,7 @@ class GuessingScreen extends React.Component {
                     if(response.data[e][0] !== localStorage.getItem('currentUsername')) {
                         namesAndScsURLs.push([response.data[e][0], response.data[e][1]])
                     }
+                    console.log("response: ", [response.data[e][0], response.data[e][1]])
                 }
 
                 // Get the returned screenshots and update the state.
@@ -273,6 +274,7 @@ class GuessingScreen extends React.Component {
         if(this.guessingInterval) clearInterval(this.guessingInterval);
         if(this.doneGuessingInterval) clearInterval(this.doneGuessingInterval);
     }
+
     render() {
         const buildRoom = new BuildRoom(this.state.responseRoom)
         this.state.scsURLsAndUserNames.forEach( tuple =>{
