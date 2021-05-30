@@ -573,6 +573,7 @@ export const SetTemplate = () => {
             )
             // send it to the backend
             await api.put("/screenshot/" + localStorage.getItem("currentUsername"), requestBody);
+            ready();
         } catch (error) {
             alert(`Something went wrong while uploading the screenshot URL \n${handleError(error)}`);
         }
@@ -580,6 +581,7 @@ export const SetTemplate = () => {
         // change to next screen
         //history.push(`/GuessingScreen`)
     }
+
 
     const ready = async () => {
         try{
